@@ -14,7 +14,7 @@ export function DiagnosticTeaser() {
               <div className="space-y-5">
                 <div className="inline-flex items-center gap-3 text-xs uppercase tracking-[0.32em] text-gold-deep">
                   <Compass className="h-3.5 w-3.5" />
-                  <span>Diagnostic en 4 questions</span>
+                  <span>Bilan d&apos;orientation Etincel</span>
                 </div>
                 <h2 className="font-display text-3xl md:text-4xl lg:text-5xl leading-[1.05] text-text-deep max-w-2xl">
                   Vous ne savez pas{" "}
@@ -28,7 +28,7 @@ export function DiagnosticTeaser() {
                 </p>
               </div>
               <Link href="/diagnostic" className="btn-primary self-start lg:self-center">
-                Faire le diagnostic
+                Faire le bilan d&apos;orientation
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </div>

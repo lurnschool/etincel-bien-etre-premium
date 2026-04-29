@@ -160,14 +160,14 @@ export default function DiagnosticPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Diagnostic en 4 questions"
+        eyebrow="Bilan d'orientation Etincel"
         title={
           <>
             Trouver{" "}
             <span className="font-display-italic text-gold-deep">votre porte d&apos;entrée</span>
           </>
         }
-        description="Quelques minutes pour identifier la pratique qui résonne le mieux avec votre besoin du moment."
+        description="Quatre questions douces pour identifier la pratique qui résonne le mieux avec votre besoin du moment."
       />
 
       <section className="pb-24">

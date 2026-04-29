@@ -8,7 +8,9 @@ import { PageHeader } from "@/components/ui/PageHeader";
 import { Etincelle } from "@/components/ui/Etincelle";
 import { WhisperLine } from "@/components/ui/WhisperLine";
 import { SmartImage } from "@/components/ui/SmartImage";
+import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
 import { SacredBackdrop } from "@/components/ornaments/SacredBackdrop";
+import { NumerologyInvitation } from "@/components/numerology/NumerologyInvitation";
 import { accompagnementsIndividuels, disclaimers, whisperLines } from "@/lib/data";
 import type { SacredFallbackKey } from "@/lib/visualAssetMap";
 
@@ -202,14 +204,14 @@ export default async function AccompagnementDetailPage({ params }: { params: Par
                     Demander un rendez-vous
                     <ArrowRight className="h-4 w-4" />
                   </Link>
-                  <Link href="/diagnostic" className="btn-secondary">
-                    Faire le diagnostic
-                  </Link>
-                  <Link
-                    href="/contact?sujet=Question"
-                    className="inline-flex items-center gap-2 px-6 py-3 text-sm text-text-medium hover:text-accent transition-colors"
+                  <WhatsAppButton
+                    message={`Bonjour Céline, j'aimerais réserver une séance de ${practice.name}.`}
+                    variant="outline"
                   >
-                    Poser une question
+                    WhatsApp
+                  </WhatsAppButton>
+                  <Link href="/diagnostic" className="btn-secondary">
+                    Faire le bilan
                   </Link>
                 </div>
               </div>
@@ -230,6 +232,9 @@ export default async function AccompagnementDetailPage({ params }: { params: Par
           </div>
         </Container>
       </section>
+
+      {/* Animation invitation — uniquement pour la numérologie */}
+      {practice.slug === "numerologie" && <NumerologyInvitation />}
 
       {/* Ce que cette pratique n'est pas — pour les pratiques sensibles */}
       {nestPasFor(practice.family).length > 0 && (

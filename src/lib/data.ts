@@ -29,6 +29,7 @@ export const contact = {
   phone: "06 27 43 81 04",
   phoneInternational: "+33 6 27 43 81 04",
   phoneLink: "tel:+33627438104",
+  whatsappLink: "https://wa.me/33627438104",
   email: "etincel33@gmail.com",
   emailLink: "mailto:etincel33@gmail.com",
   addressMain: {
@@ -38,11 +39,13 @@ export const contact = {
     source: "confirmed" as DataSource,
   },
   addressSecondary: {
-    label: "Martignas-sur-Jalle",
+    label: "Univers'elles · Martignas-sur-Jalle",
+    note: "ou selon événement",
     city: "33127 Martignas-sur-Jalle",
     source: "confirmed" as DataSource,
   },
   region: "Bordeaux Métropole · Gironde",
+  googleReviewsUrl: "https://g.page/r/etincel-de-bien-etre",
   social: {
     facebook: {
       label: "Etincel — Céline Dusseval",
@@ -160,8 +163,8 @@ export const accompagnementsIndividuels: Practice[] = [
       "Lire la symbolique des nombres pour identifier vos talents, vos cycles et les ressources qui vous appartiennent déjà.",
     forWho:
       "Pour ceux et celles qui cherchent à donner du sens à leur trajectoire ou à éclairer une transition.",
-    duration: "Durée à confirmer",
-    price: "Sur demande",
+    duration: "1h30",
+    price: "110 €",
     format: "Présentiel · Distanciel à confirmer",
     source: "confirmed" as DataSource,
   },
@@ -174,8 +177,8 @@ export const accompagnementsIndividuels: Practice[] = [
       "Un voyage intérieur pour reconnecter à l'inconscient et aux potentialités souvent enfouies sous nos automatismes.",
     forWho:
       "Pour les personnes traversant un blocage, un schéma répétitif, un besoin d'apaisement profond.",
-    duration: "Durée à confirmer",
-    price: "Sur demande",
+    duration: "1h30",
+    price: "90 €",
     format: "Présentiel",
     source: "confirmed" as DataSource,
   },
@@ -188,8 +191,8 @@ export const accompagnementsIndividuels: Practice[] = [
       "Une relaxation profonde qui invite à libérer les mémoires cellulaires et à se reconnecter à son essence.",
     forWho:
       "Pour ceux qui ressentent une fatigue émotionnelle, un trop-plein, ou cherchent un retour au calme.",
-    duration: "Durée à confirmer",
-    price: "Sur demande",
+    duration: "1h30",
+    price: "90 €",
     format: "Présentiel",
     source: "confirmed" as DataSource,
   },
@@ -202,8 +205,8 @@ export const accompagnementsIndividuels: Practice[] = [
       "Un soin combinant toucher, instruments et vibrations pour réactiver la circulation de l'énergie dans le corps.",
     forWho:
       "Pour les personnes qui ont besoin de se réinhabiter, de relâcher les tensions accumulées.",
-    duration: "Durée à confirmer",
-    price: "Sur demande",
+    duration: "1h",
+    price: "90 €",
     format: "Présentiel",
     source: "confirmed" as DataSource,
   },
@@ -215,8 +218,8 @@ export const accompagnementsIndividuels: Practice[] = [
     pitch:
       "Un massage en profondeur pensé comme un dialogue entre la main, le souffle et la mémoire du corps.",
     forWho: "Pour celles et ceux qui souhaitent un retour sensoriel doux et habité.",
-    duration: "Durée à confirmer",
-    price: "Sur demande",
+    duration: "1h20 ou 1h45",
+    price: "90 € (1h20) · 120 € (1h45)",
     format: "Présentiel",
     source: "confirmed" as DataSource,
   },
@@ -229,8 +232,8 @@ export const accompagnementsIndividuels: Practice[] = [
       "Une pratique transmise par des chamans mexicains qui stimule des zones réflexes des pieds pour ouvrir l'inconscient.",
     forWho:
       "Pour explorer un travail subtil, à la fois corporel et symbolique.",
-    duration: "Durée à confirmer",
-    price: "Sur demande",
+    duration: "1h",
+    price: "90 €",
     format: "Présentiel",
     source: "confirmed" as DataSource,
   },
@@ -243,8 +246,8 @@ export const accompagnementsIndividuels: Practice[] = [
       "La puissance du souffle pour traverser et transmuter ce qui demande à être déposé.",
     forWho:
       "Pour les personnes prêtes à explorer un travail intense et profondément libérateur.",
-    duration: "Durée à confirmer",
-    price: "Sur demande",
+    duration: "2h",
+    price: "90 € individuel · 140 € en duo",
     format: "Présentiel",
     source: "confirmed" as DataSource,
     disclaimer:
@@ -333,8 +336,8 @@ export const experiencesCollectives = [
     name: "Constellations familiales",
     pitch:
       "Une exploration symbolique des liens familiaux et de leurs transmissions invisibles.",
-    rhythm: "Sessions ponctuelles",
-    href: "/collectif#constellations",
+    rhythm: "Sessions ponctuelles · 95 €",
+    href: "/constellations",
     source: "confirmed" as DataSource,
   },
   {
@@ -342,8 +345,8 @@ export const experiencesCollectives = [
     name: "Constellations de naissance — Rebirth",
     pitch:
       "Un voyage symbolique au cœur de votre naissance et des empreintes qu'elle a laissées.",
-    rhythm: "Sessions ponctuelles",
-    href: "/collectif#rebirth",
+    rhythm: "Sessions ponctuelles · 95 €",
+    href: "/constellations#rebirth",
     source: "confirmed" as DataSource,
   },
   {
@@ -372,7 +375,7 @@ export const formations = [
     name: "Numérologie · Module 1",
     pitch: "Les fondations de la numérologie pour lire les cycles d'une vie.",
     duration: "À confirmer",
-    price: "Sur demande",
+    price: "320 €",
     source: "confirmed" as DataSource,
   },
   {
@@ -380,7 +383,7 @@ export const formations = [
     name: "Numérologie · Module 2",
     pitch: "Approfondissement et lecture symbolique avancée des nombres.",
     duration: "À confirmer",
-    price: "Sur demande",
+    price: "320 €",
     source: "confirmed" as DataSource,
   },
 ] as const;
@@ -518,6 +521,7 @@ export const corePillars = [
     fallback: "cacao" as const,
     href: "/cacao",
     cta: "Découvrir les rituels",
+    price: "Tarif selon événement",
     formats: ["Individuel", "Cercle", "Retraite"],
   },
   {
@@ -531,7 +535,8 @@ export const corePillars = [
     fallback: "feminin" as const,
     href: "/constellations",
     cta: "Découvrir les constellations",
-    formats: ["Individuel à confirmer", "Cercle"],
+    price: "À partir de 95 €",
+    formats: ["Familiale", "Naissance / Rebirth"],
   },
   {
     id: "numerologie",
@@ -544,6 +549,7 @@ export const corePillars = [
     fallback: "numerologie" as const,
     href: "/accompagnements/numerologie",
     cta: "Demander une lecture",
+    price: "110 € · Formation 320 €",
     formats: ["Lecture individuelle", "Formation M1", "Formation M2"],
   },
 ];

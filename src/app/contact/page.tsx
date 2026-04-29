@@ -10,29 +10,35 @@ import {
   Gift,
   Mountain,
   HelpCircle,
+  Sparkles,
 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Etincelle } from "@/components/ui/Etincelle";
 import { SmartImage } from "@/components/ui/SmartImage";
+import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
+import { GoogleReviewsTeaser } from "@/components/home/GoogleReviewsTeaser";
 import { ContactRapide } from "@/components/home/ContactRapide";
 import { SacredBackdrop } from "@/components/ornaments/SacredBackdrop";
 import { contact } from "@/lib/data";
+import { whatsappMessages } from "@/lib/whatsapp";
 import { pageVisuals } from "@/lib/visualAssetMap";
+import { InstagramIcon, FacebookIcon } from "@/components/ui/SocialIcons";
 
 export const metadata: Metadata = {
-  title: "Contact",
+  title: "Contact — Échanger avec Céline",
   description:
-    "Échangez avec Céline Dusseval — un message simple, une réponse personnelle.",
+    "Échangez avec Céline Dusseval — un message simple, une réponse personnelle. WhatsApp, téléphone, email, deux lieux d'accueil en Gironde.",
 };
 
 const quickLinks = [
-  { icon: Heart, label: "Une séance individuelle", href: "/accompagnements" },
-  { icon: Users, label: "Un cercle ou un atelier", href: "/collectif" },
-  { icon: Mountain, label: "Une retraite", href: "/retraites" },
-  { icon: Gift, label: "Une carte cadeau", href: "/cartes-cadeaux" },
-  { icon: HelpCircle, label: "Une question simple", href: "#message" },
+  { icon: Sparkles, label: "Rituel cacao", href: "/cacao" },
+  { icon: Heart, label: "Lecture numérologie · 110 €", href: "/accompagnements/numerologie" },
+  { icon: Users, label: "Constellations · 95 €", href: "/constellations" },
+  { icon: Gift, label: "Carte cadeau", href: "/cartes-cadeaux" },
+  { icon: Mountain, label: "Retraites", href: "/retraites" },
+  { icon: HelpCircle, label: "Bilan d'orientation", href: "/diagnostic" },
 ];
 
 export default function ContactPage() {
@@ -53,6 +59,7 @@ export default function ContactPage() {
         <SacredBackdrop variant="subtle" />
         <Container>
           <div className="grid gap-10 lg:grid-cols-[1fr_1.2fr]">
+            {/* Colonne gauche : photo + coordonnées + réseaux */}
             <Reveal>
               <div className="space-y-8 lg:sticky lg:top-28">
                 <SmartImage
@@ -68,6 +75,12 @@ export default function ContactPage() {
                     Céline Dusseval
                   </p>
                 </div>
+
+                {/* WhatsApp prioritaire */}
+                <WhatsAppButton message={whatsappMessages.generic} className="w-full justify-center">
+                  Échanger sur WhatsApp
+                </WhatsAppButton>
+
                 <div className="space-y-3">
                   <a
                     href={contact.phoneLink}
@@ -97,19 +110,50 @@ export default function ContactPage() {
                     <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gold-soft/40 text-gold-deep shrink-0">
                       <MapPin className="h-4 w-4" />
                     </span>
-                    <div className="text-sm text-text-medium leading-relaxed">
+                    <div className="text-sm text-text-medium leading-relaxed flex-1">
                       <p className="font-display text-base text-text-deep">{contact.addressMain.label}</p>
                       <p>{contact.addressMain.street}</p>
                       <p>{contact.addressMain.city}</p>
-                      <p className="mt-2 text-xs uppercase tracking-[0.18em] text-text-soft">
-                        Aussi à {contact.addressSecondary.label}
-                      </p>
+                      <div className="mt-3 pt-3 border-t border-border-soft/60">
+                        <p className="font-display text-sm text-text-deep">
+                          {contact.addressSecondary.label}
+                        </p>
+                        <p className="text-xs text-text-soft italic mt-0.5">
+                          {contact.addressSecondary.note}
+                        </p>
+                      </div>
                     </div>
                   </div>
+                </div>
+
+                {/* Réseaux sociaux */}
+                <div className="flex items-center gap-3">
+                  <a
+                    href={contact.social.instagram.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Instagram"
+                    className="flex h-10 w-10 items-center justify-center rounded-full border border-border-medium text-text-deep hover:border-accent hover:text-accent transition-colors"
+                  >
+                    <InstagramIcon size={16} />
+                  </a>
+                  <a
+                    href={contact.social.facebook.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Facebook"
+                    className="flex h-10 w-10 items-center justify-center rounded-full border border-border-medium text-text-deep hover:border-accent hover:text-accent transition-colors"
+                  >
+                    <FacebookIcon size={16} />
+                  </a>
+                  <span className="text-xs text-text-soft ml-2">
+                    {contact.social.instagram.label}
+                  </span>
                 </div>
               </div>
             </Reveal>
 
+            {/* Colonne droite : "vous hésitez ?" + liens rapides */}
             <Reveal delay={0.1}>
               <div className="space-y-8">
                 <div className="rounded-3xl border border-gold-soft/40 bg-gradient-to-br from-gold-soft/30 via-bg-card to-bg-card p-7 md:p-8">
@@ -121,17 +165,17 @@ export default function ContactPage() {
                     Vous ne savez pas quoi choisir ?
                   </p>
                   <p className="text-text-medium leading-relaxed mb-5">
-                    Faites d&apos;abord le diagnostic — quelques questions douces pour identifier la pratique la plus juste.
+                    Faites d&apos;abord le bilan d&apos;orientation — quelques questions douces pour identifier la pratique la plus juste.
                   </p>
                   <Link href="/diagnostic" className="btn-primary">
-                    Faire le diagnostic
+                    Faire le bilan d&apos;orientation
                     <ArrowRight className="h-4 w-4" />
                   </Link>
                 </div>
 
                 <div>
                   <p className="text-xs uppercase tracking-[0.24em] text-text-soft mb-3">
-                    Liens rapides
+                    Accès rapides
                   </p>
                   <ul className="grid gap-2 sm:grid-cols-2">
                     {quickLinks.map((q) => (
@@ -150,6 +194,8 @@ export default function ContactPage() {
                     ))}
                   </ul>
                 </div>
+
+                <GoogleReviewsTeaser />
               </div>
             </Reveal>
           </div>
