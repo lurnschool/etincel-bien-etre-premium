@@ -14,7 +14,7 @@ export type GiftCardData = {
   style: GiftCardStyle;
 };
 
-export type GiftCardStyle = "doree" | "feminin" | "reconnexion" | "elegance";
+export type GiftCardStyle = "doree" | "feminin" | "reconnexion" | "elegance" | "cacao";
 
 export const giftCardStyles: Record<
   GiftCardStyle,
@@ -27,6 +27,10 @@ export const giftCardStyles: Record<
   feminin: {
     label: "Féminin sacré",
     description: "Velours rose profond, accents dorés, intimité.",
+  },
+  cacao: {
+    label: "Cacao & cœur",
+    description: "Brun chaleureux, ankh doré, esprit cérémonie.",
   },
   reconnexion: {
     label: "Reconnexion",
@@ -205,5 +209,37 @@ const renderStyles: Record<GiftCardStyle, StyleConfig> = {
     label: "text-text-soft",
     placeholder: "italic text-text-soft/70",
     badge: "border-text-deep/15 text-text-deep bg-bg-soft",
+  },
+  cacao: {
+    container: "bg-gradient-to-br from-[#3d2a1f] via-[#2d1f15] to-[#1a120b]",
+    background: (
+      <>
+        <div className="absolute -top-24 -left-16 h-80 w-80 rounded-full bg-gold/20 blur-3xl" />
+        <div className="absolute -bottom-20 -right-16 h-72 w-72 rounded-full bg-rose/15 blur-3xl" />
+        {/* Ornement Ankh subtil en arrière-plan */}
+        <svg
+          aria-hidden
+          viewBox="0 0 32 44"
+          className="absolute -right-10 top-1/2 -translate-y-1/2 w-48 h-auto text-gold/15"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="0.6"
+          strokeLinecap="round"
+        >
+          <ellipse cx="16" cy="11" rx="9" ry="10" />
+          <line x1="16" y1="21" x2="16" y2="42" />
+          <line x1="6" y1="25" x2="26" y2="25" />
+        </svg>
+        <div className="absolute inset-0 grain opacity-40" />
+      </>
+    ),
+    text: "text-text-on-dark",
+    subtle: "text-gold-soft",
+    body: "text-text-on-dark-soft",
+    iconColor: "text-gold",
+    italic: "text-gold-soft",
+    label: "text-gold-soft/80",
+    placeholder: "italic text-text-on-dark-soft/60",
+    badge: "border-gold-soft/40 text-gold-soft bg-white/5",
   },
 };

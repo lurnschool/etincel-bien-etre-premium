@@ -41,7 +41,7 @@ export function GuidanceCompass() {
       <WhisperLine text={whisperLines[2]} position="left" tone="amethyst" />
 
       <Container size="wide">
-        <div className="grid lg:grid-cols-12 gap-10 lg:gap-16">
+        <div className="grid lg:grid-cols-12 gap-10 lg:gap-14">
           <Reveal className="lg:col-span-5">
             <div className="space-y-6 lg:sticky lg:top-28">
               <div className="inline-flex items-center gap-3 text-xs uppercase tracking-[0.32em] text-gold-deep">
@@ -50,7 +50,7 @@ export function GuidanceCompass() {
                 </span>
                 <span>La boussole</span>
               </div>
-              <h2 className="font-display text-4xl md:text-5xl lg:text-[3.6rem] leading-[1.05] tracking-tight text-text-deep">
+              <h2 className="font-display text-balance text-4xl md:text-5xl lg:text-[3.6rem] leading-[1.05] tracking-tight text-text-deep">
                 Par où{" "}
                 <span className="font-display-italic text-gold-deep">
                   commencer
@@ -60,7 +60,8 @@ export function GuidanceCompass() {
               <p className="text-text-medium leading-relaxed text-base md:text-lg max-w-md">
                 Choisissez ce qui résonne aujourd&apos;hui. Le site vous guide vers la porte d&apos;entrée la plus juste — sans rien imposer.
               </p>
-              <div className="hidden lg:block pt-6 text-xs uppercase tracking-[0.24em] text-text-soft">
+              <div className="hidden lg:flex items-center gap-3 pt-6 text-xs uppercase tracking-[0.24em] text-text-soft">
+                <span className="h-px w-10 bg-border-medium" aria-hidden />
                 {active ? "Une recommandation sensible" : "Touchez une intention"}
               </div>
             </div>
@@ -77,23 +78,23 @@ export function GuidanceCompass() {
                         onClick={() => setActive(isActive ? null : item.id)}
                         aria-expanded={isActive}
                         className={cn(
-                          "w-full text-left flex items-center justify-between gap-6 py-5 px-2 transition-colors group cursor-pointer",
+                          "w-full text-left flex items-center justify-between gap-4 sm:gap-6 py-4 sm:py-5 px-1 sm:px-2 transition-colors group cursor-pointer",
                           isActive
                             ? "text-accent-deep"
                             : "text-text-deep hover:text-accent",
                         )}
                       >
-                        <span className="flex items-center gap-4">
+                        <span className="flex items-center gap-3 sm:gap-4 min-w-0">
                           <span
                             className={cn(
-                              "h-1 transition-all duration-500 rounded-full",
+                              "h-1 transition-all duration-500 rounded-full shrink-0",
                               isActive
                                 ? "w-10 bg-gold"
                                 : "w-4 bg-border-medium group-hover:w-7 group-hover:bg-accent",
                             )}
                             aria-hidden
                           />
-                          <span className="font-display text-xl md:text-[1.6rem] leading-snug">
+                          <span className="font-display text-lg sm:text-xl md:text-[1.55rem] leading-tight text-pretty">
                             {item.label}
                           </span>
                         </span>

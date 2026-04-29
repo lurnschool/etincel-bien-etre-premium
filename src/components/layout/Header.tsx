@@ -36,9 +36,11 @@ export function Header() {
     <header
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-500",
+        // Toujours lisible dès le chargement : fond glass + bord fin.
+        // Au scroll : fond plus dense + ombre douce.
         scrolled
-          ? "bg-bg-base/85 backdrop-blur-xl border-b border-border-soft/60"
-          : "bg-transparent",
+          ? "bg-bg-base/92 backdrop-blur-xl border-b border-border-soft/70 shadow-[0_4px_20px_rgba(31,26,46,0.05)]"
+          : "bg-bg-base/70 backdrop-blur-md border-b border-border-soft/40",
       )}
     >
       <div

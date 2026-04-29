@@ -80,6 +80,7 @@ export const navigation = [
       { label: "Breathwork", href: "/accompagnements/breathwork" },
       { label: "Innerdance", href: "/innerdance#individuel" },
       { label: "Féminin sacré", href: "/feminin-sacre" },
+      { label: "Rituel cacao individuel", href: "/collectif/cacao#individuel" },
     ],
   },
   {
@@ -87,6 +88,7 @@ export const navigation = [
     href: "/collectif",
     children: [
       { label: "Cercles de femmes", href: "/cercles-de-femmes" },
+      { label: "Cérémonie cacao", href: "/collectif/cacao" },
       { label: "Innerdance collectif", href: "/innerdance#collectif" },
       { label: "Breathwork collectif", href: "/collectif#breathwork" },
       { label: "Constellations", href: "/collectif#constellations" },
@@ -137,7 +139,7 @@ export type Practice = {
   slug: string;
   name: string;
   intent: string;
-  family: "comprendre" | "apaiser" | "corps" | "explorer" | "feminin";
+  family: "comprendre" | "apaiser" | "corps" | "explorer" | "feminin" | "cacao";
   pitch: string;
   forWho: string;
   duration: string;
@@ -280,7 +282,23 @@ export const accompagnementsIndividuels: Practice[] = [
     disclaimer:
       "Démarche de bien-être et de développement personnel — ne remplace pas un suivi médical, gynécologique ou psychologique.",
   },
-] as const;
+  {
+    slug: "cacao-rituel",
+    name: "Rituel cacao · cérémonie",
+    intent: "Cœur & rituel",
+    family: "cacao",
+    pitch:
+      "Une expérience symbolique et sensorielle autour du cacao, pensée comme un espace de présence, d'ouverture du cœur, de partage et de reconnexion à soi.",
+    forWho:
+      "Pour celles et ceux qui veulent ralentir, ouvrir un espace sensible, vivre un rituel doux en individuel ou en cercle.",
+    duration: "Durée à confirmer",
+    price: "Sur demande",
+    format: "Présentiel · Individuel ou cercle",
+    source: "briefed" as DataSource,
+    disclaimer:
+      "Le cacao cérémoniel est consommé en très petite quantité. Si vous suivez un traitement (notamment antidépresseurs), avez une condition cardiaque ou êtes enceinte, parlez-en avec votre médecin avant la cérémonie.",
+  },
+];
 
 /**
  * Expériences collectives — incluent cercles, breathwork, innerdance, etc.
@@ -472,6 +490,16 @@ export const heroSlides = [
     secondaryCta: { label: "Découvrir les formats", href: "/cartes-cadeaux#formats" },
     palette: "gold-warm",
   },
+  {
+    id: "cacao",
+    category: "Cacao sacré",
+    title: "Le cacao comme cérémonie du cœur.",
+    text:
+      "Une expérience symbolique et sensorielle pour ralentir, ouvrir le cœur, déposer en présence — en individuel, en cercle ou en retraite.",
+    primaryCta: { label: "Découvrir les rituels", href: "/collectif/cacao" },
+    secondaryCta: { label: "Être informée du prochain rituel", href: "/contact?sujet=Cacao" },
+    palette: "cacao",
+  },
 ] as const;
 
 export type HeroSlide = (typeof heroSlides)[number];
@@ -486,6 +514,7 @@ export const practicesMarquee = [
   "Innerdance",
   "Breathwork",
   "Cercles de femmes",
+  "Cérémonie cacao",
   "Retraites",
   "Féminin sacré",
   "Cartes cadeaux",
@@ -561,6 +590,14 @@ export const guidanceIntents: GuidanceIntent[] = [
     cta: { label: "Explorer le féminin sacré", href: "/feminin-sacre" },
   },
   {
+    id: "coeur",
+    label: "Je veux ouvrir un espace autour du cœur",
+    description:
+      "Un rituel sensoriel et symbolique pour ralentir, ouvrir le cœur et déposer en présence — autour du cacao, du souffle ou en cercle.",
+    recommendations: ["cacao-rituel", "/cercles-de-femmes", "/collectif/cacao"],
+    cta: { label: "Découvrir les rituels cacao", href: "/collectif/cacao" },
+  },
+  {
     id: "offrir",
     label: "Je veux offrir un moment",
     description:
@@ -593,6 +630,16 @@ export const whisperLines = [
   "Ce qui se libère n'a pas toujours besoin d'être expliqué.",
   "Un cercle n'impose rien. Il accueille.",
   "Offrir du temps, c'est parfois offrir un retour à soi.",
+  "Il y a des passages qui demandent plus de douceur que d'effort.",
+  "Le corps sait parfois avant les mots.",
+  "Un rituel n'impose rien. Il ouvre un espace.",
+  "Le cacao invite à ralentir, écouter, ressentir.",
+  "Le souffle remet du mouvement là où tout semblait figé.",
+  "Le féminin n'est pas un concept. C'est une présence à retrouver.",
+  "Certaines réponses arrivent quand l'espace devient assez calme.",
+  "Une retraite n'est pas une fuite. C'est un retour.",
+  "Offrir une carte, c'est offrir un temps pour soi.",
+  "La transformation commence souvent par une sensation discrète.",
 ] as const;
 
 /**
@@ -639,12 +686,24 @@ export const practiceFamilies: PracticeFamily[] = [
     extraLinks: [{ label: "Cercles de femmes", href: "/cercles-de-femmes" }],
   },
   {
+    id: "cacao",
+    label: "Cœur & rituel cacao",
+    description: "Cérémonies cacao en individuel, en cercle ou en retraite.",
+    practices: ["cacao-rituel"],
+    extraLinks: [
+      { label: "Page Cérémonie cacao", href: "/collectif/cacao" },
+      { label: "Cercles de femmes", href: "/cercles-de-femmes" },
+      { label: "Retraites", href: "/retraites" },
+    ],
+  },
+  {
     id: "collectif",
     label: "Collectif & immersions",
     description: "La force du groupe, les retraites, les formations.",
     practices: [],
     extraLinks: [
       { label: "Cercles de femmes", href: "/cercles-de-femmes" },
+      { label: "Cérémonie cacao", href: "/collectif/cacao" },
       { label: "Innerdance collectif", href: "/innerdance#collectif" },
       { label: "Breathwork collectif", href: "/collectif#breathwork" },
       { label: "Constellations", href: "/collectif#constellations" },

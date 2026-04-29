@@ -7,34 +7,69 @@ import { ArrowRight, ArrowLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { heroSlides, practicesMarquee, type HeroSlide } from "@/lib/data";
 import { Etincelle } from "@/components/ui/Etincelle";
+import {
+  AnkhSymbol,
+  CacaoCup,
+  FeminineSun,
+  LotusOrnament,
+  MandalaOrnament,
+  MoonPhases,
+  ShamanicDrum,
+} from "@/components/ornaments/SacredOrnaments";
 
 const SLIDE_DURATION_MS = 8000;
 
-const palettes: Record<HeroSlide["palette"], { bg: string; halo: string; tone: "light" | "dark" }> = {
+const palettes: Record<
+  HeroSlide["palette"],
+  {
+    bg: string;
+    halo: string;
+    tone: "light" | "dark";
+    primaryOrnament: React.ReactNode;
+    accentOrnament: React.ReactNode;
+  }
+> = {
   amethyst: {
     bg: "from-[#1d1530] via-[#2a1f44] to-[#3a2358]",
     halo: "from-accent/40 via-rose/15 to-gold/10",
     tone: "dark",
+    primaryOrnament: <FeminineSun size={420} strokeWidth={0.5} className="text-gold/30" />,
+    accentOrnament: <AnkhSymbol size={120} strokeWidth={0.7} className="text-gold-soft/50" />,
   },
   "rose-gold": {
     bg: "from-[#f7e6dc] via-[#f1d9d4] to-[#fbe9c7]",
     halo: "from-rose/30 via-gold/20 to-bg-base",
     tone: "light",
+    primaryOrnament: <LotusOrnament size={360} strokeWidth={0.6} className="text-gold-deep/25" />,
+    accentOrnament: <ShamanicDrum size={130} strokeWidth={0.7} className="text-gold-deep/35" />,
   },
   "deep-night": {
     bg: "from-[#15102a] via-[#241a3f] to-[#0f0a1f]",
     halo: "from-gold/20 via-accent-deep/40 to-transparent",
     tone: "dark",
+    primaryOrnament: <MandalaOrnament size={520} strokeWidth={0.4} className="text-gold/30" />,
+    accentOrnament: <MoonPhases size={220} strokeWidth={0.6} className="text-gold-soft/45" />,
   },
   "rose-velvet": {
     bg: "from-[#3a1f3d] via-[#4a2742] to-[#2a1232]",
     halo: "from-rose/25 via-gold/15 to-accent/20",
     tone: "dark",
+    primaryOrnament: <AnkhSymbol size={220} strokeWidth={0.7} className="text-gold/40" />,
+    accentOrnament: <FeminineSun size={140} strokeWidth={0.6} className="text-gold-soft/40" />,
   },
   "gold-warm": {
     bg: "from-[#f3e1c0] via-[#e9cf9d] to-[#fbf2dc]",
     halo: "from-gold/40 via-rose-soft/30 to-bg-base",
     tone: "light",
+    primaryOrnament: <FeminineSun size={360} strokeWidth={0.6} className="text-gold-deep/25" />,
+    accentOrnament: <CacaoCup size={120} strokeWidth={0.8} className="text-gold-deep/35" />,
+  },
+  cacao: {
+    bg: "from-[#3d2a1f] via-[#2d1f15] to-[#1a120b]",
+    halo: "from-gold/25 via-rose/15 to-transparent",
+    tone: "dark",
+    primaryOrnament: <CacaoCup size={320} strokeWidth={0.7} className="text-gold/40" />,
+    accentOrnament: <AnkhSymbol size={150} strokeWidth={0.7} className="text-gold-soft/45" />,
   },
 };
 
@@ -80,6 +115,27 @@ export function CinematicHeroSlider() {
           >
             <div className={cn("absolute -top-32 -left-32 h-[44rem] w-[44rem] rounded-full blur-[160px] bg-gradient-to-br", palette.halo)} />
             <div className={cn("absolute -bottom-40 -right-40 h-[44rem] w-[44rem] rounded-full blur-[180px] bg-gradient-to-tl", palette.halo)} />
+
+            {/* Ornement principal — composition visuelle alignée sur le thème du slide */}
+            <motion.div
+              className="absolute right-[-4rem] md:right-[2%] top-1/2 -translate-y-1/2 hidden md:block"
+              animate={{ rotate: [0, 360] }}
+              transition={{ duration: 360, repeat: Infinity, ease: "linear" }}
+              aria-hidden
+            >
+              {palette.primaryOrnament}
+            </motion.div>
+
+            {/* Ornement accent flottant */}
+            <motion.div
+              className="absolute right-[14%] top-[18%] hidden lg:block"
+              animate={{ y: [0, -12, 0] }}
+              transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
+              aria-hidden
+            >
+              {palette.accentOrnament}
+            </motion.div>
+
             <div className="absolute inset-0 grain opacity-50" />
           </motion.div>
         </AnimatePresence>
