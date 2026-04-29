@@ -50,7 +50,7 @@ export function ContactRapide() {
                 <span className="font-display-italic text-gold-deep">votre besoin</span>
               </>
             }
-            description="Un message simple, une réponse personnelle. Céline lit chaque demande et vous répondra sous 48h."
+            description="Un message simple, une réponse personnelle. Céline lit chaque demande et vous répondra elle-même."
           />
         </Reveal>
 
@@ -112,7 +112,7 @@ export function ContactRapide() {
                 </div>
                 <h3 className="font-display text-3xl text-text-deep">Message reçu.</h3>
                 <p className="text-text-medium leading-relaxed max-w-md mx-auto">
-                  Merci pour votre confiance. Céline vous répondra personnellement sous 48h. En cas d'urgence, vous pouvez l'appeler directement au {contact.phone}.
+                  Merci pour votre confiance. Céline vous répondra personnellement. En cas d&apos;urgence, vous pouvez l&apos;appeler directement au {contact.phone}.
                 </p>
               </motion.div>
             ) : (

@@ -23,7 +23,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/contact",
     "/mentions-legales",
     "/politique-confidentialite",
-    "/collectif/cacao",
+    "/cacao",
   ];
 
   const staticEntries: MetadataRoute.Sitemap = staticRoutes.map((path) => ({

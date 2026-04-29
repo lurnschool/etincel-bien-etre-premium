@@ -80,7 +80,7 @@ export const navigation = [
       { label: "Breathwork", href: "/accompagnements/breathwork" },
       { label: "Innerdance", href: "/innerdance#individuel" },
       { label: "Féminin sacré", href: "/feminin-sacre" },
-      { label: "Rituel cacao individuel", href: "/collectif/cacao#individuel" },
+      { label: "Rituel cacao individuel", href: "/cacao#individuel" },
     ],
   },
   {
@@ -88,7 +88,7 @@ export const navigation = [
     href: "/collectif",
     children: [
       { label: "Cercles de femmes", href: "/cercles-de-femmes" },
-      { label: "Cérémonie cacao", href: "/collectif/cacao" },
+      { label: "Rituel cacao", href: "/cacao" },
       { label: "Innerdance collectif", href: "/innerdance#collectif" },
       { label: "Breathwork collectif", href: "/collectif#breathwork" },
       { label: "Constellations", href: "/collectif#constellations" },
@@ -509,7 +509,7 @@ export const heroSlides = [
     title: "Le cacao comme cérémonie du cœur.",
     text:
       "Une expérience symbolique et sensorielle pour ralentir, ouvrir le cœur, déposer en présence — en individuel, en cercle ou en retraite.",
-    primaryCta: { label: "Découvrir les rituels", href: "/collectif/cacao" },
+    primaryCta: { label: "Découvrir les rituels", href: "/cacao" },
     secondaryCta: { label: "Être informée du prochain rituel", href: "/contact?sujet=Cacao" },
     palette: "cacao",
     image: undefined,
@@ -609,8 +609,8 @@ export const guidanceIntents: GuidanceIntent[] = [
     label: "Je veux ouvrir un espace autour du cœur",
     description:
       "Un rituel sensoriel et symbolique pour ralentir, ouvrir le cœur et déposer en présence — autour du cacao, du souffle ou en cercle.",
-    recommendations: ["cacao-rituel", "/cercles-de-femmes", "/collectif/cacao"],
-    cta: { label: "Découvrir les rituels cacao", href: "/collectif/cacao" },
+    recommendations: ["cacao-rituel", "/cercles-de-femmes", "/cacao"],
+    cta: { label: "Découvrir les rituels cacao", href: "/cacao" },
   },
   {
     id: "offrir",
@@ -706,7 +706,7 @@ export const practiceFamilies: PracticeFamily[] = [
     description: "Cérémonies cacao en individuel, en cercle ou en retraite.",
     practices: ["cacao-rituel"],
     extraLinks: [
-      { label: "Page Cérémonie cacao", href: "/collectif/cacao" },
+      { label: "Page Cérémonie cacao", href: "/cacao" },
       { label: "Cercles de femmes", href: "/cercles-de-femmes" },
       { label: "Retraites", href: "/retraites" },
     ],
@@ -718,7 +718,7 @@ export const practiceFamilies: PracticeFamily[] = [
     practices: [],
     extraLinks: [
       { label: "Cercles de femmes", href: "/cercles-de-femmes" },
-      { label: "Cérémonie cacao", href: "/collectif/cacao" },
+      { label: "Cérémonie cacao", href: "/cacao" },
       { label: "Innerdance collectif", href: "/innerdance#collectif" },
       { label: "Breathwork collectif", href: "/collectif#breathwork" },
       { label: "Constellations", href: "/collectif#constellations" },

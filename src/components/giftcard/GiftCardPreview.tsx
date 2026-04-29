@@ -14,7 +14,13 @@ export type GiftCardData = {
   style: GiftCardStyle;
 };
 
-export type GiftCardStyle = "doree" | "feminin" | "reconnexion" | "elegance" | "cacao";
+export type GiftCardStyle =
+  | "doree"
+  | "feminin"
+  | "reconnexion"
+  | "elegance"
+  | "cacao"
+  | "retraite";
 
 export const giftCardStyles: Record<
   GiftCardStyle,
@@ -31,6 +37,10 @@ export const giftCardStyles: Record<
   cacao: {
     label: "Cacao & cœur",
     description: "Brun chaleureux, ankh doré, esprit cérémonie.",
+  },
+  retraite: {
+    label: "Retraite immersive",
+    description: "Nuit étoilée, mandala doré, esprit immersion.",
   },
   reconnexion: {
     label: "Reconnexion",
@@ -209,6 +219,42 @@ const renderStyles: Record<GiftCardStyle, StyleConfig> = {
     label: "text-text-soft",
     placeholder: "italic text-text-soft/70",
     badge: "border-text-deep/15 text-text-deep bg-bg-soft",
+  },
+  retraite: {
+    container: "bg-gradient-to-br from-[#15102a] via-[#241a3f] to-[#0a0617]",
+    background: (
+      <>
+        <div className="absolute -top-24 -right-16 h-80 w-80 rounded-full bg-accent/30 blur-3xl" />
+        <div className="absolute -bottom-20 -left-16 h-72 w-72 rounded-full bg-gold/15 blur-3xl" />
+        {/* Mandala étoilé */}
+        <svg
+          aria-hidden
+          viewBox="0 0 200 200"
+          className="absolute -right-12 top-1/2 -translate-y-1/2 w-56 h-auto text-gold/15"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="0.4"
+        >
+          <circle cx="100" cy="100" r="90" />
+          <circle cx="100" cy="100" r="70" />
+          <circle cx="100" cy="100" r="50" />
+          <circle cx="100" cy="100" r="30" />
+        </svg>
+        {/* Petites étoiles */}
+        <div className="absolute top-6 right-12 h-1 w-1 rounded-full bg-gold/60" />
+        <div className="absolute top-16 right-32 h-px w-px bg-gold-soft" />
+        <div className="absolute bottom-20 left-16 h-1 w-1 rounded-full bg-gold/40" />
+        <div className="absolute inset-0 grain opacity-40" />
+      </>
+    ),
+    text: "text-text-on-dark",
+    subtle: "text-gold-soft",
+    body: "text-text-on-dark-soft",
+    iconColor: "text-gold",
+    italic: "text-gold-soft",
+    label: "text-gold-soft/80",
+    placeholder: "italic text-text-on-dark-soft/60",
+    badge: "border-gold-soft/40 text-gold-soft bg-white/5",
   },
   cacao: {
     container: "bg-gradient-to-br from-[#3d2a1f] via-[#2d1f15] to-[#1a120b]",

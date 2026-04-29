@@ -231,6 +231,67 @@ export default async function AccompagnementDetailPage({ params }: { params: Par
         </Container>
       </section>
 
+      {/* Ce que cette pratique n'est pas — pour les pratiques sensibles */}
+      {nestPasFor(practice.family).length > 0 && (
+        <section className="section bg-bg-soft">
+          <Container size="narrow">
+            <Reveal>
+              <div className="space-y-5 mb-10">
+                <div className="inline-flex items-center gap-3 text-xs uppercase tracking-[0.32em] text-gold-deep">
+                  <Etincelle size={12} />
+                  <span>Ce que cette pratique n&apos;est pas</span>
+                </div>
+                <h2 className="font-display text-3xl md:text-4xl leading-tight text-text-deep">
+                  Pour rester juste et clair.
+                </h2>
+              </div>
+              <ul className="space-y-3">
+                {nestPasFor(practice.family).map((item) => (
+                  <li
+                    key={item}
+                    className="flex items-start gap-3 text-text-medium leading-relaxed"
+                  >
+                    <span className="mt-1.5 h-1 w-1 rounded-full bg-text-soft shrink-0" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </Reveal>
+          </Container>
+        </section>
+      )}
+
+      {/* Mini FAQ */}
+      <section className="section">
+        <Container size="narrow">
+          <Reveal>
+            <div className="space-y-5 mb-8">
+              <div className="inline-flex items-center gap-3 text-xs uppercase tracking-[0.32em] text-gold-deep">
+                <Etincelle size={12} />
+                <span>Questions fréquentes</span>
+              </div>
+              <h2 className="font-display text-3xl md:text-4xl leading-tight text-text-deep">
+                Bonnes choses à savoir.
+              </h2>
+            </div>
+            <div className="space-y-3">
+              {faqFor(practice.family, practice.name).map((item) => (
+                <details
+                  key={item.q}
+                  className="group rounded-2xl border border-border-soft bg-bg-card p-5 [&_summary::-webkit-details-marker]:hidden"
+                >
+                  <summary className="cursor-pointer flex items-center justify-between gap-4 list-none">
+                    <span className="font-display text-lg text-text-deep">{item.q}</span>
+                    <span className="text-text-soft group-open:rotate-45 transition-transform">+</span>
+                  </summary>
+                  <p className="mt-3 text-sm text-text-medium leading-relaxed">{item.a}</p>
+                </details>
+              ))}
+            </div>
+          </Reveal>
+        </Container>
+      </section>
+
       {related.length > 0 && (
         <section className="section bg-bg-soft">
           <Container>
@@ -398,4 +459,88 @@ function derouleFor(family: string): string[] {
         "Temps d'intégration",
       ];
   }
+}
+
+function nestPasFor(family: string): string[] {
+  switch (family) {
+    case "apaiser":
+      return [
+        "Ce n'est pas un acte médical ni une psychothérapie.",
+        "Ce n'est pas une promesse de guérison ou de résultat.",
+        "Ce n'est pas une mise en sommeil — vous restez consciente, en lien avec ce qui se passe.",
+      ];
+    case "explorer":
+      return [
+        "Ce n'est pas un acte médical, ni une psychothérapie conventionnelle.",
+        "Ce n'est pas une promesse de résultat — chaque expérience est singulière.",
+        "Ce n'est pas une transe forcée — Céline ajuste l'intensité à votre rythme.",
+      ];
+    case "feminin":
+      return [
+        "Ce n'est pas un soin gynécologique ou médical.",
+        "Ce n'est pas une promesse de guérison de troubles physiques.",
+        "Ce n'est pas un substitut à un suivi médical ou psychologique.",
+        "Ce n'est pas un univers fermé — l'accompagnement est ouvert à toutes les histoires.",
+      ];
+    case "cacao":
+      return [
+        "Ce n'est pas une cérémonie psychédélique — le cacao consommé est faiblement actif.",
+        "Ce n'est pas un acte médical ni une promesse de guérison.",
+        "Ce n'est pas un protocole figé — chaque cérémonie s'adapte au cercle.",
+      ];
+    case "corps":
+      return [
+        "Ce n'est pas une kinésithérapie ni un acte médical.",
+        "Ce n'est pas une promesse de résultat physique précis.",
+      ];
+    default:
+      return [];
+  }
+}
+
+function faqFor(family: string, name: string): { q: string; a: string }[] {
+  const generic = [
+    {
+      q: "Comment se passe un premier rendez-vous ?",
+      a: `Un premier échange par téléphone ou email permet à Céline de comprendre votre intention et de proposer le format le plus juste pour la séance de ${name}.`,
+    },
+    {
+      q: "Y a-t-il des précautions particulières ?",
+      a: "Si vous suivez un traitement médical ou avez une condition particulière (cardiaque, psychiatrique, grossesse), parlez-en à Céline avant la séance. Modalités précises à confirmer ensemble.",
+    },
+    {
+      q: "Faut-il avoir déjà pratiqué ?",
+      a: "Non. Cet accompagnement est ouvert aux personnes débutantes comme expérimentées. Céline ajuste à votre rythme.",
+    },
+    {
+      q: "Combien de séances faut-il prévoir ?",
+      a: "Cela dépend de votre intention et de ce qui se déploie. Une seule séance peut suffire — d'autres demandent un cheminement plus long. À évaluer ensemble.",
+    },
+  ];
+
+  if (family === "feminin") {
+    return [
+      {
+        q: "Cet accompagnement est-il réservé aux femmes ?",
+        a: "Le travail s'inscrit dans une exploration symbolique du féminin. Il s'adresse principalement aux femmes, mais Céline peut accueillir d'autres situations sur demande.",
+      },
+      ...generic.slice(1, 4),
+    ];
+  }
+
+  if (family === "cacao") {
+    return [
+      {
+        q: "Quelle quantité de cacao est consommée ?",
+        a: "Une dose cérémonielle, douce, qui ouvre l'écoute sans altération psychique. Le cacao utilisé est cru et non sucré.",
+      },
+      {
+        q: "Y a-t-il des contre-indications ?",
+        a: "Les personnes sous antidépresseurs (IMAO/ISRS), avec une condition cardiaque ou enceintes doivent demander un avis médical. Parlez-en à Céline avant l'inscription.",
+      },
+      ...generic.slice(2, 4),
+    ];
+  }
+
+  return generic;
 }

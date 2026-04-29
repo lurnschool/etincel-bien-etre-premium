@@ -24,7 +24,7 @@ import { pageVisuals } from "@/lib/visualAssetMap";
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Échangez avec Céline Dusseval — un message simple, une réponse personnelle sous 48h.",
+    "Échangez avec Céline Dusseval — un message simple, une réponse personnelle.",
 };
 
 const quickLinks = [
@@ -46,7 +46,7 @@ export default function ContactPage() {
             <span className="font-display-italic text-gold-deep">Céline</span>
           </>
         }
-        description="Un message simple, une réponse personnelle sous 48 h. Aucun téléphone surtaxé, aucune réponse automatique."
+        description="Un message simple, une réponse personnelle de Céline. Aucun téléphone surtaxé, aucune réponse automatique."
       />
 
       <section className="relative section overflow-hidden">

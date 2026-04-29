@@ -33,6 +33,10 @@ const messageSuggestions = [
   "Un moment pour toi, à ton rythme.",
   "Reviens à toi. Je t'accompagne.",
   "Pour ralentir et se déposer.",
+  "Un espace pour ton souffle, ton corps, ton cœur.",
+  "Que cette pause te ramène à l'essentiel.",
+  "Avec toute ma tendresse, en chemin avec toi.",
+  "Pour fêter cette nouvelle étape de ta vie.",
 ];
 
 const initialData: GiftCardData = {

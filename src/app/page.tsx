@@ -1,10 +1,13 @@
 import { CinematicHeroSlider } from "@/components/home/CinematicHeroSlider";
 import { EditorialIntro } from "@/components/home/EditorialIntro";
 import { GuidanceCompass } from "@/components/home/GuidanceCompass";
+import { MeetCeline } from "@/components/home/MeetCeline";
+import { WhatToDeposit } from "@/components/home/WhatToDeposit";
 import { PracticesScroll } from "@/components/home/PracticesScroll";
 import { QuoteScene } from "@/components/home/QuoteScene";
 import { Temoignages } from "@/components/home/Temoignages";
 import { GiftCardStudioTeaser } from "@/components/home/GiftCardStudioTeaser";
+import { DiagnosticTeaser } from "@/components/home/DiagnosticTeaser";
 import { LeadMagnet } from "@/components/home/LeadMagnet";
 import { ContactRapide } from "@/components/home/ContactRapide";
 
@@ -20,7 +23,13 @@ export default function HomePage() {
       {/* 3. Boussole intérieure — choisir une intention */}
       <GuidanceCompass />
 
-      {/* 4. Galerie horizontale des pratiques (scroll fluide) */}
+      {/* 4. Rencontrer Céline — portrait + récit */}
+      <MeetCeline />
+
+      {/* 5. Ce que vous pouvez venir déposer */}
+      <WhatToDeposit />
+
+      {/* 6. Galerie horizontale des pratiques */}
       <PracticesScroll />
 
       {/* 5. Scène féminin sacré pleine largeur avec parallax */}
@@ -40,7 +49,7 @@ export default function HomePage() {
         eyebrow="Cacao sacré · Cérémonie du cœur"
         quote="Le cacao invite à ralentir, écouter, ressentir."
         body="Une expérience sensorielle et symbolique pour ouvrir le cœur en présence — en individuel, en cercle, en retraite."
-        cta={{ label: "Découvrir les rituels cacao", href: "/collectif/cacao" }}
+        cta={{ label: "Découvrir les rituels cacao", href: "/cacao" }}
       />
 
       {/* 7. Scène retraites — bande immersive */}
@@ -56,10 +65,13 @@ export default function HomePage() {
       {/* 8. Témoignages — version magazine */}
       <Temoignages />
 
-      {/* 9. Carte cadeau — teaser élégant */}
+      {/* 9. Diagnostic teaser */}
+      <DiagnosticTeaser />
+
+      {/* 10. Carte cadeau — teaser élégant */}
       <GiftCardStudioTeaser />
 
-      {/* 10. Lead magnet */}
+      {/* 11. Lead magnet */}
       <LeadMagnet />
 
       {/* 11. Contact rapide */}

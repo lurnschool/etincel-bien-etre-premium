@@ -1,15 +1,17 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { Calendar, ArrowRight } from "lucide-react";
+import { Calendar, ArrowRight, Lock } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Etincelle } from "@/components/ui/Etincelle";
+import { WhisperLine } from "@/components/ui/WhisperLine";
+import { whisperLines } from "@/lib/data";
 
 export const metadata: Metadata = {
-  title: "Cercles de femmes",
+  title: "Cercles de femmes — Bordeaux",
   description:
-    "Un rendez-vous mensuel à Bordeaux pour déposer, partager et revenir à soi en sororité.",
+    "Un rendez-vous mensuel pour déposer, partager et revenir à soi en sororité. Un cadre tenu, confidentiel, des rituels doux portés par Céline Dusseval.",
 };
 
 const peutVivre = [
@@ -29,6 +31,26 @@ const aQuiSadresse = [
   "À celles qui souhaitent se ressourcer en groupe",
 ];
 
+const deroule = [
+  "Accueil dans un espace tenu — bougies, lumière douce, présence",
+  "Pose de l'intention — un mot, une image, ce qui appelle aujourd'hui",
+  "Tour de parole en confiance — sans interruption, sans interprétation",
+  "Pratique corporelle douce, respiration et ancrage",
+  "Rituel symbolique — parfois cacao, parfois objet, parfois silence",
+  "Clôture — intégration, gratitude, retour au quotidien",
+];
+
+const thematiques = [
+  "Cycles intérieurs et saisons du féminin",
+  "Reconnexion au corps et au souffle",
+  "Mémoires familiales et lignée féminine",
+  "Énergie créatrice et expression de soi",
+  "Rituels de passage et nouvelles pages",
+  "Cacao et ouverture du cœur",
+  "Lune et rythmes naturels",
+  "Sororité et confidentialité",
+];
+
 export default function CerclesPage() {
   return (
     <>
@@ -46,8 +68,9 @@ export default function CerclesPage() {
       />
 
       <section className="section">
+        <WhisperLine text={whisperLines[8]} position="left" tone="amethyst" />
         <Container>
-          <div className="grid gap-16 lg:grid-cols-[1.4fr_1fr] items-start">
+          <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr] items-start">
             <Reveal>
               <div className="space-y-12">
                 <div className="space-y-5">
@@ -68,7 +91,7 @@ export default function CerclesPage() {
                 <div className="space-y-5">
                   <div className="inline-flex items-center gap-3 text-xs uppercase tracking-[0.32em] text-gold-deep">
                     <Etincelle size={12} />
-                    <span>À qui cela s'adresse</span>
+                    <span>À qui cela s&apos;adresse</span>
                   </div>
                   <ul className="space-y-2">
                     {aQuiSadresse.map((item) => (
@@ -80,33 +103,85 @@ export default function CerclesPage() {
                   </ul>
                 </div>
 
+                <div className="space-y-5">
+                  <div className="inline-flex items-center gap-3 text-xs uppercase tracking-[0.32em] text-gold-deep">
+                    <Etincelle size={12} />
+                    <span>Le déroulé d&apos;un cercle</span>
+                  </div>
+                  <ol className="space-y-3">
+                    {deroule.map((step, i) => (
+                      <li key={step} className="flex items-baseline gap-4 text-text-medium leading-relaxed">
+                        <span className="font-display-italic text-gold-deep tabular-nums shrink-0">
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                        <span>{step}</span>
+                      </li>
+                    ))}
+                  </ol>
+                  <p className="text-xs text-text-soft italic">
+                    Déroulé indicatif — chaque cercle s&apos;ajuste à la thématique et à l&apos;énergie du groupe.
+                  </p>
+                </div>
+
+                <div className="space-y-5">
+                  <div className="inline-flex items-center gap-3 text-xs uppercase tracking-[0.32em] text-gold-deep">
+                    <Etincelle size={12} />
+                    <span>Thématiques possibles</span>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {thematiques.map((t) => (
+                      <span
+                        key={t}
+                        className="rounded-full border border-border-medium bg-bg-card px-4 py-1.5 text-sm text-text-deep"
+                      >
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                  <p className="text-xs text-text-soft italic">
+                    La thématique du prochain cercle sera annoncée à l&apos;ouverture des inscriptions.
+                  </p>
+                </div>
+
                 <div className="rounded-3xl border border-rose-soft/60 bg-gradient-to-br from-rose-soft/40 via-bg-card to-bg-card p-8 space-y-4">
                   <div className="flex items-center gap-3 text-xs uppercase tracking-[0.32em] text-gold-deep">
-                    <Calendar className="h-3.5 w-3.5" />
-                    <span>Prochain cercle</span>
+                    <Lock className="h-3.5 w-3.5" />
+                    <span>Confidentialité</span>
                   </div>
-                  <p className="font-display text-2xl text-text-deep">
-                    Prochaine date à venir
+                  <p className="font-display text-2xl text-text-deep leading-snug">
+                    Ce qui est partagé reste à l&apos;intérieur du cercle.
                   </p>
                   <p className="text-sm text-text-medium leading-relaxed">
-                    Pour être informée dès l'ouverture des inscriptions, laissez-nous votre prénom et votre email — vous recevrez un message dès que la date sera fixée.
+                    La confidentialité est un cadre fondamental du cercle. Aucune trace écrite, aucun partage extérieur, aucun jugement. Vous parlez seulement si vous le souhaitez.
                   </p>
                 </div>
               </div>
             </Reveal>
 
             <Reveal delay={0.1}>
-              <aside id="inscription" className="sticky top-32 rounded-3xl border border-border-soft bg-bg-card p-7 space-y-4">
-                <p className="text-xs uppercase tracking-[0.24em] text-gold-deep">Liste d'intérêt</p>
+              <aside
+                id="inscription"
+                className="lg:sticky lg:top-28 rounded-3xl border border-border-soft bg-bg-card p-7 space-y-4"
+              >
+                <div className="flex items-center gap-2 text-xs uppercase tracking-[0.24em] text-gold-deep">
+                  <Calendar className="h-3.5 w-3.5" />
+                  <span>Prochain cercle</span>
+                </div>
                 <p className="font-display text-2xl leading-snug text-text-deep">
-                  Être informée du prochain cercle
+                  Prochaine date à venir
                 </p>
-                <p className="text-sm text-text-medium">
-                  Inscrivez-vous pour recevoir la prochaine date par email.
+                <p className="text-sm text-text-medium leading-relaxed">
+                  Inscrivez-vous à la liste pour être prévenue en priorité dès qu&apos;une nouvelle date est ouverte.
                 </p>
                 <Link href="/contact?sujet=Cercle de femmes" className="btn-primary w-full">
-                  S'inscrire à la liste
+                  Rejoindre la liste d&apos;intérêt
                   <ArrowRight className="h-4 w-4" />
+                </Link>
+                <Link
+                  href="/contact?sujet=Question cercle"
+                  className="block text-center text-sm text-text-medium hover:text-accent transition-colors py-2"
+                >
+                  Poser une question
                 </Link>
                 <p className="text-[0.7rem] text-text-soft leading-relaxed pt-2 border-t border-border-soft">
                   Vos coordonnées ne seront utilisées que pour vous prévenir des prochains cercles. Désinscription à tout moment.
