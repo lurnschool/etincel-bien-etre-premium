@@ -6,6 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { Etincelle } from "@/components/ui/Etincelle";
+import { asset } from "@/lib/assets";
 
 /**
  * Section éditoriale immersive — grande citation + portrait en arche,
@@ -75,7 +76,7 @@ export function EditorialIntro() {
             <div className="relative w-full max-w-sm">
               <div className="absolute -inset-8 bg-gradient-to-br from-gold-soft/40 via-rose-soft/30 to-bg-soft rounded-[3rem] blur-2xl -z-10" />
               <Image
-                src="/images/celine/portrait-celine.png"
+                src={asset("/images/celine/portrait-celine.png")}
                 alt="Portrait de Céline Dusseval"
                 width={640}
                 height={900}

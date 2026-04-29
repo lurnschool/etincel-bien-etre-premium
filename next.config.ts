@@ -2,16 +2,18 @@ import type { NextConfig } from "next";
 
 const isGitHubPages = process.env.GITHUB_PAGES === "true";
 const repoName = "etincel-bien-etre-premium";
+const basePath = isGitHubPages ? `/${repoName}` : "";
 
 const nextConfig: NextConfig = {
-  // Static export pour GitHub Pages
   output: "export",
-  // GitHub Pages ne gère pas l'optimization image Next.js
   images: { unoptimized: true },
-  // basePath quand servi sur lurnschool.github.io/<repoName>
-  basePath: isGitHubPages ? `/${repoName}` : "",
+  basePath,
   assetPrefix: isGitHubPages ? `/${repoName}/` : "",
   trailingSlash: true,
+  // Expose basePath aux composants client pour préfixer les /public/...
+  env: {
+    NEXT_PUBLIC_BASE_PATH: basePath,
+  },
 };
 
 export default nextConfig;

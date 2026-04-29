@@ -7,6 +7,7 @@ import { useRef } from "react";
 import { ArrowRight } from "lucide-react";
 import { Etincelle } from "@/components/ui/Etincelle";
 import { contact } from "@/lib/data";
+import { asset } from "@/lib/assets";
 
 /**
  * Hero immersif — photo de Céline pleine hauteur, parallax au scroll,
@@ -33,7 +34,7 @@ export function HeroLiving() {
         className="absolute inset-0"
       >
         <Image
-          src="/images/celine/approche-philosophie.jpg"
+          src={asset("/images/celine/approche-philosophie.jpg")}
           alt="Céline Dusseval avec son tambour chamanique au lever du soleil"
           fill
           priority

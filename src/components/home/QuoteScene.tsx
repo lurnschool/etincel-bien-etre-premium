@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Etincelle } from "@/components/ui/Etincelle";
+import { asset } from "@/lib/assets";
 
 /**
  * Scène pleine largeur — image avec parallax fort + citation
@@ -46,7 +47,7 @@ export function QuoteScene({
     >
       <motion.div style={{ y, scale }} className="absolute inset-0">
         <Image
-          src={image}
+          src={asset(image)}
           alt={alt}
           fill
           sizes="100vw"

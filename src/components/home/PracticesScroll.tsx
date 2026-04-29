@@ -6,6 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { Etincelle } from "@/components/ui/Etincelle";
+import { asset } from "@/lib/assets";
 
 const practices = [
   {
@@ -120,7 +121,7 @@ export function PracticesScroll() {
             >
               <div className="relative w-full aspect-[4/5] rounded-[2rem] overflow-hidden bg-bg-card mb-5 transition-transform duration-500 group-hover:-translate-y-2">
                 <Image
-                  src={p.image}
+                  src={asset(p.image)}
                   alt={p.name}
                   fill
                   sizes="(max-width: 768px) 260px, 320px"

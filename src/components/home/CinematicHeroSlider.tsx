@@ -6,6 +6,7 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ArrowLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { asset } from "@/lib/assets";
 import { heroSlides, practicesMarquee, type HeroSlide } from "@/lib/data";
 import { Etincelle } from "@/components/ui/Etincelle";
 import {
@@ -125,7 +126,7 @@ export function CinematicHeroSlider() {
                 className="absolute inset-0"
               >
                 <Image
-                  src={slide.image}
+                  src={asset(slide.image)}
                   alt={slide.title}
                   fill
                   priority={index === 0}
