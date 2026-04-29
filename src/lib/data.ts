@@ -437,18 +437,23 @@ export const cta = {
 } as const;
 
 /**
- * Slides du CinematicHeroSlider — pleine largeur, narration éditoriale.
+ * Slides du CinematicHeroSlider — pleine largeur, photo réelle + narration.
+ * Les images proviennent du site existant etinceldebienetre.fr (récupérées
+ * et stockées dans /public/images/celine/). À enrichir avec les photos
+ * Instagram une fois validées.
  */
 export const heroSlides = [
   {
     id: "reconnexion",
     category: "Reconnexion",
-    title: "Un espace pour revenir à vous.",
+    title: "Trouver l'endroit en soi où tout est possible.",
     text:
       "Céline vous accompagne à travers des pratiques sensibles, corporelles et symboliques pour retrouver de l'apaisement, de la clarté et votre élan intérieur.",
     primaryCta: { label: "Trouver ma porte d'entrée", href: "/#boussole" },
     secondaryCta: { label: "Découvrir les pratiques", href: "/#atlas" },
     palette: "amethyst",
+    image: "/images/celine/approche-philosophie.jpg",
+    imagePosition: "object-[center_30%]",
   },
   {
     id: "corps",
@@ -459,6 +464,8 @@ export const heroSlides = [
     primaryCta: { label: "Explorer les accompagnements", href: "/accompagnements" },
     secondaryCta: { label: "Faire le diagnostic", href: "/diagnostic" },
     palette: "rose-gold",
+    image: "/images/celine/portrait-celine.png",
+    imagePosition: "object-[center_top]",
   },
   {
     id: "collectif",
@@ -469,6 +476,8 @@ export const heroSlides = [
     primaryCta: { label: "Découvrir les expériences", href: "/collectif" },
     secondaryCta: { label: "Voir les prochaines dates", href: "/evenements" },
     palette: "deep-night",
+    image: undefined,
+    imagePosition: undefined,
   },
   {
     id: "feminin",
@@ -479,6 +488,8 @@ export const heroSlides = [
     primaryCta: { label: "Explorer le féminin sacré", href: "/feminin-sacre" },
     secondaryCta: { label: "Découvrir les cercles", href: "/cercles-de-femmes" },
     palette: "rose-velvet",
+    image: "/images/celine/approche-philosophie.jpg",
+    imagePosition: "object-[center_60%]",
   },
   {
     id: "offrir",
@@ -489,6 +500,8 @@ export const heroSlides = [
     primaryCta: { label: "Créer une carte cadeau", href: "/cartes-cadeaux" },
     secondaryCta: { label: "Découvrir les formats", href: "/cartes-cadeaux#formats" },
     palette: "gold-warm",
+    image: "/images/celine/carte-cadeau.png",
+    imagePosition: "object-center",
   },
   {
     id: "cacao",
@@ -499,6 +512,8 @@ export const heroSlides = [
     primaryCta: { label: "Découvrir les rituels", href: "/collectif/cacao" },
     secondaryCta: { label: "Être informée du prochain rituel", href: "/contact?sujet=Cacao" },
     palette: "cacao",
+    image: undefined,
+    imagePosition: undefined,
   },
 ] as const;
 

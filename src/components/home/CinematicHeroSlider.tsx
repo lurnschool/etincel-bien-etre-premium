@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ArrowLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -19,16 +20,15 @@ import {
 
 const SLIDE_DURATION_MS = 8000;
 
-const palettes: Record<
-  HeroSlide["palette"],
-  {
-    bg: string;
-    halo: string;
-    tone: "light" | "dark";
-    primaryOrnament: React.ReactNode;
-    accentOrnament: React.ReactNode;
-  }
-> = {
+type PaletteConfig = {
+  bg: string;
+  halo: string;
+  tone: "light" | "dark";
+  primaryOrnament: React.ReactNode;
+  accentOrnament: React.ReactNode;
+};
+
+const palettes: Record<HeroSlide["palette"], PaletteConfig> = {
   amethyst: {
     bg: "from-[#1d1530] via-[#2a1f44] to-[#3a2358]",
     halo: "from-accent/40 via-rose/15 to-gold/10",
@@ -74,8 +74,9 @@ const palettes: Record<
 };
 
 /**
- * Hero cinématique pleine largeur — 5 slides éditoriales.
- * Auto-play 8s, transition douce, indicateurs discrets, swipe mobile.
+ * Hero cinématique — slider pleine largeur avec photos réelles
+ * en arrière-plan (Ken Burns + parallax doux). Auto-play 8s,
+ * transitions fade lentes, indicateurs progress.
  */
 export function CinematicHeroSlider() {
   const [index, setIndex] = useState(0);
@@ -94,6 +95,7 @@ export function CinematicHeroSlider() {
   const slide = heroSlides[index];
   const palette = palettes[slide.palette];
   const isDark = palette.tone === "dark";
+  const hasImage = !!slide.image;
 
   return (
     <section
@@ -103,109 +105,147 @@ export function CinematicHeroSlider() {
       aria-roledescription="carousel"
       aria-label="Présentation des univers d'Etincel"
     >
-      <div className="relative w-full h-[78vh] md:h-[78vh] lg:h-[82vh] min-h-[640px]">
-        <AnimatePresence mode="wait">
+      <div className="relative w-full h-[88vh] md:h-[88vh] lg:h-[92vh] min-h-[640px]">
+        <AnimatePresence mode="sync">
           <motion.div
             key={slide.id}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-            className={cn("absolute inset-0 bg-gradient-to-br", palette.bg)}
+            transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
+            className="absolute inset-0"
           >
-            <div className={cn("absolute -top-32 -left-32 h-[44rem] w-[44rem] rounded-full blur-[160px] bg-gradient-to-br", palette.halo)} />
-            <div className={cn("absolute -bottom-40 -right-40 h-[44rem] w-[44rem] rounded-full blur-[180px] bg-gradient-to-tl", palette.halo)} />
+            {/* Photo réelle en arrière-plan + Ken Burns subtil */}
+            {hasImage && slide.image && (
+              <motion.div
+                key={`img-${slide.id}`}
+                initial={{ scale: 1.08 }}
+                animate={{ scale: 1 }}
+                transition={{ duration: 9, ease: "easeOut" }}
+                className="absolute inset-0"
+              >
+                <Image
+                  src={slide.image}
+                  alt={slide.title}
+                  fill
+                  priority={index === 0}
+                  sizes="100vw"
+                  className={cn(
+                    "object-cover",
+                    slide.imagePosition ?? "object-center",
+                  )}
+                />
+                {/* Overlay pour lisibilité */}
+                {isDark ? (
+                  <>
+                    <div className="absolute inset-0 bg-gradient-to-r from-bg-deep/80 via-bg-deep/40 to-transparent md:from-bg-deep/70" />
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-bg-deep/60" />
+                  </>
+                ) : (
+                  <>
+                    <div className="absolute inset-0 bg-gradient-to-r from-bg-base/90 via-bg-base/60 to-transparent md:from-bg-base/80" />
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-bg-base/40" />
+                  </>
+                )}
+              </motion.div>
+            )}
 
-            {/* Ornement principal — composition visuelle alignée sur le thème du slide */}
-            <motion.div
-              className="absolute right-[-4rem] md:right-[2%] top-1/2 -translate-y-1/2 hidden md:block"
-              animate={{ rotate: [0, 360] }}
-              transition={{ duration: 360, repeat: Infinity, ease: "linear" }}
-              aria-hidden
-            >
-              {palette.primaryOrnament}
-            </motion.div>
+            {/* Si pas de photo : fallback gradient + ornements */}
+            {!hasImage && (
+              <>
+                <div className={cn("absolute inset-0 bg-gradient-to-br", palette.bg)} />
+                <div className={cn("absolute -top-32 -left-32 h-[44rem] w-[44rem] rounded-full blur-[160px] bg-gradient-to-br", palette.halo)} />
+                <div className={cn("absolute -bottom-40 -right-40 h-[44rem] w-[44rem] rounded-full blur-[180px] bg-gradient-to-tl", palette.halo)} />
+                <motion.div
+                  className="absolute right-[-4rem] md:right-[2%] top-1/2 -translate-y-1/2 hidden md:block"
+                  animate={{ rotate: [0, 360] }}
+                  transition={{ duration: 360, repeat: Infinity, ease: "linear" }}
+                  aria-hidden
+                >
+                  {palette.primaryOrnament}
+                </motion.div>
+                <motion.div
+                  className="absolute right-[14%] top-[18%] hidden lg:block"
+                  animate={{ y: [0, -12, 0] }}
+                  transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
+                  aria-hidden
+                >
+                  {palette.accentOrnament}
+                </motion.div>
+              </>
+            )}
 
-            {/* Ornement accent flottant */}
-            <motion.div
-              className="absolute right-[14%] top-[18%] hidden lg:block"
-              animate={{ y: [0, -12, 0] }}
-              transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
-              aria-hidden
-            >
-              {palette.accentOrnament}
-            </motion.div>
-
-            <div className="absolute inset-0 grain opacity-50" />
+            <div className="absolute inset-0 grain opacity-30" />
           </motion.div>
         </AnimatePresence>
 
-        <div className="relative h-full mx-auto max-w-7xl px-6 md:px-10 flex items-end pb-24 md:pb-28">
-          <div className="grid lg:grid-cols-12 gap-8 w-full">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={`text-${slide.id}`}
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -16 }}
-                transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-                className="lg:col-span-8 max-w-3xl space-y-6"
+        <div className="relative h-full mx-auto max-w-7xl px-6 md:px-10 flex items-end pb-28 md:pb-32">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={`text-${slide.id}`}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -16 }}
+              transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+              className="max-w-3xl space-y-6"
+            >
+              <div
+                className={cn(
+                  "inline-flex items-center gap-3 text-[0.7rem] uppercase tracking-[0.36em]",
+                  isDark ? "text-gold-soft" : "text-gold-deep",
+                )}
               >
-                <div
+                <span className="text-gold">
+                  <Etincelle size={12} />
+                </span>
+                <span>{slide.category}</span>
+              </div>
+
+              <h1
+                className={cn(
+                  "font-display text-balance text-[2.6rem] sm:text-5xl md:text-6xl lg:text-[4.6rem] leading-[1.02] tracking-tight",
+                  isDark ? "text-text-on-dark" : "text-text-deep",
+                )}
+              >
+                {slide.title}
+              </h1>
+
+              <p
+                className={cn(
+                  "text-base md:text-lg leading-relaxed max-w-xl",
+                  isDark ? "text-text-on-dark-soft" : "text-text-medium",
+                )}
+              >
+                {slide.text}
+              </p>
+
+              <div className="flex flex-wrap gap-3 pt-2">
+                <Link
+                  href={slide.primaryCta.href}
                   className={cn(
-                    "inline-flex items-center gap-3 text-[0.7rem] uppercase tracking-[0.36em]",
-                    isDark ? "text-gold-soft" : "text-gold-deep",
+                    "group inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-sm font-medium transition-all duration-400",
+                    isDark
+                      ? "bg-gold text-text-deep hover:bg-gold-soft hover:-translate-y-0.5"
+                      : "bg-accent-deep text-text-on-dark hover:bg-accent hover:-translate-y-0.5",
                   )}
                 >
-                  <span className="text-gold">
-                    <Etincelle size={12} />
-                  </span>
-                  <span>{slide.category}</span>
-                </div>
-                <h1
+                  {slide.primaryCta.label}
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                </Link>
+                <Link
+                  href={slide.secondaryCta.href}
                   className={cn(
-                    "font-display text-balance text-[2.6rem] sm:text-5xl md:text-6xl lg:text-[4.6rem] leading-[1.02] tracking-tight",
-                    isDark ? "text-text-on-dark" : "text-text-deep",
+                    "inline-flex items-center gap-2 rounded-full border px-7 py-3.5 text-sm font-medium transition-colors",
+                    isDark
+                      ? "border-white/30 text-text-on-dark hover:border-gold hover:text-gold"
+                      : "border-text-deep/20 text-text-deep hover:border-accent hover:text-accent",
                   )}
                 >
-                  {slide.title}
-                </h1>
-                <p
-                  className={cn(
-                    "text-base md:text-lg leading-relaxed max-w-xl",
-                    isDark ? "text-text-on-dark-soft" : "text-text-medium",
-                  )}
-                >
-                  {slide.text}
-                </p>
-                <div className="flex flex-wrap gap-3 pt-2">
-                  <Link
-                    href={slide.primaryCta.href}
-                    className={cn(
-                      "inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-medium transition-all duration-400",
-                      isDark
-                        ? "bg-gold text-text-deep hover:bg-gold-soft hover:-translate-y-0.5"
-                        : "bg-accent-deep text-text-on-dark hover:bg-accent hover:-translate-y-0.5",
-                    )}
-                  >
-                    {slide.primaryCta.label}
-                    <ArrowRight className="h-4 w-4" />
-                  </Link>
-                  <Link
-                    href={slide.secondaryCta.href}
-                    className={cn(
-                      "inline-flex items-center gap-2 rounded-full border px-6 py-3 text-sm font-medium transition-colors",
-                      isDark
-                        ? "border-white/30 text-text-on-dark hover:border-gold hover:text-gold"
-                        : "border-text-deep/20 text-text-deep hover:border-accent hover:text-accent",
-                    )}
-                  >
-                    {slide.secondaryCta.label}
-                  </Link>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          </div>
+                  {slide.secondaryCta.label}
+                </Link>
+              </div>
+            </motion.div>
+          </AnimatePresence>
         </div>
 
         <div className="absolute bottom-8 left-0 right-0 mx-auto max-w-7xl px-6 md:px-10 flex items-center justify-between">
@@ -221,14 +261,16 @@ export function CinematicHeroSlider() {
                 <span
                   className={cn(
                     "absolute inset-0 rounded-full transition-colors",
-                    isDark ? "bg-white/30 group-hover/dot:bg-white/50" : "bg-text-deep/20 group-hover/dot:bg-text-deep/40",
+                    isDark
+                      ? "bg-white/30 group-hover/dot:bg-white/50"
+                      : "bg-text-deep/20 group-hover/dot:bg-text-deep/40",
                   )}
                 />
                 {i === index && (
                   <motion.span
                     key={`progress-${slide.id}-${index}`}
                     initial={{ width: 0 }}
-                    animate={{ width: paused ? "100%" : "100%" }}
+                    animate={{ width: "100%" }}
                     transition={{
                       duration: paused ? 0 : SLIDE_DURATION_MS / 1000,
                       ease: "linear",
@@ -247,10 +289,10 @@ export function CinematicHeroSlider() {
               onClick={prev}
               aria-label="Slide précédent"
               className={cn(
-                "h-9 w-9 rounded-full flex items-center justify-center border transition-colors",
+                "h-10 w-10 rounded-full flex items-center justify-center border backdrop-blur-sm transition-colors",
                 isDark
-                  ? "border-white/25 text-text-on-dark hover:border-gold hover:text-gold"
-                  : "border-text-deep/20 text-text-deep hover:border-accent hover:text-accent",
+                  ? "border-white/25 bg-white/5 text-text-on-dark hover:border-gold hover:text-gold"
+                  : "border-text-deep/20 bg-bg-base/40 text-text-deep hover:border-accent hover:text-accent",
               )}
             >
               <ArrowLeft className="h-4 w-4" />
@@ -259,10 +301,10 @@ export function CinematicHeroSlider() {
               onClick={next}
               aria-label="Slide suivant"
               className={cn(
-                "h-9 w-9 rounded-full flex items-center justify-center border transition-colors",
+                "h-10 w-10 rounded-full flex items-center justify-center border backdrop-blur-sm transition-colors",
                 isDark
-                  ? "border-white/25 text-text-on-dark hover:border-gold hover:text-gold"
-                  : "border-text-deep/20 text-text-deep hover:border-accent hover:text-accent",
+                  ? "border-white/25 bg-white/5 text-text-on-dark hover:border-gold hover:text-gold"
+                  : "border-text-deep/20 bg-bg-base/40 text-text-deep hover:border-accent hover:text-accent",
               )}
             >
               <ArrowRight className="h-4 w-4" />
@@ -271,7 +313,7 @@ export function CinematicHeroSlider() {
         </div>
       </div>
 
-      <PracticesMarquee inline />
+      <PracticesMarquee />
     </section>
   );
 }
@@ -279,15 +321,10 @@ export function CinematicHeroSlider() {
 /**
  * Bande défilante des pratiques — éditoriale, infinie, douce.
  */
-function PracticesMarquee({ inline = false }: { inline?: boolean }) {
+function PracticesMarquee() {
   const items = [...practicesMarquee, ...practicesMarquee];
   return (
-    <div
-      className={cn(
-        "relative w-full overflow-hidden border-y border-border-soft/40 bg-bg-base/80 backdrop-blur",
-        inline && "border-t border-b-0",
-      )}
-    >
+    <div className="relative w-full overflow-hidden border-y border-border-soft/40 bg-bg-base/80 backdrop-blur">
       <div className="flex gap-12 py-4 whitespace-nowrap animate-[scroll_60s_linear_infinite] hover:[animation-play-state:paused]">
         {items.map((item, i) => (
           <span
