@@ -179,103 +179,104 @@ body {
   pointer-events: none;
 }
 
-/* Bouton primaire (style premium) */
-.btn-primary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.95rem 1.75rem;
-  background: var(--accent-deep);
-  color: var(--text-on-dark);
-  border-radius: 999px;
-  font-weight: 500;
-  font-size: 0.95rem;
-  letter-spacing: 0.02em;
-  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 6px 20px rgba(74, 52, 99, 0.25);
-}
+/* Boutons premium et cartes — placés dans @layer components
+ * pour que les utilities Tailwind (ex. `hidden`) puissent les overrider
+ * via la cascade des layers. */
+@layer components {
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.95rem 1.75rem;
+    background: var(--accent-deep);
+    color: var(--text-on-dark);
+    border-radius: 999px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    letter-spacing: 0.02em;
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 6px 20px rgba(74, 52, 99, 0.25);
+  }
 
-.btn-primary::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, var(--accent), var(--accent-deep));
-  opacity: 0;
-  transition: opacity 0.4s ease;
-}
+  .btn-primary::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
 
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(74, 52, 99, 0.35);
-}
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(74, 52, 99, 0.35);
+  }
 
-.btn-primary:hover::before { opacity: 1; }
+  .btn-primary:hover::before { opacity: 1; }
 
-.btn-primary > * { position: relative; z-index: 1; }
+  .btn-primary > * { position: relative; z-index: 1; }
 
-/* Bouton secondaire — fond clair */
-.btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.95rem 1.75rem;
-  background: transparent;
-  color: var(--text-deep);
-  border: 1px solid var(--border-medium);
-  border-radius: 999px;
-  font-weight: 500;
-  font-size: 0.95rem;
-  letter-spacing: 0.02em;
-  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-}
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.95rem 1.75rem;
+    background: transparent;
+    color: var(--text-deep);
+    border: 1px solid var(--border-medium);
+    border-radius: 999px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    letter-spacing: 0.02em;
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
 
-.btn-secondary:hover {
-  background: var(--bg-card);
-  border-color: var(--accent);
-  color: var(--accent);
-  transform: translateY(-2px);
-}
+  .btn-secondary:hover {
+    background: var(--bg-card);
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-2px);
+  }
 
-/* Bouton doré */
-.btn-gold {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.95rem 1.75rem;
-  background: linear-gradient(135deg, var(--gold) 0%, var(--gold-deep) 100%);
-  color: var(--text-deep);
-  border-radius: 999px;
-  font-weight: 500;
-  font-size: 0.95rem;
-  letter-spacing: 0.02em;
-  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-  box-shadow: 0 6px 20px rgba(201, 168, 106, 0.35);
-}
+  .btn-gold {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.95rem 1.75rem;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-deep) 100%);
+    color: var(--text-deep);
+    border-radius: 999px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    letter-spacing: 0.02em;
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    box-shadow: 0 6px 20px rgba(201, 168, 106, 0.35);
+  }
 
-.btn-gold:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(201, 168, 106, 0.5);
-}
+  .btn-gold:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(201, 168, 106, 0.5);
+  }
 
-/* Carte premium */
-.card-premium {
-  background: var(--bg-card);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border-soft);
-  box-shadow: var(--shadow-soft);
-  transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-  overflow: hidden;
-}
+  .card-premium {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-soft);
+    box-shadow: var(--shadow-soft);
+    transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    overflow: hidden;
+  }
 
-.card-premium:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-medium);
-  border-color: var(--gold-soft);
+  .card-premium:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-medium);
+    border-color: var(--gold-soft);
+  }
 }
 
 /* Section padding standard */
