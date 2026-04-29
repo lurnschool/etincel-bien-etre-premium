@@ -58,13 +58,6 @@ const palettes: Record<HeroSlide["palette"], PaletteConfig> = {
     primaryOrnament: <AnkhSymbol size={220} strokeWidth={0.7} className="text-gold/40" />,
     accentOrnament: <FeminineSun size={140} strokeWidth={0.6} className="text-gold-soft/40" />,
   },
-  "gold-warm": {
-    bg: "from-[#f3e1c0] via-[#e9cf9d] to-[#fbf2dc]",
-    halo: "from-gold/40 via-rose-soft/30 to-bg-base",
-    tone: "light",
-    primaryOrnament: <FeminineSun size={360} strokeWidth={0.6} className="text-gold-deep/25" />,
-    accentOrnament: <CacaoCup size={120} strokeWidth={0.8} className="text-gold-deep/35" />,
-  },
   cacao: {
     bg: "from-[#3d2a1f] via-[#2d1f15] to-[#1a120b]",
     halo: "from-gold/25 via-rose/15 to-transparent",

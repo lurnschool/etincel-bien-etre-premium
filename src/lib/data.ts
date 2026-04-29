@@ -66,13 +66,14 @@ export const contact = {
  */
 export const navigation = [
   { label: "Accueil", href: "/" },
-  { label: "Être guidée", href: "/#boussole" },
+  { label: "Cacao", href: "/cacao" },
+  { label: "Constellations", href: "/constellations" },
+  { label: "Numérologie", href: "/accompagnements/numerologie" },
   {
-    label: "Individuel",
+    label: "Autres pratiques",
     href: "/accompagnements",
     children: [
       { label: "Tous les accompagnements", href: "/accompagnements" },
-      { label: "Numérologie", href: "/accompagnements/numerologie" },
       { label: "Hypnose", href: "/accompagnements/hypnose" },
       { label: "CellRelease®", href: "/accompagnements/cellrelease" },
       { label: "Massage énergétique", href: "/accompagnements/massage-energetique" },
@@ -80,7 +81,6 @@ export const navigation = [
       { label: "Breathwork", href: "/accompagnements/breathwork" },
       { label: "Innerdance", href: "/innerdance#individuel" },
       { label: "Féminin sacré", href: "/feminin-sacre" },
-      { label: "Rituel cacao individuel", href: "/cacao#individuel" },
     ],
   },
   {
@@ -88,16 +88,13 @@ export const navigation = [
     href: "/collectif",
     children: [
       { label: "Cercles de femmes", href: "/cercles-de-femmes" },
-      { label: "Rituel cacao", href: "/cacao" },
       { label: "Innerdance collectif", href: "/innerdance#collectif" },
       { label: "Breathwork collectif", href: "/collectif#breathwork" },
-      { label: "Constellations", href: "/collectif#constellations" },
       { label: "Ateliers", href: "/collectif#ateliers" },
     ],
   },
   { label: "Retraites", href: "/retraites" },
   { label: "Offrir", href: "/cartes-cadeaux" },
-  { label: "Contact", href: "/contact" },
 ] as const;
 
 export const portesEntree = [
@@ -437,51 +434,49 @@ export const cta = {
 } as const;
 
 /**
- * Slides du CinematicHeroSlider — pleine largeur, photo réelle + narration.
- * Les images proviennent du site existant etinceldebienetre.fr (récupérées
- * et stockées dans /public/images/celine/). À enrichir avec les photos
- * Instagram une fois validées.
+ * Slides du CinematicHeroSlider — orientés business autour des 3 piliers
+ * de Céline : Cacao, Constellations, Numérologie, + féminin et retraites.
  */
 export const heroSlides = [
   {
-    id: "reconnexion",
-    category: "Reconnexion",
-    title: "Trouver l'endroit en soi où tout est possible.",
+    id: "cacao",
+    category: "Pilier · Rituel cacao",
+    title: "Le cacao comme cérémonie du cœur.",
     text:
-      "Céline vous accompagne à travers des pratiques sensibles, corporelles et symboliques pour retrouver de l'apaisement, de la clarté et votre élan intérieur.",
-    primaryCta: { label: "Trouver ma porte d'entrée", href: "/#boussole" },
-    secondaryCta: { label: "Découvrir les pratiques", href: "/#atlas" },
-    palette: "amethyst",
-    image: "/images/celine/approche-philosophie.jpg",
-    imagePosition: "object-[center_30%]",
+      "Une expérience sensorielle et symbolique pour ralentir, écouter le corps et revenir à soi — en individuel, en cercle ou en retraite.",
+    primaryCta: { label: "Découvrir les rituels cacao", href: "/cacao" },
+    secondaryCta: { label: "Être informée du prochain rituel", href: "/contact?sujet=Cacao" },
+    palette: "cacao",
+    image: undefined,
+    imagePosition: undefined,
   },
   {
-    id: "corps",
-    category: "Corps & énergie",
-    title: "Quand le corps devient une porte.",
+    id: "constellations",
+    category: "Pilier · Constellations",
+    title: "Éclairer les liens invisibles.",
     text:
-      "Massages, souffle, présence et écoute du corps ouvrent un espace pour déposer ce qui demande à l'être.",
-    primaryCta: { label: "Explorer les accompagnements", href: "/accompagnements" },
+      "Explorer les dynamiques familiales, symboliques ou intérieures qui influencent votre chemin — en individuel ou en cercle.",
+    primaryCta: { label: "Découvrir les constellations", href: "/constellations" },
     secondaryCta: { label: "Faire le diagnostic", href: "/diagnostic" },
-    palette: "rose-gold",
-    image: "/images/celine/portrait-celine.png",
-    imagePosition: "object-[center_top]",
-  },
-  {
-    id: "collectif",
-    category: "Collectif",
-    title: "Avancer ensemble autrement.",
-    text:
-      "Cercles de femmes, Innerdance, breathwork, constellations et ateliers créent des espaces de partage et de transformation.",
-    primaryCta: { label: "Découvrir les expériences", href: "/collectif" },
-    secondaryCta: { label: "Voir les prochaines dates", href: "/evenements" },
     palette: "deep-night",
     image: undefined,
     imagePosition: undefined,
   },
   {
+    id: "numerologie",
+    category: "Pilier · Numérologie",
+    title: "Lire les cycles et les ressources de votre chemin.",
+    text:
+      "Une lecture symbolique pour mieux comprendre vos élans, vos passages et vos points d'appui.",
+    primaryCta: { label: "Demander une lecture", href: "/accompagnements/numerologie" },
+    secondaryCta: { label: "Découvrir les formations", href: "/formations" },
+    palette: "amethyst",
+    image: "/images/celine/numerologie.png",
+    imagePosition: "object-center",
+  },
+  {
     id: "feminin",
-    category: "Féminin sacré",
+    category: "Féminin · Intuition",
     title: "Revenir au corps, aux cycles et à l'intuition.",
     text:
       "Un accompagnement symbolique autour du féminin, de la mémoire du corps et de l'énergie créatrice.",
@@ -489,35 +484,149 @@ export const heroSlides = [
     secondaryCta: { label: "Découvrir les cercles", href: "/cercles-de-femmes" },
     palette: "rose-velvet",
     image: "/images/celine/approche-philosophie.jpg",
-    imagePosition: "object-[center_60%]",
+    imagePosition: "object-[center_30%]",
   },
   {
-    id: "offrir",
-    category: "Offrir",
-    title: "Offrir une parenthèse de reconnexion.",
+    id: "retraites",
+    category: "Expériences immersives",
+    title: "Retraites & cercles : avancer ensemble autrement.",
     text:
-      "Créez une carte cadeau personnalisée pour offrir un moment sensible, profond et adapté.",
-    primaryCta: { label: "Créer une carte cadeau", href: "/cartes-cadeaux" },
-    secondaryCta: { label: "Découvrir les formats", href: "/cartes-cadeaux#formats" },
-    palette: "gold-warm",
-    image: "/images/celine/carte-cadeau.png",
-    imagePosition: "object-center",
-  },
-  {
-    id: "cacao",
-    category: "Cacao sacré",
-    title: "Le cacao comme cérémonie du cœur.",
-    text:
-      "Une expérience symbolique et sensorielle pour ralentir, ouvrir le cœur, déposer en présence — en individuel, en cercle ou en retraite.",
-    primaryCta: { label: "Découvrir les rituels", href: "/cacao" },
-    secondaryCta: { label: "Être informée du prochain rituel", href: "/contact?sujet=Cacao" },
-    palette: "cacao",
-    image: undefined,
-    imagePosition: undefined,
+      "Cercles de femmes, retraites, breathwork, innerdance, ateliers — des espaces de partage et de transformation profonde.",
+    primaryCta: { label: "Découvrir les retraites", href: "/retraites" },
+    secondaryCta: { label: "Voir les prochaines dates", href: "/evenements" },
+    palette: "rose-gold",
+    image: "/images/celine/portrait-celine.png",
+    imagePosition: "object-[center_top]",
   },
 ] as const;
 
 export type HeroSlide = (typeof heroSlides)[number];
+
+/**
+ * Les 3 piliers de Céline — porte d'entrée principale du site.
+ * Mis en avant dans le composant CorePillars (triptyque éditorial).
+ */
+export const corePillars = [
+  {
+    id: "cacao",
+    number: "01",
+    name: "Rituel cacao",
+    catchphrase: "Ouvrir un espace de cœur et de présence.",
+    description:
+      "Une expérience sensorielle et symbolique pour ralentir, écouter le corps et revenir à soi.",
+    image: undefined,
+    fallback: "cacao" as const,
+    href: "/cacao",
+    cta: "Découvrir les rituels",
+    formats: ["Individuel", "Cercle", "Retraite"],
+  },
+  {
+    id: "constellations",
+    number: "02",
+    name: "Constellations",
+    catchphrase: "Éclairer les liens invisibles.",
+    description:
+      "Explorer les dynamiques familiales, symboliques ou intérieures qui influencent votre chemin.",
+    image: "/images/celine/constellations.png",
+    fallback: "feminin" as const,
+    href: "/constellations",
+    cta: "Découvrir les constellations",
+    formats: ["Individuel à confirmer", "Cercle"],
+  },
+  {
+    id: "numerologie",
+    number: "03",
+    name: "Numérologie",
+    catchphrase: "Lire les cycles et les ressources de votre chemin.",
+    description:
+      "Une lecture symbolique pour mieux comprendre vos élans, vos passages et vos points d'appui.",
+    image: "/images/celine/numerologie.png",
+    fallback: "numerologie" as const,
+    href: "/accompagnements/numerologie",
+    cta: "Demander une lecture",
+    formats: ["Lecture individuelle", "Formation M1", "Formation M2"],
+  },
+];
+
+/**
+ * Pratiques secondaires regroupées par intention — alimentent
+ * ComplementaryPracticesExplorer.
+ */
+export type SecondaryIntent = {
+  id: string;
+  label: string;
+  catchphrase: string;
+  practices: { name: string; href: string; format?: string }[];
+};
+
+export const secondaryIntents: SecondaryIntent[] = [
+  {
+    id: "apaiser",
+    label: "Libérer une mémoire",
+    catchphrase: "Quand le passé demande à être déposé.",
+    practices: [
+      { name: "Hypnose & mouvements oculaires", href: "/accompagnements/hypnose", format: "Individuel" },
+      { name: "CellRelease®", href: "/accompagnements/cellrelease", format: "Individuel" },
+    ],
+  },
+  {
+    id: "corps",
+    label: "Revenir au corps",
+    catchphrase: "Quand le corps appelle à être réhabité.",
+    practices: [
+      { name: "Massage énergétique", href: "/accompagnements/massage-energetique", format: "Individuel" },
+      { name: "Massage Libération Reconnexion", href: "/accompagnements/massage-liberation-reconnexion", format: "Individuel" },
+      { name: "Réflexologie amérindienne", href: "/accompagnements/reflexologie", format: "Individuel" },
+    ],
+  },
+  {
+    id: "explorer",
+    label: "Explorer l'intérieur",
+    catchphrase: "Souffle, présence, états sensibles.",
+    practices: [
+      { name: "Breathwork chamanique", href: "/accompagnements/breathwork", format: "Individuel & collectif" },
+      { name: "Innerdance", href: "/innerdance", format: "Individuel & collectif" },
+    ],
+  },
+  {
+    id: "feminin",
+    label: "Explorer le féminin",
+    catchphrase: "Cycles, intuition, énergie créatrice.",
+    practices: [
+      { name: "Féminin sacré", href: "/feminin-sacre", format: "Individuel" },
+      { name: "Cercles de femmes", href: "/cercles-de-femmes", format: "Mensuel" },
+    ],
+  },
+  {
+    id: "collectif",
+    label: "Vivre en groupe",
+    catchphrase: "La force de la présence partagée.",
+    practices: [
+      { name: "Cercles de femmes", href: "/cercles-de-femmes", format: "Mensuel" },
+      { name: "Innerdance collectif", href: "/innerdance#collectif", format: "Sessions ponctuelles" },
+      { name: "Breathwork collectif", href: "/collectif#breathwork", format: "Sessions ponctuelles" },
+      { name: "Ateliers thématiques", href: "/collectif#ateliers", format: "Programme à venir" },
+    ],
+  },
+  {
+    id: "immersion",
+    label: "Vivre une immersion",
+    catchphrase: "Un temps long pour se déposer pleinement.",
+    practices: [
+      { name: "Retraites", href: "/retraites", format: "Plusieurs jours" },
+      { name: "Week-ends reconnexion", href: "/retraites", format: "Week-end" },
+      { name: "Formations en numérologie", href: "/formations", format: "Modules M1 / M2" },
+    ],
+  },
+  {
+    id: "offrir",
+    label: "Offrir un moment",
+    catchphrase: "Une carte cadeau qui ressemble à la personne.",
+    practices: [
+      { name: "Cartes cadeaux personnalisées", href: "/cartes-cadeaux", format: "6 styles disponibles" },
+    ],
+  },
+];
 
 /**
  * Bande défilante des pratiques — élégante et éditoriale, pas publicitaire.

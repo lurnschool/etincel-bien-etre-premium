@@ -24,6 +24,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/mentions-legales",
     "/politique-confidentialite",
     "/cacao",
+    "/constellations",
   ];
 
   const staticEntries: MetadataRoute.Sitemap = staticRoutes.map((path) => ({
