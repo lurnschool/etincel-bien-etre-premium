@@ -14,6 +14,8 @@ import {
   Download,
   Send,
   Shield,
+  CreditCard,
+  Loader2,
 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
@@ -28,7 +30,7 @@ import {
 } from "@/components/giftcard/GiftCardPreview";
 import { cn } from "@/lib/utils";
 import { whatsappMessages } from "@/lib/whatsapp";
-import { stripeEnabled } from "@/lib/stripeProducts";
+import { redirectToCheckout, generateOrderRef } from "@/lib/stripeProducts";
 
 type GiftType = {
   id: string;
@@ -38,6 +40,7 @@ type GiftType = {
   price: string;
   defaultStyle: GiftCardStyle;
   cardLabel: string;
+  productId: string;
 };
 
 const giftTypes: GiftType[] = [
@@ -46,9 +49,10 @@ const giftTypes: GiftType[] = [
     icon: Sparkles,
     label: "Rituel cacao",
     description: "Une cérémonie sensorielle et symbolique pour ouvrir le cœur.",
-    price: "Selon événement",
+    price: "Tarif selon événement ou format",
     defaultStyle: "cacao",
     cardLabel: "Une cérémonie cacao",
+    productId: "carte-cadeau-cacao",
   },
   {
     id: "numerologie",
@@ -58,6 +62,7 @@ const giftTypes: GiftType[] = [
     price: "110 €",
     defaultStyle: "elegance",
     cardLabel: "Une lecture numérologique",
+    productId: "carte-cadeau-numerologie-110",
   },
   {
     id: "constellation",
@@ -67,6 +72,7 @@ const giftTypes: GiftType[] = [
     price: "95 €",
     defaultStyle: "feminin",
     cardLabel: "Une constellation",
+    productId: "carte-cadeau-constellation-95",
   },
   {
     id: "soin",
@@ -76,6 +82,7 @@ const giftTypes: GiftType[] = [
     price: "À partir de 90 €",
     defaultStyle: "doree",
     cardLabel: "Un soin énergétique",
+    productId: "carte-cadeau-soin-90",
   },
   {
     id: "collectif",
@@ -85,6 +92,7 @@ const giftTypes: GiftType[] = [
     price: "Sur demande",
     defaultStyle: "retraite",
     cardLabel: "Une expérience collective",
+    productId: "carte-cadeau-libre",
   },
   {
     id: "libre",
@@ -94,6 +102,7 @@ const giftTypes: GiftType[] = [
     price: "Vous choisissez",
     defaultStyle: "doree",
     cardLabel: "Une parenthèse",
+    productId: "carte-cadeau-libre",
   },
 ];
 
@@ -110,13 +119,13 @@ const messageSuggestions = [
 
 const steps = [
   { num: "01", label: "Personnalisez", description: "Choisissez le cadeau, le style, écrivez votre message." },
-  { num: "02", label: "Envoyez la demande", description: "Téléchargez l'aperçu, transmettez à Céline." },
-  { num: "03", label: "Céline valide", description: "Échange court pour confirmer modalités et règlement." },
-  { num: "04", label: "Réception", description: "Carte personnalisée envoyée par email ou imprimée." },
+  { num: "02", label: "Validez & payez", description: "Paiement sécurisé Stripe ou règlement manuel avec Céline." },
+  { num: "03", label: "Carte définitive", description: "Une fois payé, la carte est générée avec sa référence officielle." },
+  { num: "04", label: "Réception", description: "Carte téléchargeable et envoyée par email à votre proche." },
 ];
 
 export default function CartesCadeauxPage() {
-  const [step, setStep] = useState<"choisir" | "personnaliser" | "valider">("choisir");
+  const [step, setStep] = useState<"choisir" | "personnaliser" | "valider" | "succes">("choisir");
   const [selectedType, setSelectedType] = useState<GiftType | null>(null);
   const [data, setData] = useState<GiftCardData>({
     fromName: "",
@@ -127,13 +136,16 @@ export default function CartesCadeauxPage() {
     occasion: "",
     style: "doree",
   });
-  const [requestSent, setRequestSent] = useState(false);
+  const [orderRef, setOrderRef] = useState<string>("");
+  const [paymentMode, setPaymentMode] = useState<"stripe" | "manual" | null>(null);
+  const [processing, setProcessing] = useState(false);
   const [contactInfo, setContactInfo] = useState({
     email: "",
     phone: "",
     consent: false,
   });
   const previewRef = useRef<HTMLDivElement>(null);
+  const finalRef = useRef<HTMLDivElement>(null);
 
   const selectGift = (g: GiftType) => {
     setSelectedType(g);
@@ -149,16 +161,16 @@ export default function CartesCadeauxPage() {
   const update = <K extends keyof GiftCardData>(key: K, value: GiftCardData[K]) =>
     setData((d) => ({ ...d, [key]: value }));
 
-  const downloadPng = async () => {
-    if (!previewRef.current) return;
+  const downloadFinalPng = async () => {
+    if (!finalRef.current) return;
     try {
       const { toPng } = await import("html-to-image");
-      const dataUrl = await toPng(previewRef.current, {
+      const dataUrl = await toPng(finalRef.current, {
         cacheBust: true,
         pixelRatio: 2,
       });
       const link = document.createElement("a");
-      link.download = `carte-cadeau-etincel-${data.toName || "carte"}.png`
+      link.download = `carte-cadeau-etincel-${orderRef || "carte"}.png`
         .toLowerCase()
         .replace(/\s+/g, "-");
       link.href = dataUrl;
@@ -168,10 +180,24 @@ export default function CartesCadeauxPage() {
     }
   };
 
-  const handleSendRequest = (e: React.FormEvent) => {
+  const handleStripePay = async () => {
+    if (!selectedType || !contactInfo.email || !contactInfo.consent) return;
+    setProcessing(true);
+    setPaymentMode("stripe");
+    const res = await redirectToCheckout(selectedType.productId);
+    setProcessing(false);
+    if (res.ok) {
+      setOrderRef(res.ref);
+      setStep("succes");
+    }
+  };
+
+  const handleManualRequest = (e: React.FormEvent) => {
     e.preventDefault();
     if (!contactInfo.email || !contactInfo.consent) return;
-    setRequestSent(true);
+    setPaymentMode("manual");
+    setOrderRef(generateOrderRef("DEM"));
+    setStep("succes");
   };
 
   return (
@@ -189,15 +215,19 @@ export default function CartesCadeauxPage() {
         description="Une carte cadeau personnalisée pour offrir un moment sensible — séance, rituel, cercle ou montant libre."
       />
 
-      {/* Indicateur d'étapes */}
       <section className="bg-bg-soft border-y border-border-soft">
         <Container>
           <div className="py-6 flex items-center justify-center gap-4 md:gap-8 flex-wrap">
-            {(["choisir", "personnaliser", "valider"] as const).map((s, i) => {
+            {(["choisir", "personnaliser", "valider", "succes"] as const).map((s, i) => {
               const isActive = step === s;
-              const isPast =
-                (step === "personnaliser" && s === "choisir") ||
-                (step === "valider" && (s === "choisir" || s === "personnaliser"));
+              const idx = ["choisir", "personnaliser", "valider", "succes"].indexOf(step);
+              const isPast = i < idx;
+              const labels = {
+                choisir: "Choisir",
+                personnaliser: "Personnaliser",
+                valider: "Payer",
+                succes: "Carte finale",
+              } as const;
               return (
                 <div key={s} className="flex items-center gap-3">
                   <span
@@ -222,11 +252,9 @@ export default function CartesCadeauxPage() {
                         : "text-text-soft/50",
                     )}
                   >
-                    {s === "choisir" ? "Choisir" : s === "personnaliser" ? "Personnaliser" : "Valider"}
+                    {labels[s]}
                   </span>
-                  {i < 2 && (
-                    <span className="hidden md:block h-px w-12 bg-border-medium" />
-                  )}
+                  {i < 3 && <span className="hidden md:block h-px w-12 bg-border-medium" />}
                 </div>
               );
             })}
@@ -234,11 +262,9 @@ export default function CartesCadeauxPage() {
         </Container>
       </section>
 
-      {/* Contenu */}
       <section className="py-20 md:py-28">
         <Container>
           <AnimatePresence mode="wait">
-            {/* ÉTAPE 1 — Choix */}
             {step === "choisir" && (
               <motion.div
                 key="choisir"
@@ -288,7 +314,6 @@ export default function CartesCadeauxPage() {
               </motion.div>
             )}
 
-            {/* ÉTAPE 2 — Personnaliser */}
             {step === "personnaliser" && selectedType && (
               <motion.div
                 key="personnaliser"
@@ -306,13 +331,12 @@ export default function CartesCadeauxPage() {
                 </button>
 
                 <div className="grid gap-10 lg:grid-cols-[1fr_1.05fr] items-start">
-                  {/* Aperçu */}
                   <div className="lg:sticky lg:top-28 space-y-4">
                     <span className="text-[0.65rem] uppercase tracking-[0.32em] text-gold-deep flex items-center gap-2">
                       <Sparkles className="h-3 w-3" />
                       Aperçu en direct · {selectedType.label}
                     </span>
-                    <GiftCardPreview ref={previewRef} data={data} />
+                    <GiftCardPreview ref={previewRef} data={data} watermark />
                     <div className="flex flex-wrap gap-2">
                       {(Object.keys(giftCardStyles) as GiftCardStyle[]).map((s) => (
                         <button
@@ -329,16 +353,19 @@ export default function CartesCadeauxPage() {
                         </button>
                       ))}
                     </div>
-                    <button
-                      onClick={downloadPng}
-                      className="inline-flex items-center gap-2 rounded-full bg-accent-deep px-5 py-3 text-sm font-medium text-text-on-dark hover:bg-accent transition-colors"
+                    <p className="text-[0.72rem] text-text-soft leading-relaxed pt-1">
+                      Filigrane « Aperçu » présent sur cette étape — il disparaît une fois la commande validée.
+                    </p>
+                    <WhatsAppButton
+                      message={whatsappMessages.carteCadeau}
+                      variant="outline"
+                      size="sm"
+                      className="w-full justify-center"
                     >
-                      <Download className="h-4 w-4" />
-                      Télécharger l&apos;aperçu PNG
-                    </button>
+                      Une question ? Échanger sur WhatsApp
+                    </WhatsAppButton>
                   </div>
 
-                  {/* Formulaire */}
                   <div className="space-y-5">
                     <div className="space-y-2">
                       <label className="text-xs uppercase tracking-[0.24em] text-text-soft">
@@ -405,7 +432,7 @@ export default function CartesCadeauxPage() {
                       onClick={() => setStep("valider")}
                       className="btn-primary w-full sm:w-auto"
                     >
-                      Continuer
+                      Continuer vers le paiement
                       <ArrowRight className="h-4 w-4" />
                     </button>
                   </div>
@@ -413,7 +440,6 @@ export default function CartesCadeauxPage() {
               </motion.div>
             )}
 
-            {/* ÉTAPE 3 — Valider */}
             {step === "valider" && selectedType && (
               <motion.div
                 key="valider"
@@ -429,132 +455,237 @@ export default function CartesCadeauxPage() {
                   ← Modifier la carte
                 </button>
 
-                {requestSent ? (
-                  <div className="max-w-2xl mx-auto text-center space-y-5 rounded-[2rem] border border-gold-soft/40 bg-gradient-to-br from-gold-soft/30 via-bg-card to-bg-card p-12">
-                    <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-gold-soft/60 text-gold-deep">
-                      <CheckCircle2 className="h-7 w-7" />
-                    </div>
-                    <h2 className="font-display text-3xl md:text-4xl text-text-deep leading-tight">
-                      Demande envoyée à Céline.
-                    </h2>
-                    <p className="text-text-medium leading-relaxed max-w-lg mx-auto">
-                      Céline reçoit votre carte avec votre message et vos coordonnées. Elle vous recontactera personnellement pour finaliser le règlement et la livraison.
-                    </p>
-                    <div className="flex flex-wrap gap-3 justify-center pt-4">
-                      <WhatsAppButton message={whatsappMessages.carteCadeau}>
-                        Échanger directement sur WhatsApp
-                      </WhatsAppButton>
-                      <Link href="/" className="btn-secondary">
-                        Retour à l&apos;accueil
-                      </Link>
+                <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] items-start max-w-5xl mx-auto">
+                  <div className="space-y-5 lg:sticky lg:top-28">
+                    <span className="text-[0.65rem] uppercase tracking-[0.32em] text-gold-deep">
+                      Récapitulatif
+                    </span>
+                    <div className="rounded-2xl border border-border-soft bg-bg-card p-6 space-y-4">
+                      <div className="flex items-start gap-3">
+                        <selectedType.icon className="h-5 w-5 text-gold-deep mt-1 shrink-0" />
+                        <div>
+                          <p className="text-xs uppercase tracking-[0.2em] text-text-soft mb-1">Cadeau</p>
+                          <p className="font-display text-xl text-text-deep">{selectedType.label}</p>
+                          <p className="text-sm text-text-medium">{selectedType.price}</p>
+                        </div>
+                      </div>
+                      <div className="border-t border-border-soft pt-4 space-y-2 text-sm">
+                        <div className="flex justify-between"><span className="text-text-soft">De</span><span className="text-text-deep">{data.fromName || "—"}</span></div>
+                        <div className="flex justify-between"><span className="text-text-soft">Pour</span><span className="text-text-deep">{data.toName || "—"}</span></div>
+                        <div className="flex justify-between"><span className="text-text-soft">Style</span><span className="text-text-deep">{giftCardStyles[data.style].label}</span></div>
+                      </div>
                     </div>
                   </div>
-                ) : (
-                  <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] items-start max-w-5xl mx-auto">
-                    {/* Récap */}
-                    <div className="space-y-5 lg:sticky lg:top-28">
-                      <span className="text-[0.65rem] uppercase tracking-[0.32em] text-gold-deep">
-                        Récapitulatif
-                      </span>
-                      <div className="rounded-2xl border border-border-soft bg-bg-card p-6 space-y-4">
-                        <div className="flex items-start gap-3">
-                          <selectedType.icon className="h-5 w-5 text-gold-deep mt-1 shrink-0" />
-                          <div>
-                            <p className="text-xs uppercase tracking-[0.2em] text-text-soft mb-1">Cadeau</p>
-                            <p className="font-display text-xl text-text-deep">{selectedType.label}</p>
-                            <p className="text-sm text-text-medium">{selectedType.price}</p>
-                          </div>
-                        </div>
-                        <div className="border-t border-border-soft pt-4 space-y-2 text-sm">
-                          <div className="flex justify-between"><span className="text-text-soft">De</span><span className="text-text-deep">{data.fromName || "—"}</span></div>
-                          <div className="flex justify-between"><span className="text-text-soft">Pour</span><span className="text-text-deep">{data.toName || "—"}</span></div>
-                          <div className="flex justify-between"><span className="text-text-soft">Style</span><span className="text-text-deep">{giftCardStyles[data.style].label}</span></div>
-                        </div>
+
+                  <div className="space-y-6">
+                    <div className="rounded-3xl border border-border-soft bg-bg-card p-7 md:p-8 space-y-5">
+                      <div className="flex items-center gap-3 text-[0.65rem] uppercase tracking-[0.32em] text-gold-deep">
+                        <Send className="h-3.5 w-3.5" />
+                        <span>Vos coordonnées (carte envoyée à cette adresse)</span>
                       </div>
+                      <div className="grid sm:grid-cols-2 gap-3">
+                        <input
+                          type="email"
+                          required
+                          placeholder="Email"
+                          value={contactInfo.email}
+                          onChange={(e) => setContactInfo({ ...contactInfo, email: e.target.value })}
+                          className="bg-bg-soft rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-accent/30"
+                        />
+                        <input
+                          type="tel"
+                          placeholder="Téléphone (optionnel)"
+                          value={contactInfo.phone}
+                          onChange={(e) => setContactInfo({ ...contactInfo, phone: e.target.value })}
+                          className="bg-bg-soft rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-accent/30"
+                        />
+                      </div>
+                      <label className="flex items-start gap-3 text-xs leading-relaxed text-text-medium cursor-pointer">
+                        <input
+                          type="checkbox"
+                          required
+                          checked={contactInfo.consent}
+                          onChange={(e) => setContactInfo({ ...contactInfo, consent: e.target.checked })}
+                          className="mt-0.5 h-4 w-4 rounded border-border-medium text-accent focus:ring-accent/30"
+                        />
+                        <span>
+                          J&apos;accepte que Céline conserve mes coordonnées pour finaliser et envoyer cette carte cadeau.
+                        </span>
+                      </label>
                     </div>
 
-                    {/* Validation */}
-                    <div className="space-y-6">
-                      <div className="rounded-3xl border border-border-soft bg-bg-card p-7 md:p-8 space-y-5">
-                        <div className="flex items-center gap-3 text-[0.65rem] uppercase tracking-[0.32em] text-gold-deep">
-                          <Send className="h-3.5 w-3.5" />
-                          <span>Étape finale — vos coordonnées</span>
-                        </div>
-                        <h2 className="font-display text-2xl md:text-3xl text-text-deep leading-tight">
-                          Céline finalise avec vous.
-                        </h2>
-                        <p className="text-sm text-text-medium leading-relaxed">
-                          Laissez-nous votre email — Céline vous recontacte pour valider le règlement et préparer la carte.
-                        </p>
-                        <form onSubmit={handleSendRequest} className="space-y-4">
-                          <div className="grid sm:grid-cols-2 gap-3">
-                            <input
-                              type="email"
-                              required
-                              placeholder="Email"
-                              value={contactInfo.email}
-                              onChange={(e) => setContactInfo({ ...contactInfo, email: e.target.value })}
-                              className="bg-bg-soft rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-accent/30"
-                            />
-                            <input
-                              type="tel"
-                              placeholder="Téléphone (optionnel)"
-                              value={contactInfo.phone}
-                              onChange={(e) => setContactInfo({ ...contactInfo, phone: e.target.value })}
-                              className="bg-bg-soft rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-accent/30"
-                            />
-                          </div>
-                          <label className="flex items-start gap-3 text-xs leading-relaxed text-text-medium cursor-pointer">
-                            <input
-                              type="checkbox"
-                              required
-                              checked={contactInfo.consent}
-                              onChange={(e) => setContactInfo({ ...contactInfo, consent: e.target.checked })}
-                              className="mt-0.5 h-4 w-4 rounded border-border-medium text-accent focus:ring-accent/30"
-                            />
-                            <span>
-                              J&apos;accepte que Céline me recontacte pour finaliser cette carte cadeau. Mes données ne sont pas transmises à des tiers.
-                            </span>
-                          </label>
-                          <button type="submit" className="btn-primary w-full">
-                            <Send className="h-4 w-4" />
-                            Envoyer ma demande à Céline
-                          </button>
-                        </form>
-                      </div>
-
-                      {/* WhatsApp + Stripe */}
-                      <div className="rounded-3xl border border-[#25D366]/30 bg-[#25D366]/5 p-7 space-y-4">
-                        <div className="flex items-center gap-3 text-xs uppercase tracking-[0.24em] text-[#1ebe5a]">
-                          <Sparkles className="h-3.5 w-3.5" />
-                          <span>Plus rapide</span>
-                        </div>
+                    <div className="rounded-3xl border-2 border-accent/30 bg-gradient-to-br from-accent/5 via-bg-card to-bg-card p-7 md:p-8 space-y-4">
+                      <div className="flex items-center gap-3">
+                        <CreditCard className="h-5 w-5 text-accent-deep" />
                         <p className="font-display text-xl text-text-deep">
-                          Finaliser directement avec Céline sur WhatsApp
+                          Paiement sécurisé en ligne
                         </p>
-                        <WhatsAppButton message={whatsappMessages.carteCadeau} className="w-full justify-center">
-                          Continuer sur WhatsApp
-                        </WhatsAppButton>
                       </div>
+                      <p className="text-sm text-text-medium leading-relaxed">
+                        Réglez par carte bancaire via Stripe. Vous recevez la carte définitive et sa référence par email immédiatement après le paiement.
+                      </p>
+                      <button
+                        onClick={handleStripePay}
+                        disabled={processing || !contactInfo.email || !contactInfo.consent}
+                        className="w-full inline-flex items-center justify-center gap-2 rounded-full bg-accent-deep px-6 py-3.5 text-sm font-medium text-text-on-dark hover:bg-accent transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {processing && paymentMode === "stripe" ? (
+                          <>
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                            Redirection vers Stripe…
+                          </>
+                        ) : (
+                          <>
+                            <Shield className="h-4 w-4" />
+                            Payer avec Stripe — {selectedType.price}
+                          </>
+                        )}
+                      </button>
+                      <p className="text-[0.7rem] text-text-soft leading-relaxed">
+                        Paiement 3D Secure · cartes Visa, MasterCard, Amex acceptées · facturation immédiate.
+                      </p>
+                    </div>
 
-                      {!stripeEnabled && (
-                        <p className="flex items-start gap-3 text-xs text-text-soft leading-relaxed border border-border-soft bg-bg-soft rounded-2xl p-4">
-                          <Shield className="h-3.5 w-3.5 mt-0.5 shrink-0" />
-                          <span>
-                            Le paiement en ligne sécurisé sera disponible prochainement. Pour l&apos;instant, le règlement se fait directement avec Céline (virement, espèces, chèque).
-                          </span>
-                        </p>
+                    <div className="rounded-3xl border border-border-soft bg-bg-card p-7 space-y-4">
+                      <div className="flex items-center gap-3 text-[0.7rem] uppercase tracking-[0.24em] text-text-soft">
+                        <span className="h-px flex-1 bg-border-soft" />
+                        <span>OU</span>
+                        <span className="h-px flex-1 bg-border-soft" />
+                      </div>
+                      <p className="font-display text-lg text-text-deep">
+                        Régler manuellement avec Céline
+                      </p>
+                      <p className="text-sm text-text-medium leading-relaxed">
+                        Virement, espèces, chèque — Céline vous recontacte personnellement.
+                      </p>
+                      <form onSubmit={handleManualRequest} className="space-y-3">
+                        <button
+                          type="submit"
+                          disabled={!contactInfo.email || !contactInfo.consent}
+                          className="btn-secondary w-full justify-center disabled:opacity-50"
+                        >
+                          <Send className="h-4 w-4" />
+                          Envoyer ma demande à Céline
+                        </button>
+                      </form>
+                      <WhatsAppButton
+                        message={whatsappMessages.carteCadeau}
+                        className="w-full justify-center"
+                      >
+                        Continuer sur WhatsApp
+                      </WhatsAppButton>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
+            {step === "succes" && selectedType && (
+              <motion.div
+                key="succes"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.5 }}
+                className="space-y-10 max-w-5xl mx-auto"
+              >
+                <div className="text-center space-y-4 max-w-2xl mx-auto">
+                  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-gold-soft/60 text-gold-deep">
+                    <CheckCircle2 className="h-7 w-7" />
+                  </div>
+                  <h2 className="font-display text-3xl md:text-4xl text-text-deep leading-tight">
+                    {paymentMode === "stripe"
+                      ? "Paiement validé. Voici votre carte définitive."
+                      : "Demande envoyée. Céline confirmera après réception du règlement."}
+                  </h2>
+                  <p className="text-text-medium leading-relaxed">
+                    Référence : <span className="font-mono font-medium text-text-deep">{orderRef}</span>
+                  </p>
+                  <p className="text-sm text-text-soft leading-relaxed">
+                    {paymentMode === "stripe"
+                      ? "La carte ci-dessous est valide. Une copie est envoyée à votre email et à celui de Céline."
+                      : "La carte définitive (sans filigrane) sera générée dès que Céline aura validé votre règlement."}
+                  </p>
+                </div>
+
+                <div className="grid gap-10 lg:grid-cols-[1fr_1fr] items-start">
+                  <div ref={finalRef} className="lg:sticky lg:top-28">
+                    <GiftCardPreview
+                      data={{
+                        ...data,
+                        occasion: orderRef,
+                      }}
+                      watermark={paymentMode !== "stripe"}
+                    />
+                  </div>
+
+                  <div className="space-y-5">
+                    <div className="rounded-3xl border border-gold-soft/40 bg-gradient-to-br from-gold-soft/20 via-bg-card to-bg-card p-7 space-y-4">
+                      <p className="font-display text-2xl text-text-deep">
+                        Que faire maintenant ?
+                      </p>
+                      {paymentMode === "stripe" ? (
+                        <>
+                          <button
+                            onClick={downloadFinalPng}
+                            className="btn-primary w-full justify-center"
+                          >
+                            <Download className="h-4 w-4" />
+                            Télécharger la carte définitive
+                          </button>
+                          <p className="text-xs text-text-soft leading-relaxed">
+                            Imprimez la carte ou transférez-la à votre proche par email/SMS. Sa référence ({orderRef}) la rend valable lors de la prise de rendez-vous avec Céline.
+                          </p>
+                        </>
+                      ) : (
+                        <>
+                          <p className="text-sm text-text-medium leading-relaxed">
+                            Céline reçoit votre commande avec votre référence. Une fois le règlement confirmé (virement / espèces / chèque), elle vous envoie la carte définitive téléchargeable.
+                          </p>
+                          <WhatsAppButton
+                            message={`${whatsappMessages.carteCadeau} Référence : ${orderRef}.`}
+                            className="w-full justify-center"
+                          >
+                            Confirmer le règlement sur WhatsApp
+                          </WhatsAppButton>
+                        </>
                       )}
                     </div>
+
+                    <div className="grid sm:grid-cols-2 gap-3">
+                      <Link href="/" className="btn-secondary w-full justify-center">
+                        Retour à l&apos;accueil
+                      </Link>
+                      <button
+                        onClick={() => {
+                          setStep("choisir");
+                          setSelectedType(null);
+                          setData({
+                            fromName: "",
+                            toName: "",
+                            message: "",
+                            cardType: "",
+                            amount: "",
+                            occasion: "",
+                            style: "doree",
+                          });
+                          setContactInfo({ email: "", phone: "", consent: false });
+                          setOrderRef("");
+                          setPaymentMode(null);
+                        }}
+                        className="btn-secondary w-full justify-center"
+                      >
+                        Préparer une autre carte
+                      </button>
+                    </div>
                   </div>
-                )}
+                </div>
               </motion.div>
             )}
           </AnimatePresence>
         </Container>
       </section>
 
-      {/* Comment ça marche */}
       <section id="formats" className="bg-bg-soft py-20 md:py-28">
         <Container>
           <Reveal>

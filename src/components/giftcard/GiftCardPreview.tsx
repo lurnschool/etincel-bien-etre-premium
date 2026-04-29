@@ -53,86 +53,121 @@ export const giftCardStyles: Record<
 };
 
 /**
- * Carte cadeau visuelle — rendue dans une div forwarded
- * pour pouvoir l'exporter en PNG via html-to-image.
+ * Carte cadeau visuelle — aperçu uniquement tant que le paiement Stripe
+ * réel ou la validation manuelle Céline n'a pas eu lieu.
+ *
+ * `watermark` (true par défaut) ajoute :
+ *  - une bande "APERÇU · NON VALIDE COMME CADEAU" en diagonale
+ *  - une référence "REF: APERCU"
+ * pour empêcher l'usage frauduleux d'un PNG capturé par capture d'écran.
  */
-export const GiftCardPreview = forwardRef<HTMLDivElement, { data: GiftCardData }>(
-  function GiftCardPreview({ data }, ref) {
-    const styleConfig = renderStyles[data.style];
-    return (
-      <div
-        ref={ref}
-        className={cn(
-          "relative w-full aspect-[7/5] rounded-2xl overflow-hidden",
-          "shadow-[0_30px_80px_rgba(31,26,46,0.18)]",
-          styleConfig.container,
-        )}
-        style={{ minHeight: 360 }}
-      >
-        {styleConfig.background}
+export const GiftCardPreview = forwardRef<
+  HTMLDivElement,
+  { data: GiftCardData; watermark?: boolean }
+>(function GiftCardPreview({ data, watermark = true }, ref) {
+  const styleConfig = renderStyles[data.style];
+  return (
+    <div
+      ref={ref}
+      className={cn(
+        "relative w-full aspect-[7/5] rounded-2xl overflow-hidden",
+        "shadow-[0_30px_80px_rgba(31,26,46,0.18)]",
+        styleConfig.container,
+      )}
+      style={{ minHeight: 360 }}
+    >
+      {styleConfig.background}
 
-        <div className={cn("relative h-full p-7 md:p-9 flex flex-col justify-between", styleConfig.text)}>
-          <header className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-2">
-              <span className={styleConfig.iconColor}>
-                <Etincelle size={16} />
-              </span>
-              <div className="leading-none">
-                <p className="font-display text-lg md:text-xl">Etincel</p>
-                <p className={cn("font-display-italic text-[0.55rem] md:text-[0.6rem] tracking-[0.28em] uppercase mt-0.5", styleConfig.subtle)}>
-                  de bien être · Céline Dusseval
-                </p>
-              </div>
+      <div className={cn("relative h-full p-7 md:p-9 flex flex-col justify-between", styleConfig.text)}>
+        <header className="flex items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <span className={styleConfig.iconColor}>
+              <Etincelle size={16} />
+            </span>
+            <div className="leading-none">
+              <p className="font-display text-lg md:text-xl">Etincel</p>
+              <p className={cn("font-display-italic text-[0.55rem] md:text-[0.6rem] tracking-[0.28em] uppercase mt-0.5", styleConfig.subtle)}>
+                de bien être · Céline Dusseval
+              </p>
             </div>
-            {data.occasion && (
-              <span className={cn("text-[0.6rem] uppercase tracking-[0.24em] px-2.5 py-1 rounded-full border", styleConfig.badge)}>
-                {data.occasion}
-              </span>
-            )}
-          </header>
+          </div>
+          {data.occasion && (
+            <span className={cn("text-[0.6rem] uppercase tracking-[0.24em] px-2.5 py-1 rounded-full border", styleConfig.badge)}>
+              {data.occasion}
+            </span>
+          )}
+        </header>
 
-          <div className="space-y-3 max-w-md">
-            <p className={cn("text-[0.6rem] uppercase tracking-[0.32em]", styleConfig.label)}>
-              Carte cadeau personnalisée
+        <div className="space-y-3 max-w-md">
+          <p className={cn("text-[0.6rem] uppercase tracking-[0.32em]", styleConfig.label)}>
+            Carte cadeau personnalisée
+          </p>
+          <h3 className="font-display text-2xl md:text-[2rem] leading-[1.05]">
+            {data.toName ? (
+              <>
+                <span className={styleConfig.italic}>Pour</span>{" "}
+                <span className="font-display-italic">{data.toName}</span>
+              </>
+            ) : (
+              <span className={styleConfig.placeholder}>Pour vous</span>
+            )}
+          </h3>
+          <p className={cn("text-sm md:text-[0.95rem] leading-relaxed", styleConfig.body)}>
+            {data.message || "Une parenthèse pour revenir à soi."}
+          </p>
+        </div>
+
+        <footer className="flex items-end justify-between gap-4 pt-4">
+          <div className="space-y-0.5">
+            <p className={cn("text-[0.55rem] uppercase tracking-[0.28em]", styleConfig.label)}>
+              {data.cardType || "Type de cadeau"}
             </p>
-            <h3 className="font-display text-2xl md:text-[2rem] leading-[1.05]">
-              {data.toName ? (
-                <>
-                  <span className={styleConfig.italic}>Pour</span>{" "}
-                  <span className="font-display-italic">{data.toName}</span>
-                </>
-              ) : (
-                <span className={styleConfig.placeholder}>Pour vous</span>
-              )}
-            </h3>
-            <p className={cn("text-sm md:text-[0.95rem] leading-relaxed", styleConfig.body)}>
-              {data.message || "Une parenthèse pour revenir à soi."}
+            <p className="font-display text-lg md:text-xl">
+              {data.amount || "Montant à définir"}
             </p>
           </div>
-
-          <footer className="flex items-end justify-between gap-4 pt-4">
-            <div className="space-y-0.5">
-              <p className={cn("text-[0.55rem] uppercase tracking-[0.28em]", styleConfig.label)}>
-                {data.cardType || "Type de cadeau"}
-              </p>
-              <p className="font-display text-lg md:text-xl">
-                {data.amount || "Montant à définir"}
-              </p>
-            </div>
-            <div className="text-right space-y-0.5">
-              <p className={cn("text-[0.55rem] uppercase tracking-[0.28em]", styleConfig.label)}>
-                Offert par
-              </p>
-              <p className="font-display-italic text-base md:text-lg">
-                {data.fromName || "—"}
-              </p>
-            </div>
-          </footer>
-        </div>
+          <div className="text-right space-y-0.5">
+            <p className={cn("text-[0.55rem] uppercase tracking-[0.28em]", styleConfig.label)}>
+              {watermark ? "Référence" : "Offert par"}
+            </p>
+            <p className="font-display-italic text-base md:text-lg">
+              {watermark ? "APERÇU" : data.fromName || "—"}
+            </p>
+          </div>
+        </footer>
       </div>
-    );
-  },
-);
+
+      {watermark && (
+        <>
+          {/* Bande diagonale visible mais non destructive */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden"
+          >
+            <span
+              className="font-display-italic text-3xl md:text-5xl tracking-[0.3em] uppercase opacity-25 select-none"
+              style={{
+                transform: "rotate(-22deg)",
+                color: "rgba(255, 255, 255, 0.55)",
+                textShadow: "0 1px 2px rgba(0,0,0,0.35)",
+                whiteSpace: "nowrap",
+              }}
+            >
+              Aperçu · Non valide
+            </span>
+          </div>
+          {/* Bandeau du haut */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute top-0 inset-x-0 bg-rose/85 text-white text-[0.55rem] md:text-[0.6rem] font-medium tracking-[0.32em] uppercase text-center py-1.5"
+          >
+            Aperçu — paiement non finalisé
+          </div>
+        </>
+      )}
+    </div>
+  );
+});
 
 type StyleConfig = {
   container: string;

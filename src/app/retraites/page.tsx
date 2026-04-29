@@ -1,6 +1,4 @@
-import Link from "next/link";
 import type { Metadata } from "next";
-import { Mountain, ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { PageHeader } from "@/components/ui/PageHeader";
@@ -8,6 +6,7 @@ import { Etincelle } from "@/components/ui/Etincelle";
 import { WhisperLine } from "@/components/ui/WhisperLine";
 import { ImageMosaic } from "@/components/ui/ImageMosaic";
 import { SacredBackdrop } from "@/components/ornaments/SacredBackdrop";
+import { RetreatInterestForm } from "@/components/retraites/RetreatInterestForm";
 import { whisperLines } from "@/lib/data";
 import { pageVisuals } from "@/lib/visualAssetMap";
 
@@ -206,44 +205,22 @@ export default function RetraitesPage() {
             <Reveal>
               <div className="space-y-5">
                 <div className="inline-flex items-center gap-3 text-xs uppercase tracking-[0.32em] text-gold-soft">
-                  <Mountain className="h-3.5 w-3.5" />
-                  <span>Prochaine retraite</span>
+                  <Etincelle size={12} />
+                  <span>Inscription liste d&apos;intérêt</span>
                 </div>
                 <h2 className="font-display text-4xl md:text-5xl leading-tight text-text-on-dark">
-                  Dates à venir.
+                  Avancer ensemble, au bon moment.
                 </h2>
                 <p className="text-text-on-dark-soft leading-relaxed text-base md:text-lg max-w-xl">
-                  Le format, le lieu, la durée et le programme seront communiqués dès que la prochaine immersion sera ouverte aux inscriptions. Les places sont limitées et un échange préalable est systématique.
+                  Les retraites Etincel sont annoncées à un cercle restreint avant publication publique. Inscrivez-vous pour être prévenue en priorité — dès qu&apos;une date, un format et un lieu sont confirmés, un email vous parvient avec le programme complet.
+                </p>
+                <p className="text-sm text-text-on-dark-soft/80 leading-relaxed max-w-xl">
+                  Aucune inscription définitive ici — vous restez libre de vous positionner ou non quand vous recevrez le programme.
                 </p>
               </div>
             </Reveal>
             <Reveal delay={0.1}>
-              <div className="rounded-3xl border border-gold-soft/40 bg-white/5 backdrop-blur-sm p-7 md:p-8 space-y-5">
-                <p className="text-xs uppercase tracking-[0.24em] text-gold-soft">
-                  Liste d&apos;intérêt
-                </p>
-                <p className="font-display text-2xl leading-snug text-text-on-dark">
-                  Être informée des prochaines retraites
-                </p>
-                <p className="text-sm text-text-on-dark-soft leading-relaxed">
-                  Soyez prévenue dès l&apos;ouverture des inscriptions et de l&apos;annonce du programme.
-                </p>
-                <div className="space-y-3 pt-2">
-                  <Link
-                    href="/contact?sujet=Retraite"
-                    className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-gold px-6 py-3 text-sm font-medium text-text-deep hover:bg-gold-soft transition-colors"
-                  >
-                    Rejoindre la liste
-                    <ArrowRight className="h-4 w-4" />
-                  </Link>
-                  <Link
-                    href="/contact?sujet=Question retraite"
-                    className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/25 px-6 py-3 text-sm font-medium text-text-on-dark hover:border-gold hover:text-gold transition-colors"
-                  >
-                    Poser une question
-                  </Link>
-                </div>
-              </div>
+              <RetreatInterestForm />
             </Reveal>
           </div>
         </Container>

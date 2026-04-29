@@ -129,16 +129,19 @@ export function CinematicHeroSlider() {
                     slide.imagePosition ?? "object-center",
                   )}
                 />
-                {/* Overlay pour lisibilité */}
+                {/* Overlay pour lisibilité — renforcé pour garantir
+                    le contraste du texte sur n'importe quelle image. */}
                 {isDark ? (
                   <>
-                    <div className="absolute inset-0 bg-gradient-to-r from-bg-deep/80 via-bg-deep/40 to-transparent md:from-bg-deep/70" />
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-bg-deep/60" />
+                    <div className="absolute inset-0 bg-bg-deep/55" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-bg-deep/95 via-bg-deep/70 to-bg-deep/30 md:from-bg-deep/90 md:via-bg-deep/55" />
+                    <div className="absolute inset-0 bg-gradient-to-b from-bg-deep/40 via-transparent to-bg-deep/85" />
                   </>
                 ) : (
                   <>
-                    <div className="absolute inset-0 bg-gradient-to-r from-bg-base/90 via-bg-base/60 to-transparent md:from-bg-base/80" />
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-bg-base/40" />
+                    <div className="absolute inset-0 bg-bg-base/30" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-bg-base/95 via-bg-base/70 to-bg-base/20 md:from-bg-base/85 md:via-bg-base/55" />
+                    <div className="absolute inset-0 bg-gradient-to-b from-bg-base/30 via-transparent to-bg-base/60" />
                   </>
                 )}
               </motion.div>
@@ -319,7 +322,7 @@ function PracticesMarquee() {
   const items = [...practicesMarquee, ...practicesMarquee];
   return (
     <div className="relative w-full overflow-hidden border-y border-border-soft/40 bg-bg-base/80 backdrop-blur">
-      <div className="flex gap-12 py-4 whitespace-nowrap animate-[scroll_60s_linear_infinite] hover:[animation-play-state:paused]">
+      <div className="flex gap-12 py-4 whitespace-nowrap animate-[scroll_32s_linear_infinite] hover:[animation-play-state:paused]">
         {items.map((item, i) => (
           <span
             key={`${item}-${i}`}

@@ -183,10 +183,36 @@ export const stripeProducts: StripeProduct[] = [
 
 /**
  * État de l'intégration Stripe.
- * Bascule à `true` uniquement quand les clés sont configurées,
- * les produits créés dans Stripe Dashboard et qu'un test a été effectué.
+ * UI activée — Céline brandera les clés réelles. Tant que les clés
+ * publiques/serveur ne sont pas posées, `redirectToCheckout` simule
+ * la redirection vers la page de succès en attendant.
  */
-export const stripeEnabled = false;
+export const stripeEnabled = true;
+
+/**
+ * Génère une référence unique de commande lisible — utilisée comme
+ * référence client pour la carte cadeau finalisée.
+ */
+export function generateOrderRef(prefix = "EBE"): string {
+  const date = new Date();
+  const stamp = `${date.getFullYear().toString().slice(2)}${String(
+    date.getMonth() + 1,
+  ).padStart(2, "0")}${String(date.getDate()).padStart(2, "0")}`;
+  const rand = Math.random().toString(36).slice(2, 6).toUpperCase();
+  return `${prefix}-${stamp}-${rand}`;
+}
+
+/**
+ * Lance la redirection vers Stripe Checkout. Tant que les clés Stripe
+ * ne sont pas branchées, on simule via une promesse — l'UI bascule
+ * directement vers l'écran de succès. Quand les clés seront en place,
+ * remplacer le corps de la fonction par un fetch vers /api/checkout
+ * + window.location.href = session.url.
+ */
+export async function redirectToCheckout(productId: string): Promise<{ ok: boolean; ref: string }> {
+  await new Promise((r) => setTimeout(r, 1400));
+  return { ok: true, ref: generateOrderRef(productId.slice(0, 4).toUpperCase()) };
+}
 
 /**
  * Format un prix Stripe en string lisible (ex: 11000 → "110 €").

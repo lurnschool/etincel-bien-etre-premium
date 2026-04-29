@@ -2,11 +2,13 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Phone, Mail, MapPin, Send, CheckCircle2 } from "lucide-react";
+import { Phone, Mail, MapPin, Send, CheckCircle2, Loader2 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionTitle } from "@/components/ui/SectionTitle";
+import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
 import { contact } from "@/lib/data";
+import { whatsappMessages } from "@/lib/whatsapp";
 
 const motivationOptions = [
   "Une séance individuelle",
@@ -18,11 +20,14 @@ const motivationOptions = [
 ];
 
 /**
- * Formulaire de contact rapide. Envoi non branché —
- * sera connecté à Resend / API mail au sprint 4.
+ * Formulaire de contact rapide. UI prête pour Resend — envoi simulé
+ * tant que la clé n'est pas branchée. Quand RESEND_API_KEY sera
+ * disponible, remplacer le setTimeout par un fetch /api/contact
+ * qui appelle l'API Resend côté serveur.
  */
 export function ContactRapide() {
   const [submitted, setSubmitted] = useState(false);
+  const [sending, setSending] = useState(false);
   const [form, setForm] = useState({
     firstname: "",
     email: "",
@@ -32,9 +37,12 @@ export function ContactRapide() {
     consent: false,
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.firstname || !form.email || !form.consent) return;
+    setSending(true);
+    await new Promise((r) => setTimeout(r, 700));
+    setSending(false);
     setSubmitted(true);
   };
 
@@ -112,8 +120,13 @@ export function ContactRapide() {
                 </div>
                 <h3 className="font-display text-3xl text-text-deep">Message reçu.</h3>
                 <p className="text-text-medium leading-relaxed max-w-md mx-auto">
-                  Merci pour votre confiance. Céline vous répondra personnellement. En cas d&apos;urgence, vous pouvez l&apos;appeler directement au {contact.phone}.
+                  Merci pour votre confiance. Céline vous répondra personnellement à <strong>{form.email}</strong>. En cas d&apos;urgence, vous pouvez l&apos;appeler au {contact.phone}.
                 </p>
+                <div className="flex flex-wrap gap-3 justify-center pt-3">
+                  <WhatsAppButton message={whatsappMessages.generic}>
+                    Continuer sur WhatsApp
+                  </WhatsAppButton>
+                </div>
               </motion.div>
             ) : (
               <form
@@ -201,10 +214,32 @@ export function ContactRapide() {
                     J'accepte que mes données soient utilisées uniquement par Etincel de bien être pour répondre à ma demande. Aucune transmission à des tiers.
                   </span>
                 </label>
-                <button type="submit" className="btn-primary w-full sm:w-auto">
-                  <Send className="h-4 w-4" />
-                  Envoyer mon message
-                </button>
+                <div className="flex flex-wrap gap-3 items-center">
+                  <button
+                    type="submit"
+                    disabled={sending}
+                    className="btn-primary w-full sm:w-auto disabled:opacity-60"
+                  >
+                    {sending ? (
+                      <>
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                        Envoi en cours…
+                      </>
+                    ) : (
+                      <>
+                        <Send className="h-4 w-4" />
+                        Envoyer mon message
+                      </>
+                    )}
+                  </button>
+                  <WhatsAppButton
+                    message={whatsappMessages.generic}
+                    variant="outline"
+                    size="sm"
+                  >
+                    Plutôt sur WhatsApp
+                  </WhatsAppButton>
+                </div>
               </form>
             )}
           </Reveal>

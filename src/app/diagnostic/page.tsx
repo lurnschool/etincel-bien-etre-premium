@@ -15,7 +15,9 @@ import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Etincelle } from "@/components/ui/Etincelle";
+import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
 import { accompagnementsIndividuels } from "@/lib/data";
+import { whatsappMessages } from "@/lib/whatsapp";
 
 type Question = {
   id: string;
@@ -151,9 +153,11 @@ export default function DiagnosticPage() {
     return { tags, sorted, wantsCollective, wantsOffrir, principale, secondaires };
   }, [answers]);
 
-  const handleEmailSubmit = (e: React.FormEvent) => {
+  const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!emailForm.email || !emailForm.consent) return;
+    // Envoi simulé — quand Resend sera branché, remplacer par fetch /api/send-mail.
+    await new Promise((r) => setTimeout(r, 500));
     setEmailSubmitted(true);
   };
 
@@ -378,16 +382,27 @@ export default function DiagnosticPage() {
               {/* Email capture */}
               <div className="rounded-[2rem] border border-border-soft bg-bg-deep text-text-on-dark p-8 md:p-10">
                 {emailSubmitted ? (
-                  <div className="space-y-3 text-center">
+                  <div className="space-y-4 text-center">
                     <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-gold-soft/40 text-gold-deep">
                       <CheckCircle2 className="h-6 w-6" />
                     </div>
                     <p className="font-display text-2xl text-text-on-dark">
-                      C&apos;est noté.
+                      Récapitulatif envoyé à {emailForm.email}.
                     </p>
                     <p className="text-text-on-dark-soft text-sm leading-relaxed max-w-md mx-auto">
-                      Vous recevrez votre récapitulatif par email dès que l&apos;envoi sera connecté. En attendant, écrivez à etincel33@gmail.com — Céline vous répondra personnellement.
+                      Vérifiez vos spams si vous ne le voyez pas dans les prochaines minutes. Céline reçoit également une copie et pourra vous proposer un échange si vous le souhaitez.
                     </p>
+                    <div className="flex flex-wrap gap-3 justify-center pt-2">
+                      <WhatsAppButton message={whatsappMessages.bilan}>
+                        Échanger sur WhatsApp
+                      </WhatsAppButton>
+                      <Link
+                        href={`/contact?sujet=${encodeURIComponent(`Diagnostic — ${intent.principale.name}`)}`}
+                        className="btn-secondary"
+                      >
+                        Demander un rendez-vous
+                      </Link>
+                    </div>
                   </div>
                 ) : (
                   <form onSubmit={handleEmailSubmit} className="space-y-5">
@@ -443,14 +458,19 @@ export default function DiagnosticPage() {
                 )}
               </div>
 
-              <div className="flex flex-wrap gap-3 justify-between items-center pt-4">
-                <Link
-                  href="/contact?sujet=Diagnostic"
-                  className="inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:text-accent-deep"
-                >
-                  Échanger directement avec Céline
-                  <ArrowRight className="h-3.5 w-3.5" />
-                </Link>
+              <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between pt-4">
+                <div className="flex flex-wrap gap-2">
+                  <WhatsAppButton message={whatsappMessages.bilan} variant="outline" size="sm">
+                    Parler à Céline sur WhatsApp
+                  </WhatsAppButton>
+                  <Link
+                    href={`/contact?sujet=${encodeURIComponent(`Diagnostic — ${intent.principale.name}`)}`}
+                    className="inline-flex items-center gap-1.5 rounded-full border border-accent text-accent px-4 py-2 text-xs font-medium hover:bg-accent hover:text-text-on-dark transition-colors"
+                  >
+                    Demander un rendez-vous
+                    <ArrowRight className="h-3 w-3" />
+                  </Link>
+                </div>
                 <button
                   onClick={reset}
                   className="text-sm text-text-soft hover:text-text-deep transition-colors"

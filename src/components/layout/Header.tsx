@@ -10,8 +10,9 @@ import { Etincelle } from "@/components/ui/Etincelle";
 
 /**
  * Header éditorial compact — 72px desktop, 64px mobile.
- * Glass au repos, opaque + plus dense au scroll.
- * Mega-menu doux 3 colonnes max sur Individuel et Collectif.
+ * Toujours opaque pour rester lisible sur toutes les pages
+ * (y compris hero variant="deep"). Pas de glass translucide qui
+ * laisse passer le contenu en dessous.
  */
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -35,12 +36,12 @@ export function Header() {
   return (
     <header
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-500",
-        // Toujours lisible dès le chargement : fond glass + bord fin.
-        // Au scroll : fond plus dense + ombre douce.
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
+        // Fond opaque dès le chargement — toujours lisible, jamais "fade".
+        "bg-bg-base/98 backdrop-blur-xl border-b",
         scrolled
-          ? "bg-bg-base/92 backdrop-blur-xl border-b border-border-soft/70 shadow-[0_4px_20px_rgba(31,26,46,0.05)]"
-          : "bg-bg-base/70 backdrop-blur-md border-b border-border-soft/40",
+          ? "border-border-medium shadow-[0_6px_24px_rgba(31,26,46,0.08)]"
+          : "border-border-soft",
       )}
     >
       <div
@@ -79,7 +80,7 @@ export function Header() {
               >
                 <Link
                   href={item.href}
-                  className="flex items-center gap-1 px-3 py-2 text-[0.83rem] font-medium text-text-deep/80 hover:text-accent transition-colors"
+                  className="flex items-center gap-1 px-3 py-2 text-[0.83rem] font-semibold text-text-deep hover:text-accent transition-colors"
                 >
                   {item.label}
                   {hasChildren && (
@@ -100,7 +101,7 @@ export function Header() {
                           <Link
                             key={child.href}
                             href={child.href}
-                            className="block rounded-xl px-4 py-2 text-[0.83rem] text-text-deep/75 hover:bg-bg-soft hover:text-accent transition-colors"
+                            className="block rounded-xl px-4 py-2 text-[0.83rem] font-medium text-text-deep hover:bg-bg-soft hover:text-accent transition-colors"
                           >
                             {child.label}
                           </Link>

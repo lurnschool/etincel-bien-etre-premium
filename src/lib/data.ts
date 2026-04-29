@@ -45,7 +45,11 @@ export const contact = {
     source: "confirmed" as DataSource,
   },
   region: "Bordeaux Métropole · Gironde",
-  googleReviewsUrl: "https://g.page/r/etincel-de-bien-etre",
+  // Lien Google Business à brancher dès que Céline aura confirmé l'URL officielle
+  // (format attendu : https://maps.app.goo.gl/... ou https://g.co/...).
+  // Le composant GoogleReviewsTeaser détecte les placeholders et désactive
+  // le bouton "Voir les avis Google" tant que le lien n'est pas authentique.
+  googleReviewsUrl: "",
   social: {
     facebook: {
       label: "Etincel — Céline Dusseval",
@@ -428,7 +432,7 @@ export const disclaimers = {
 } as const;
 
 export const cta = {
-  primary: { label: "Trouver ma porte d'entrée", href: "/#boussole" },
+  primary: { label: "Faire mon bilan", href: "/diagnostic" },
   secondary: { label: "Prendre contact", href: "/contact" },
   discoverPractices: { label: "Découvrir les pratiques", href: "/#atlas" },
   giftCard: { label: "Créer une carte cadeau", href: "/cartes-cadeaux" },
@@ -437,10 +441,23 @@ export const cta = {
 } as const;
 
 /**
- * Slides du CinematicHeroSlider — orientés business autour des 3 piliers
- * de Céline : Cacao, Constellations, Numérologie, + féminin et retraites.
+ * Slides du CinematicHeroSlider — Céline en premier (présence humaine
+ * avant promesse), puis les 3 piliers Cacao / Constellations / Numérologie,
+ * puis féminin et retraites.
  */
 export const heroSlides = [
+  {
+    id: "celine",
+    category: "Etincel · Céline Dusseval",
+    title: "Céline Dusseval — accompagnatrice holistique en Gironde.",
+    text:
+      "Cacao, constellations, numérologie, hypnose, breathwork, féminin sacré : un espace pour ralentir, déposer et retrouver votre étincelle intérieure.",
+    primaryCta: { label: "Faire mon bilan d'orientation", href: "/diagnostic" },
+    secondaryCta: { label: "Échanger avec Céline", href: "/contact" },
+    palette: "rose-velvet",
+    image: "/images/celine/portrait-celine.png",
+    imagePosition: "object-[center_top]",
+  },
   {
     id: "cacao",
     category: "Pilier · Rituel cacao",
@@ -455,7 +472,7 @@ export const heroSlides = [
   },
   {
     id: "constellations",
-    category: "Pilier · Constellations",
+    category: "Pilier · Constellations · 95 €",
     title: "Éclairer les liens invisibles.",
     text:
       "Explorer les dynamiques familiales, symboliques ou intérieures qui influencent votre chemin — en individuel ou en cercle.",
@@ -467,7 +484,7 @@ export const heroSlides = [
   },
   {
     id: "numerologie",
-    category: "Pilier · Numérologie",
+    category: "Pilier · Numérologie · 110 €",
     title: "Lire les cycles et les ressources de votre chemin.",
     text:
       "Une lecture symbolique pour mieux comprendre vos élans, vos passages et vos points d'appui.",
@@ -498,8 +515,8 @@ export const heroSlides = [
     primaryCta: { label: "Découvrir les retraites", href: "/retraites" },
     secondaryCta: { label: "Voir les prochaines dates", href: "/evenements" },
     palette: "rose-gold",
-    image: "/images/celine/portrait-celine.png",
-    imagePosition: "object-[center_top]",
+    image: undefined,
+    imagePosition: undefined,
   },
 ] as const;
 
