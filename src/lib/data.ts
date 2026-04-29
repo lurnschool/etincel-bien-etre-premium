@@ -59,11 +59,16 @@ export const contact = {
   },
 } as const;
 
+/**
+ * Navigation simplifiée — direction "boussole".
+ * Le visiteur n'est plus confronté à un labyrinthe : il choisit d'abord
+ * une intention via "Être guidée" ou explore les grandes familles.
+ */
 export const navigation = [
   { label: "Accueil", href: "/" },
-  { label: "À propos", href: "/a-propos" },
+  { label: "Être guidée", href: "/#boussole" },
   {
-    label: "Accompagnements",
+    label: "Individuel",
     href: "/accompagnements",
     children: [
       { label: "Tous les accompagnements", href: "/accompagnements" },
@@ -72,27 +77,25 @@ export const navigation = [
       { label: "CellRelease®", href: "/accompagnements/cellrelease" },
       { label: "Massage énergétique", href: "/accompagnements/massage-energetique" },
       { label: "Réflexologie amérindienne", href: "/accompagnements/reflexologie" },
-      { label: "Breathwork individuel", href: "/accompagnements/breathwork" },
-      { label: "Innerdance individuel", href: "/innerdance#individuel" },
+      { label: "Breathwork", href: "/accompagnements/breathwork" },
+      { label: "Innerdance", href: "/innerdance#individuel" },
       { label: "Féminin sacré", href: "/feminin-sacre" },
     ],
   },
   {
-    label: "Expériences collectives",
+    label: "Collectif",
     href: "/collectif",
     children: [
-      { label: "Toutes les expériences", href: "/collectif" },
       { label: "Cercles de femmes", href: "/cercles-de-femmes" },
       { label: "Innerdance collectif", href: "/innerdance#collectif" },
       { label: "Breathwork collectif", href: "/collectif#breathwork" },
-      { label: "Constellations familiales", href: "/collectif#constellations" },
+      { label: "Constellations", href: "/collectif#constellations" },
       { label: "Ateliers", href: "/collectif#ateliers" },
     ],
   },
   { label: "Retraites", href: "/retraites" },
-  { label: "Formations", href: "/formations" },
-  { label: "Cartes cadeaux", href: "/cartes-cadeaux" },
-  { label: "Événements", href: "/evenements" },
+  { label: "Offrir", href: "/cartes-cadeaux" },
+  { label: "Contact", href: "/contact" },
 ] as const;
 
 export const portesEntree = [
@@ -407,13 +410,249 @@ export const disclaimers = {
 } as const;
 
 export const cta = {
-  primary: { label: "Trouver mon accompagnement", href: "/diagnostic" },
+  primary: { label: "Trouver ma porte d'entrée", href: "/#boussole" },
   secondary: { label: "Prendre contact", href: "/contact" },
-  discoverPractices: { label: "Découvrir les pratiques", href: "/accompagnements" },
-  giftCard: { label: "Découvrir les cartes cadeaux", href: "/cartes-cadeaux" },
+  discoverPractices: { label: "Découvrir les pratiques", href: "/#atlas" },
+  giftCard: { label: "Créer une carte cadeau", href: "/cartes-cadeaux" },
   retreats: { label: "Rejoindre la liste d'intérêt", href: "/retraites#interet" },
   cercles: { label: "Être informée du prochain cercle", href: "/cercles-de-femmes#inscription" },
 } as const;
+
+/**
+ * Slides du CinematicHeroSlider — pleine largeur, narration éditoriale.
+ */
+export const heroSlides = [
+  {
+    id: "reconnexion",
+    category: "Reconnexion",
+    title: "Un espace pour revenir à vous.",
+    text:
+      "Céline vous accompagne à travers des pratiques sensibles, corporelles et symboliques pour retrouver de l'apaisement, de la clarté et votre élan intérieur.",
+    primaryCta: { label: "Trouver ma porte d'entrée", href: "/#boussole" },
+    secondaryCta: { label: "Découvrir les pratiques", href: "/#atlas" },
+    palette: "amethyst",
+  },
+  {
+    id: "corps",
+    category: "Corps & énergie",
+    title: "Quand le corps devient une porte.",
+    text:
+      "Massages, souffle, présence et écoute du corps ouvrent un espace pour déposer ce qui demande à l'être.",
+    primaryCta: { label: "Explorer les accompagnements", href: "/accompagnements" },
+    secondaryCta: { label: "Faire le diagnostic", href: "/diagnostic" },
+    palette: "rose-gold",
+  },
+  {
+    id: "collectif",
+    category: "Collectif",
+    title: "Avancer ensemble autrement.",
+    text:
+      "Cercles de femmes, Innerdance, breathwork, constellations et ateliers créent des espaces de partage et de transformation.",
+    primaryCta: { label: "Découvrir les expériences", href: "/collectif" },
+    secondaryCta: { label: "Voir les prochaines dates", href: "/evenements" },
+    palette: "deep-night",
+  },
+  {
+    id: "feminin",
+    category: "Féminin sacré",
+    title: "Revenir au corps, aux cycles et à l'intuition.",
+    text:
+      "Un accompagnement symbolique autour du féminin, de la mémoire du corps et de l'énergie créatrice.",
+    primaryCta: { label: "Explorer le féminin sacré", href: "/feminin-sacre" },
+    secondaryCta: { label: "Découvrir les cercles", href: "/cercles-de-femmes" },
+    palette: "rose-velvet",
+  },
+  {
+    id: "offrir",
+    category: "Offrir",
+    title: "Offrir une parenthèse de reconnexion.",
+    text:
+      "Créez une carte cadeau personnalisée pour offrir un moment sensible, profond et adapté.",
+    primaryCta: { label: "Créer une carte cadeau", href: "/cartes-cadeaux" },
+    secondaryCta: { label: "Découvrir les formats", href: "/cartes-cadeaux#formats" },
+    palette: "gold-warm",
+  },
+] as const;
+
+export type HeroSlide = (typeof heroSlides)[number];
+
+/**
+ * Bande défilante des pratiques — élégante et éditoriale, pas publicitaire.
+ */
+export const practicesMarquee = [
+  "Numérologie",
+  "Hypnose",
+  "CellRelease®",
+  "Innerdance",
+  "Breathwork",
+  "Cercles de femmes",
+  "Retraites",
+  "Féminin sacré",
+  "Cartes cadeaux",
+  "Massage énergétique",
+  "Réflexologie amérindienne",
+  "Constellations",
+] as const;
+
+/**
+ * Boussole intérieure — 8 intentions + recommandations associées.
+ * Renvoie un slug d'accompagnements ou de pages internes.
+ */
+export type GuidanceIntent = {
+  id: string;
+  label: string;
+  description: string;
+  recommendations: string[]; // slugs des pratiques (Practice.slug) ou pages (préfix /)
+  cta: { label: string; href: string };
+};
+
+export const guidanceIntents: GuidanceIntent[] = [
+  {
+    id: "changement",
+    label: "Je traverse une période de changement",
+    description:
+      "Quand le sol bouge, ces pratiques aident à retrouver une boussole intérieure et à éclairer la suite.",
+    recommendations: ["numerologie", "hypnose", "innerdance-individuel"],
+    cta: { label: "Explorer ces accompagnements", href: "/accompagnements" },
+  },
+  {
+    id: "apaisement",
+    label: "J'ai besoin d'apaisement",
+    description:
+      "Pour relâcher la pression, déposer la fatigue émotionnelle et revenir à un rythme plus doux.",
+    recommendations: ["cellrelease", "hypnose", "massage-energetique"],
+    cta: { label: "Voir ces pratiques", href: "/accompagnements" },
+  },
+  {
+    id: "comprendre",
+    label: "Je veux comprendre mon chemin",
+    description:
+      "Un travail symbolique pour lire les cycles, les motifs, les talents et les ressources qui vous appartiennent.",
+    recommendations: ["numerologie"],
+    cta: { label: "Découvrir la numérologie", href: "/accompagnements/numerologie" },
+  },
+  {
+    id: "corps",
+    label: "Je veux revenir à mon corps",
+    description:
+      "Ces pratiques ouvrent un espace corporel et sensible pour ralentir, ressentir et revenir à soi.",
+    recommendations: [
+      "massage-energetique",
+      "reflexologie",
+      "breathwork",
+      "innerdance-individuel",
+    ],
+    cta: { label: "Voir ces accompagnements", href: "/accompagnements" },
+  },
+  {
+    id: "collectif",
+    label: "Je veux vivre une expérience collective",
+    description:
+      "Cercles, breathwork, innerdance, constellations : la force du groupe pour traverser, partager et avancer.",
+    recommendations: ["/cercles-de-femmes", "/collectif", "/innerdance#collectif"],
+    cta: { label: "Découvrir le collectif", href: "/collectif" },
+  },
+  {
+    id: "feminin",
+    label: "Je veux explorer mon féminin",
+    description:
+      "Un accompagnement symbolique du corps, des cycles et de l'énergie créatrice — en individuel ou en cercle.",
+    recommendations: ["feminin-sacre", "/cercles-de-femmes", "/feminin-sacre"],
+    cta: { label: "Explorer le féminin sacré", href: "/feminin-sacre" },
+  },
+  {
+    id: "offrir",
+    label: "Je veux offrir un moment",
+    description:
+      "Une carte cadeau personnalisée — séance, expérience collective, retraite ou montant libre.",
+    recommendations: ["/cartes-cadeaux"],
+    cta: { label: "Créer une carte cadeau", href: "/cartes-cadeaux" },
+  },
+  {
+    id: "former",
+    label: "Je veux me former ou vivre une immersion",
+    description:
+      "Formations en numérologie ou retraites immersives pour aller plus loin dans la transmission.",
+    recommendations: ["/formations", "/retraites"],
+    cta: { label: "Découvrir les formats longs", href: "/formations" },
+  },
+];
+
+/**
+ * Phrases poétiques pour le composant WhisperLine — intégrées en discrétion.
+ * Toujours latérales, opacité faible, jamais centrales.
+ */
+export const whisperLines = [
+  "Le corps garde parfois ce que les mots n'ont pas encore déposé.",
+  "Revenir à soi n'est pas reculer. C'est reprendre racine.",
+  "Certaines portes ne s'ouvrent qu'en ralentissant.",
+  "Votre souffle sait déjà le chemin.",
+  "Il y a des passages qui ne se traversent pas seule.",
+  "L'étincelle n'a pas disparu. Elle attendait un espace.",
+  "La douceur peut être une force très structurante.",
+  "Ce qui se libère n'a pas toujours besoin d'être expliqué.",
+  "Un cercle n'impose rien. Il accueille.",
+  "Offrir du temps, c'est parfois offrir un retour à soi.",
+] as const;
+
+/**
+ * Familles de l'atlas des pratiques — colonne gauche du PracticeAtlas.
+ */
+export type PracticeFamily = {
+  id: string;
+  label: string;
+  description: string;
+  practices: string[];
+  extraLinks?: { label: string; href: string }[];
+};
+
+export const practiceFamilies: PracticeFamily[] = [
+  {
+    id: "comprendre",
+    label: "Comprendre son chemin",
+    description: "Lire les cycles, les talents, les ressources.",
+    practices: ["numerologie"],
+  },
+  {
+    id: "apaiser",
+    label: "Apaiser et libérer",
+    description: "Relâcher la pression, libérer ce qui demande à l'être.",
+    practices: ["hypnose", "cellrelease"],
+  },
+  {
+    id: "corps",
+    label: "Revenir au corps",
+    description: "Habiter à nouveau la maison qu'est votre corps.",
+    practices: ["massage-energetique", "massage-liberation-reconnexion", "reflexologie"],
+  },
+  {
+    id: "explorer",
+    label: "Explorer l'intérieur",
+    description: "Souffle, états de présence, écoute sensible.",
+    practices: ["breathwork", "innerdance-individuel"],
+  },
+  {
+    id: "feminin",
+    label: "Féminin sacré",
+    description: "Le corps, les cycles, l'intuition, la créativité.",
+    practices: ["feminin-sacre"],
+    extraLinks: [{ label: "Cercles de femmes", href: "/cercles-de-femmes" }],
+  },
+  {
+    id: "collectif",
+    label: "Collectif & immersions",
+    description: "La force du groupe, les retraites, les formations.",
+    practices: [],
+    extraLinks: [
+      { label: "Cercles de femmes", href: "/cercles-de-femmes" },
+      { label: "Innerdance collectif", href: "/innerdance#collectif" },
+      { label: "Breathwork collectif", href: "/collectif#breathwork" },
+      { label: "Constellations", href: "/collectif#constellations" },
+      { label: "Retraites", href: "/retraites" },
+      { label: "Formations", href: "/formations" },
+    ],
+  },
+];
 
 export const seoDefaults = {
   siteUrl: "https://etinceldebienetre.fr",
