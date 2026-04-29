@@ -1,26 +1,377 @@
 @import "tailwindcss";
 
+/*
+ * ETINCEL DE BIEN ÊTRE — Design System
+ * Direction artistique : premium, lumineuse, douce, profonde,
+ * féminine, naturelle, spirituelle mais crédible, moderne, chaleureuse.
+ *
+ * Palette inspirée de l'identité existante (violet/mauve du logo),
+ * réinterprétée en gamme premium avec accent doré "étincelle".
+ * Couleurs provisoires — à ajuster avec la cliente.
+ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Fonds */
+  --bg-base: #faf6f0;          /* crème chaud lumineux */
+  --bg-soft: #f3ecdf;          /* sable chaud */
+  --bg-card: #ffffff;          /* carte */
+  --bg-deep: #1d1530;          /* violet nuit profond — sections immersives */
+  --bg-deep-soft: #2a1f44;     /* violet profond moins intense */
+
+  /* Accents */
+  --accent: #6b4f8a;           /* améthyste — couleur signature */
+  --accent-soft: #a98dc3;      /* améthyste douce */
+  --accent-deep: #4a3463;      /* améthyste profond */
+  --gold: #c9a86a;             /* doré chaud — l'étincelle */
+  --gold-soft: #e3cd9d;        /* doré pâle */
+  --gold-deep: #a3823f;        /* doré profond — texte sur clair */
+  --rose: #d8a9a4;             /* rose nude féminin */
+  --rose-soft: #f1d9d4;        /* rose poudré */
+
+  /* Texte */
+  --text-deep: #1f1a2e;        /* texte principal */
+  --text-medium: #4d4661;      /* texte courant */
+  --text-soft: #8b819b;        /* texte tertiaire */
+  --text-on-dark: #f5efe3;     /* texte sur fond profond */
+  --text-on-dark-soft: #c9bdd9;
+
+  /* Bordures */
+  --border-soft: #e6dccb;
+  --border-medium: #d4c5a8;
+  --border-dark: rgba(255, 255, 255, 0.12);
+
+  /* Ombres premium */
+  --shadow-soft: 0 4px 20px rgba(31, 26, 46, 0.06);
+  --shadow-medium: 0 12px 40px rgba(31, 26, 46, 0.1);
+  --shadow-deep: 0 24px 60px rgba(31, 26, 46, 0.18);
+  --shadow-glow: 0 0 60px rgba(201, 168, 106, 0.25);
+
+  /* Rayons */
+  --radius-sm: 0.5rem;
+  --radius: 1rem;
+  --radius-lg: 1.5rem;
+  --radius-xl: 2rem;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Couleurs Tailwind */
+  --color-bg-base: var(--bg-base);
+  --color-bg-soft: var(--bg-soft);
+  --color-bg-card: var(--bg-card);
+  --color-bg-deep: var(--bg-deep);
+  --color-bg-deep-soft: var(--bg-deep-soft);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-deep: var(--accent-deep);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-gold-deep: var(--gold-deep);
+  --color-rose: var(--rose);
+  --color-rose-soft: var(--rose-soft);
+  --color-text-deep: var(--text-deep);
+  --color-text-medium: var(--text-medium);
+  --color-text-soft: var(--text-soft);
+  --color-text-on-dark: var(--text-on-dark);
+  --color-text-on-dark-soft: var(--text-on-dark-soft);
+  --color-border-soft: var(--border-soft);
+  --color-border-medium: var(--border-medium);
+
+  /* Typographies */
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-cormorant);
+
+  /* Animations sur-mesure */
+  --animate-fade-up: fadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  --animate-shimmer: shimmer 4s ease-in-out infinite;
+  --animate-float: float 6s ease-in-out infinite;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  0%, 100% { opacity: 0.4; transform: translateY(0); }
+  50% { opacity: 1; transform: translateY(-4px); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+/* Base */
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg-base);
+  color: var(--text-deep);
+  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+  font-feature-settings: "ss01", "cv11";
+  letter-spacing: -0.005em;
+}
+
+/* Sélection */
+::selection {
+  background: var(--accent-soft);
+  color: var(--text-on-dark);
+}
+
+/* Scrollbar discrète */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--bg-soft); }
+::-webkit-scrollbar-thumb {
+  background: var(--accent-soft);
+  border-radius: 10px;
+  border: 2px solid var(--bg-soft);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+/* Typographie display */
+.font-display {
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-weight: 400;
+  letter-spacing: -0.015em;
+}
+
+.font-display-italic {
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+}
+
+/* Filet doré décoratif */
+.gold-line {
+  display: inline-block;
+  width: 2.5rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  vertical-align: middle;
+}
+
+.gold-line-vertical {
+  display: inline-block;
+  width: 1px;
+  height: 2.5rem;
+  background: linear-gradient(180deg, transparent, var(--gold), transparent);
+}
+
+/* Texte avec dégradé doré */
+.text-gold-gradient {
+  background: linear-gradient(135deg, var(--gold-deep) 0%, var(--gold) 50%, var(--gold-soft) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* Halo lumineux décoratif */
+.glow-soft {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(201, 168, 106, 0.15), transparent 60%);
+  pointer-events: none;
+}
+
+/* Bouton primaire (style premium) */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.95rem 1.75rem;
+  background: var(--accent-deep);
+  color: var(--text-on-dark);
+  border-radius: 999px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(74, 52, 99, 0.25);
+}
+
+.btn-primary::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(74, 52, 99, 0.35);
+}
+
+.btn-primary:hover::before { opacity: 1; }
+
+.btn-primary > * { position: relative; z-index: 1; }
+
+/* Bouton secondaire — fond clair */
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.95rem 1.75rem;
+  background: transparent;
+  color: var(--text-deep);
+  border: 1px solid var(--border-medium);
+  border-radius: 999px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.btn-secondary:hover {
+  background: var(--bg-card);
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-2px);
+}
+
+/* Bouton doré */
+.btn-gold {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.95rem 1.75rem;
+  background: linear-gradient(135deg, var(--gold) 0%, var(--gold-deep) 100%);
+  color: var(--text-deep);
+  border-radius: 999px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: 0 6px 20px rgba(201, 168, 106, 0.35);
+}
+
+.btn-gold:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(201, 168, 106, 0.5);
+}
+
+/* Carte premium */
+.card-premium {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-soft);
+  box-shadow: var(--shadow-soft);
+  transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  overflow: hidden;
+}
+
+.card-premium:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-medium);
+  border-color: var(--gold-soft);
+}
+
+/* Section padding standard */
+.section {
+  padding: 6rem 0;
+}
+
+@media (max-width: 768px) {
+  .section { padding: 4rem 0; }
+}
+
+/* Conteneur sur-mesure */
+.container-premium {
+  width: 100%;
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .container-premium { padding: 0 2.5rem; }
+}
+
+/* Grain subtil pour texture premium */
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+/* Animation au scroll basée sur visibilité (si Framer non utilisé) */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Décoration : ornement étincelle */
+.etincelle {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: var(--gold);
+  border-radius: 50%;
+  position: relative;
+  box-shadow: 0 0 14px var(--gold);
+}
+
+.etincelle::before,
+.etincelle::after {
+  content: "";
+  position: absolute;
+  background: var(--gold);
+}
+
+.etincelle::before {
+  width: 24px;
+  height: 1px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.etincelle::after {
+  width: 1px;
+  height: 24px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Lien soulignement doux */
+.link-elegant {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s ease;
+}
+
+.link-elegant:hover {
+  border-bottom-color: var(--gold);
+}
+
+/* Focus accessible mais raffiné */
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+  border-radius: 4px;
 }

@@ -1,0 +1,215 @@
+"use client";
+
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { Phone, Mail, MapPin, Send, CheckCircle2 } from "lucide-react";
+import { Container } from "@/components/ui/Container";
+import { Reveal } from "@/components/ui/Reveal";
+import { SectionTitle } from "@/components/ui/SectionTitle";
+import { contact } from "@/lib/data";
+
+const motivationOptions = [
+  "Une séance individuelle",
+  "Un cercle de femmes",
+  "Une retraite",
+  "Une carte cadeau",
+  "Une formation",
+  "Autre",
+];
+
+/**
+ * Formulaire de contact rapide. Envoi non branché —
+ * sera connecté à Resend / API mail au sprint 4.
+ */
+export function ContactRapide() {
+  const [submitted, setSubmitted] = useState(false);
+  const [form, setForm] = useState({
+    firstname: "",
+    email: "",
+    phone: "",
+    motivation: motivationOptions[0],
+    message: "",
+    consent: false,
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!form.firstname || !form.email || !form.consent) return;
+    setSubmitted(true);
+  };
+
+  return (
+    <section className="section relative overflow-hidden">
+      <Container>
+        <Reveal>
+          <SectionTitle
+            eyebrow="Premier contact"
+            title={
+              <>
+                Échangeons sur{" "}
+                <span className="font-display-italic text-gold-deep">votre besoin</span>
+              </>
+            }
+            description="Un message simple, une réponse personnelle. Céline lit chaque demande et vous répondra sous 48h."
+          />
+        </Reveal>
+
+        <div className="mt-14 grid gap-10 lg:grid-cols-[1fr_1.4fr]">
+          <Reveal>
+            <div className="space-y-5">
+              <div className="rounded-2xl border border-border-soft bg-bg-card p-6">
+                <div className="flex items-center gap-3 mb-2">
+                  <Phone className="h-4 w-4 text-accent" />
+                  <span className="text-xs uppercase tracking-[0.24em] text-text-soft">Téléphone</span>
+                </div>
+                <a
+                  href={contact.phoneLink}
+                  className="font-display text-2xl text-text-deep hover:text-accent transition-colors"
+                >
+                  {contact.phone}
+                </a>
+              </div>
+              <div className="rounded-2xl border border-border-soft bg-bg-card p-6">
+                <div className="flex items-center gap-3 mb-2">
+                  <Mail className="h-4 w-4 text-accent" />
+                  <span className="text-xs uppercase tracking-[0.24em] text-text-soft">Email</span>
+                </div>
+                <a
+                  href={contact.emailLink}
+                  className="font-display text-2xl text-text-deep hover:text-accent transition-colors break-all"
+                >
+                  {contact.email}
+                </a>
+              </div>
+              <div className="rounded-2xl border border-border-soft bg-bg-card p-6">
+                <div className="flex items-center gap-3 mb-3">
+                  <MapPin className="h-4 w-4 text-accent" />
+                  <span className="text-xs uppercase tracking-[0.24em] text-text-soft">Lieux</span>
+                </div>
+                <div className="space-y-2 text-sm text-text-medium leading-relaxed">
+                  <p>
+                    <span className="font-medium text-text-deep block">{contact.addressMain.label}</span>
+                    {contact.addressMain.street}<br />
+                    {contact.addressMain.city}
+                  </p>
+                  <p className="pt-2 border-t border-border-soft">
+                    Aussi à {contact.addressSecondary.label}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </Reveal>
+
+          <Reveal delay={0.1}>
+            {submitted ? (
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="rounded-3xl border border-border-soft bg-bg-card p-10 text-center space-y-4"
+              >
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-gold-soft/40">
+                  <CheckCircle2 className="h-7 w-7 text-gold-deep" />
+                </div>
+                <h3 className="font-display text-3xl text-text-deep">Message reçu.</h3>
+                <p className="text-text-medium leading-relaxed max-w-md mx-auto">
+                  Merci pour votre confiance. Céline vous répondra personnellement sous 48h. En cas d'urgence, vous pouvez l'appeler directement au {contact.phone}.
+                </p>
+              </motion.div>
+            ) : (
+              <form
+                onSubmit={handleSubmit}
+                className="rounded-3xl border border-border-soft bg-bg-card p-8 md:p-10 space-y-5"
+              >
+                <div className="grid gap-5 sm:grid-cols-2">
+                  <div className="space-y-1.5">
+                    <label htmlFor="contact-firstname" className="text-xs uppercase tracking-[0.24em] text-text-soft">
+                      Prénom
+                    </label>
+                    <input
+                      id="contact-firstname"
+                      required
+                      value={form.firstname}
+                      onChange={(e) => setForm({ ...form, firstname: e.target.value })}
+                      className="w-full rounded-xl bg-bg-soft px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-accent/30"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label htmlFor="contact-email" className="text-xs uppercase tracking-[0.24em] text-text-soft">
+                      Email
+                    </label>
+                    <input
+                      id="contact-email"
+                      type="email"
+                      required
+                      value={form.email}
+                      onChange={(e) => setForm({ ...form, email: e.target.value })}
+                      className="w-full rounded-xl bg-bg-soft px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-accent/30"
+                    />
+                  </div>
+                </div>
+                <div className="grid gap-5 sm:grid-cols-2">
+                  <div className="space-y-1.5">
+                    <label htmlFor="contact-phone" className="text-xs uppercase tracking-[0.24em] text-text-soft">
+                      Téléphone <span className="opacity-60">(optionnel)</span>
+                    </label>
+                    <input
+                      id="contact-phone"
+                      type="tel"
+                      value={form.phone}
+                      onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                      className="w-full rounded-xl bg-bg-soft px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-accent/30"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label htmlFor="contact-motivation" className="text-xs uppercase tracking-[0.24em] text-text-soft">
+                      Je viens pour
+                    </label>
+                    <select
+                      id="contact-motivation"
+                      value={form.motivation}
+                      onChange={(e) => setForm({ ...form, motivation: e.target.value })}
+                      className="w-full rounded-xl bg-bg-soft px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-accent/30"
+                    >
+                      {motivationOptions.map((m) => (
+                        <option key={m}>{m}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+                <div className="space-y-1.5">
+                  <label htmlFor="contact-message" className="text-xs uppercase tracking-[0.24em] text-text-soft">
+                    Votre message
+                  </label>
+                  <textarea
+                    id="contact-message"
+                    rows={4}
+                    value={form.message}
+                    onChange={(e) => setForm({ ...form, message: e.target.value })}
+                    placeholder="Quelques lignes pour décrire votre besoin, votre intuition, votre question…"
+                    className="w-full rounded-xl bg-bg-soft px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-accent/30 resize-none"
+                  />
+                </div>
+                <label className="flex items-start gap-3 text-xs leading-relaxed text-text-medium cursor-pointer">
+                  <input
+                    type="checkbox"
+                    required
+                    checked={form.consent}
+                    onChange={(e) => setForm({ ...form, consent: e.target.checked })}
+                    className="mt-0.5 h-4 w-4 rounded border-border-medium text-accent focus:ring-accent/30"
+                  />
+                  <span>
+                    J'accepte que mes données soient utilisées uniquement par Etincel de bien être pour répondre à ma demande. Aucune transmission à des tiers.
+                  </span>
+                </label>
+                <button type="submit" className="btn-primary w-full sm:w-auto">
+                  <Send className="h-4 w-4" />
+                  Envoyer mon message
+                </button>
+              </form>
+            )}
+          </Reveal>
+        </div>
+      </Container>
+    </section>
+  );
+}

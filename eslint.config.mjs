@@ -5,9 +5,14 @@ import nextTs from "eslint-config-next/typescript";
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
-  // Override default ignores of eslint-config-next.
+  // Site en français — l'apostrophe typographique est usuelle et lisible.
+  // Echapper toutes les apostrophes en JSX nuit à la qualité du contenu sans bénéfice réel.
+  {
+    rules: {
+      "react/no-unescaped-entities": "off",
+    },
+  },
   globalIgnores([
-    // Default ignores of eslint-config-next:
     ".next/**",
     "out/**",
     "build/**",
