@@ -1,6 +1,8 @@
 import type { MetadataRoute } from "next";
 import { accompagnementsIndividuels, seoDefaults } from "@/lib/data";
 
+export const dynamic = "force-static";
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = seoDefaults.siteUrl;
   const now = new Date();
@@ -21,7 +23,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/contact",
     "/mentions-legales",
     "/politique-confidentialite",
-    "/etre-guidee",
     "/collectif/cacao",
   ];
 
