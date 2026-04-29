@@ -101,7 +101,9 @@ export const navigation = [
     ],
   },
   { label: "Retraites", href: "/retraites" },
+  { label: "Bilan", href: "/diagnostic" },
   { label: "Offrir", href: "/cartes-cadeaux" },
+  { label: "Contact", href: "/contact" },
 ] as const;
 
 export const portesEntree = [

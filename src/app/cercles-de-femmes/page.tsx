@@ -6,6 +6,7 @@ import { Reveal } from "@/components/ui/Reveal";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Etincelle } from "@/components/ui/Etincelle";
 import { WhisperLine } from "@/components/ui/WhisperLine";
+import { BilanGiftBanner } from "@/components/layout/BilanGiftBanner";
 import { whisperLines } from "@/lib/data";
 
 export const metadata: Metadata = {
@@ -191,6 +192,8 @@ export default function CerclesPage() {
           </div>
         </Container>
       </section>
+
+      <BilanGiftBanner variant="warm" />
     </>
   );
 }

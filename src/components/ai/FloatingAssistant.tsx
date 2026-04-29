@@ -362,7 +362,7 @@ export function FloatingAssistant() {
                             Bilan d&apos;orientation
                           </p>
                           <p className="font-display text-base text-text-deep mt-1">
-                            Trouver votre porte d&apos;entrée
+                            Faire mon bilan
                           </p>
                         </div>
                         <ArrowRight className="h-4 w-4 text-gold-deep" />

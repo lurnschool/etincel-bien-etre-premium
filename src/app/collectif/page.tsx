@@ -4,6 +4,7 @@ import { ArrowRight, Users } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { PageHeader } from "@/components/ui/PageHeader";
+import { BilanGiftBanner } from "@/components/layout/BilanGiftBanner";
 import { experiencesCollectives } from "@/lib/data";
 
 export const metadata: Metadata = {
@@ -56,6 +57,8 @@ export default function CollectifPage() {
           </div>
         </Container>
       </section>
+
+      <BilanGiftBanner />
     </>
   );
 }

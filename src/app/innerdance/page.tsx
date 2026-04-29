@@ -5,6 +5,7 @@ import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Etincelle } from "@/components/ui/Etincelle";
+import { BilanGiftBanner } from "@/components/layout/BilanGiftBanner";
 import { disclaimers } from "@/lib/data";
 
 export const metadata: Metadata = {
@@ -150,6 +151,8 @@ export default function InnerdancePage() {
           </div>
         </Container>
       </section>
+
+      <BilanGiftBanner />
     </>
   );
 }

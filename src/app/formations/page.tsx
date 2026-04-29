@@ -4,6 +4,7 @@ import { ArrowRight, GraduationCap } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { PageHeader } from "@/components/ui/PageHeader";
+import { BilanGiftBanner } from "@/components/layout/BilanGiftBanner";
 import { formations } from "@/lib/data";
 
 export const metadata: Metadata = {
@@ -65,11 +66,13 @@ export default function FormationsPage() {
 
           <Reveal>
             <p className="mt-12 text-center text-sm text-text-soft max-w-2xl mx-auto">
-              Programme détaillé, dates et modalités d'inscription : à valider avec Céline avant publication.
+              Programme détaillé, dates et modalités d&apos;inscription : Céline vous transmet le dossier complet sur demande.
             </p>
           </Reveal>
         </Container>
       </section>
+
+      <BilanGiftBanner variant="warm" />
     </>
   );
 }
