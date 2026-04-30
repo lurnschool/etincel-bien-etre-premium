@@ -32,6 +32,7 @@ import { cn } from "@/lib/utils";
 import { whatsappMessages } from "@/lib/whatsapp";
 import { createCheckoutSession, generateOrderRef, findProduct } from "@/lib/stripeProducts";
 import { useCart } from "@/lib/cart";
+import { submitContact } from "@/lib/contactClient";
 
 type GiftType = {
   id: string;
@@ -264,11 +265,31 @@ export default function CartesCadeauxPage() {
     );
   };
 
-  const handleManualRequest = (e: React.FormEvent) => {
+  const handleManualRequest = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!contactInfo.email || !contactInfo.consent) return;
+    if (!selectedType || !contactInfo.email || !contactInfo.consent) return;
     setPaymentMode("manual");
-    setOrderRef(generateOrderRef("DEM"));
+    const ref = generateOrderRef("DEM");
+    setOrderRef(ref);
+    // L'envoi email est best-effort — le succès UI passe quoi qu'il arrive
+    // car la carte cadeau brouillon est déjà téléchargeable côté client.
+    void submitContact({
+      intent: "gift-card-manual",
+      contact: {
+        firstname: data.fromName,
+        email: contactInfo.email,
+        phone: contactInfo.phone,
+      },
+      fields: {
+        Référence: ref,
+        Cadeau: selectedType.label,
+        "Pour": data.toName,
+        "Montant": data.amount,
+        Occasion: data.occasion,
+        Style: data.style,
+      },
+      message: data.message,
+    });
     setStep("succes");
   };
 

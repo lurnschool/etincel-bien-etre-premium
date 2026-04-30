@@ -24,10 +24,11 @@ import { Reveal } from "@/components/ui/Reveal";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Etincelle } from "@/components/ui/Etincelle";
 import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
-import { whatsappMessages } from "@/lib/whatsapp";
+import { whatsappMessages, whatsappLink } from "@/lib/whatsapp";
 import { asset } from "@/lib/assets";
 import { cn } from "@/lib/utils";
 import { buildBilan } from "@/lib/bilan";
+import { submitContact } from "@/lib/contactClient";
 
 type Question = {
   id: string;
@@ -187,9 +188,37 @@ export default function DiagnosticPage() {
     e.preventDefault();
     if (!lead.firstname || !lead.email || !lead.consent) return;
     setSubmitting(true);
-    // Envoi simulé — remplacer par fetch /api/send-mail (Resend) une fois branché.
-    await new Promise((r) => setTimeout(r, 900));
+
+    const orientationFields: Record<string, string> = {
+      "Axe principal identifié": bilan.axePrincipal.name,
+      "Axe secondaire": bilan.axeSecondaire?.name ?? "—",
+    };
+    Object.entries(answers).forEach(([qid, vals]) => {
+      const q = questions.find((x) => x.id === qid);
+      if (q) {
+        const labels = vals
+          .map((v) => q.options.find((o) => o.value === v)?.label ?? v)
+          .join(" · ");
+        orientationFields[q.label] = labels;
+      }
+    });
+
+    const res = await submitContact({
+      intent: "diagnostic",
+      contact: {
+        firstname: lead.firstname,
+        email: lead.email,
+        phone: lead.phone,
+      },
+      fields: orientationFields,
+      message: bilan.reasonAxePrincipal,
+    });
     setSubmitting(false);
+    if (!res.ok && !res.fallback) {
+      console.warn("Diagnostic submit error:", res.error);
+    }
+    // On affiche toujours le résultat — le bilan est utilisable même si
+    // l'email ne part pas (c'est un outil d'orientation, pas un paiement).
     setPhase("result");
   };
 

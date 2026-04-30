@@ -5,7 +5,8 @@ import { motion } from "framer-motion";
 import { ArrowRight, CheckCircle2, Loader2, Mountain } from "lucide-react";
 import Link from "next/link";
 import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
-import { whatsappMessages } from "@/lib/whatsapp";
+import { whatsappMessages, whatsappLink } from "@/lib/whatsapp";
+import { submitContact } from "@/lib/contactClient";
 
 const retreatTopics = [
   "Retraite féminin sacré",
@@ -16,13 +17,14 @@ const retreatTopics = [
 ];
 
 /**
- * Formulaire d'inscription à la liste d'intérêt retraites.
- * Envoi simulé tant que Resend n'est pas branché. Après submit,
- * Céline reçoit l'inscription et la personne est confirmée.
+ * Formulaire d'inscription à la liste d'intérêt retraites — branché
+ * sur /api/contact (Resend). Si la clé est absente, on bascule sur
+ * un fallback honnête (WhatsApp / mailto).
  */
 export function RetreatInterestForm() {
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
+  const [fallbackMessage, setFallbackMessage] = useState<string | null>(null);
   const [form, setForm] = useState({
     firstname: "",
     email: "",
@@ -31,13 +33,35 @@ export function RetreatInterestForm() {
     consent: false,
   });
 
+  const buildBody = () =>
+    `Bonjour Céline,\n\nJe souhaite être prévenue à l'ouverture des prochaines retraites (${form.topic}).\n\n${form.firstname} <${form.email}>${form.phone ? ` · ${form.phone}` : ""}`;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.firstname || !form.email || !form.consent) return;
     setSending(true);
-    await new Promise((r) => setTimeout(r, 700));
+    setFallbackMessage(null);
+    const res = await submitContact({
+      intent: "retreat-interest",
+      contact: {
+        firstname: form.firstname,
+        email: form.email,
+        phone: form.phone,
+      },
+      fields: { "Type de retraite": form.topic },
+    });
     setSending(false);
-    setSubmitted(true);
+    if (res.ok) {
+      setSubmitted(true);
+      return;
+    }
+    if (res.fallback) {
+      setFallbackMessage(
+        "L'envoi par email n'est pas encore activé sur cet hébergement. Continuez avec Céline en un clic ci-dessous.",
+      );
+      return;
+    }
+    setFallbackMessage(`L'envoi a échoué : ${res.error}.`);
   };
 
   if (submitted) {
@@ -159,6 +183,27 @@ export function RetreatInterestForm() {
           Échanger sur WhatsApp
         </WhatsAppButton>
       </div>
+      {fallbackMessage && (
+        <div className="rounded-2xl border border-gold-soft/40 bg-white/8 p-4 text-xs text-text-on-dark-soft leading-relaxed space-y-3">
+          <p>{fallbackMessage}</p>
+          <div className="flex flex-wrap gap-2">
+            <a
+              href={whatsappLink(buildBody())}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 rounded-full bg-[#25D366] px-3 py-1.5 text-xs font-medium text-white hover:bg-[#1ebe5a] transition-colors"
+            >
+              Continuer sur WhatsApp
+            </a>
+            <a
+              href={`mailto:etincel33@gmail.com?subject=${encodeURIComponent("Intérêt retraite — site Etincel")}&body=${encodeURIComponent(buildBody())}`}
+              className="inline-flex items-center gap-1.5 rounded-full border border-white/25 px-3 py-1.5 text-xs font-medium text-text-on-dark hover:border-gold hover:text-gold transition-colors"
+            >
+              Envoyer par email
+            </a>
+          </div>
+        </div>
+      )}
     </form>
   );
 }

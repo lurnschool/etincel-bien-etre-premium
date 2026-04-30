@@ -13,6 +13,13 @@ type Tool = {
   href: string;
 };
 
+const familyLabels: Record<Tool["family"], { label: string; color: string }> = {
+  memoires: { label: "Mémoires", color: "text-accent" },
+  feminin: { label: "Féminin & cacao", color: "text-rose" },
+  corps: { label: "Corps & intégration", color: "text-gold-deep" },
+  transverse: { label: "Transverse", color: "text-gold" },
+};
+
 const tools: Tool[] = [
   {
     name: "Hypnose",
@@ -63,13 +70,6 @@ const tools: Tool[] = [
     href: "/innerdance",
   },
 ];
-
-const familyLabels: Record<Tool["family"], { label: string; href: string; color: string }> = {
-  memoires: { label: "Mémoires", href: "/memoires-constellations", color: "text-accent" },
-  feminin: { label: "Féminin & cacao", href: "/feminin-cacao", color: "text-rose" },
-  corps: { label: "Corps & intégration", href: "/corps-integration", color: "text-gold-deep" },
-  transverse: { label: "Transverse", href: "/diagnostic", color: "text-gold" },
-};
 
 /**
  * Section « Les outils qu'elle peut mobiliser » — présentation éditoriale,
@@ -136,13 +136,9 @@ export function ToolsMobilized() {
                     {tool.description}
                   </p>
                   <div className="col-span-12 lg:col-span-2 flex items-center justify-end gap-2 text-[0.72rem] uppercase tracking-[0.22em]">
-                    <Link
-                      href={family.href}
-                      onClick={(e) => e.stopPropagation()}
-                      className={`${family.color} hover:underline underline-offset-2`}
-                    >
+                    <span className={`${family.color}`}>
                       {family.label}
-                    </Link>
+                    </span>
                     <ArrowRight className="h-3 w-3 text-text-soft transition-transform group-hover:translate-x-0.5" />
                   </div>
                   <p className="lg:hidden col-span-12 text-sm text-text-medium leading-relaxed -mt-1">

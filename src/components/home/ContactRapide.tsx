@@ -8,7 +8,8 @@ import { Reveal } from "@/components/ui/Reveal";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
 import { contact } from "@/lib/data";
-import { whatsappMessages } from "@/lib/whatsapp";
+import { whatsappMessages, whatsappLink } from "@/lib/whatsapp";
+import { submitContact } from "@/lib/contactClient";
 
 const motivationOptions = [
   "Une séance individuelle",
@@ -20,14 +21,14 @@ const motivationOptions = [
 ];
 
 /**
- * Formulaire de contact rapide. UI prête pour Resend — envoi simulé
- * tant que la clé n'est pas branchée. Quand RESEND_API_KEY sera
- * disponible, remplacer le setTimeout par un fetch /api/contact
- * qui appelle l'API Resend côté serveur.
+ * Formulaire de contact rapide branché sur /api/contact (Resend).
+ * Si la clé Resend est absente, on bascule sur un fallback honnête
+ * proposant WhatsApp et mailto avec le contenu pré-rempli.
  */
 export function ContactRapide() {
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
+  const [fallbackMessage, setFallbackMessage] = useState<string | null>(null);
   const [form, setForm] = useState({
     firstname: "",
     email: "",
@@ -37,13 +38,38 @@ export function ContactRapide() {
     consent: false,
   });
 
+  const buildPlainBody = () =>
+    `Bonjour Céline,\n\nDe : ${form.firstname} <${form.email}>${form.phone ? ` · ${form.phone}` : ""}\nJe viens pour : ${form.motivation}\n${form.message ? `\n${form.message}\n` : ""}\nMerci !`;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.firstname || !form.email || !form.consent) return;
     setSending(true);
-    await new Promise((r) => setTimeout(r, 700));
+    setFallbackMessage(null);
+    const res = await submitContact({
+      intent: "contact",
+      contact: {
+        firstname: form.firstname,
+        email: form.email,
+        phone: form.phone,
+      },
+      fields: { "Je viens pour": form.motivation },
+      message: form.message,
+    });
     setSending(false);
-    setSubmitted(true);
+    if (res.ok) {
+      setSubmitted(true);
+      return;
+    }
+    if (res.fallback) {
+      setFallbackMessage(
+        "L'envoi par email n'est pas encore activé sur cet hébergement. Continuez avec Céline en un clic ci-dessous — votre message lui parviendra directement.",
+      );
+      return;
+    }
+    setFallbackMessage(
+      `L'envoi a échoué : ${res.error}. Réessayez dans un instant ou écrivez à Céline directement.`,
+    );
   };
 
   return (
@@ -240,6 +266,27 @@ export function ContactRapide() {
                     Plutôt sur WhatsApp
                   </WhatsAppButton>
                 </div>
+                {fallbackMessage && (
+                  <div className="rounded-2xl border border-gold-soft/60 bg-bg-soft p-4 text-xs text-text-medium leading-relaxed space-y-3">
+                    <p>{fallbackMessage}</p>
+                    <div className="flex flex-wrap gap-2">
+                      <a
+                        href={whatsappLink(buildPlainBody())}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 rounded-full bg-[#25D366] px-3 py-1.5 text-xs font-medium text-white hover:bg-[#1ebe5a] transition-colors"
+                      >
+                        Continuer sur WhatsApp
+                      </a>
+                      <a
+                        href={`mailto:${contact.email}?subject=${encodeURIComponent("Contact via le site Etincel")}&body=${encodeURIComponent(buildPlainBody())}`}
+                        className="inline-flex items-center gap-1.5 rounded-full bg-bg-card border border-border-soft px-3 py-1.5 text-xs font-medium text-text-deep hover:bg-bg-soft transition-colors"
+                      >
+                        Envoyer par email
+                      </a>
+                    </div>
+                  </div>
+                )}
               </form>
             )}
           </Reveal>

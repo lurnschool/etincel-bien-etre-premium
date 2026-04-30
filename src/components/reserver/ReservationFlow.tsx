@@ -23,6 +23,7 @@ import { whatsappLink } from "@/lib/whatsapp";
 import { createCheckoutSession, generateOrderRef } from "@/lib/stripeProducts";
 import { useCart } from "@/lib/cart";
 import { AddToCartButton } from "@/components/cart/AddToCartButton";
+import { submitContact } from "@/lib/contactClient";
 import { getCalendlyUrl, isCalendlyEnabled } from "@/lib/booking";
 import { CalendlyInline } from "@/components/reserver/CalendlyInline";
 import { cn } from "@/lib/utils";
@@ -134,9 +135,26 @@ export function ReservationFlow({ practice }: { practice: ReservationPractice })
     if (!isContactValid) return;
     setPaymentMode("manual");
     setProcessing(true);
-    await new Promise((r) => setTimeout(r, 600));
+    const ref = generateOrderRef("RDV");
+    await submitContact({
+      intent: "reservation-manual",
+      contact: {
+        firstname: contact.firstname,
+        email: contact.email,
+        phone: contact.phone,
+      },
+      fields: {
+        Référence: ref,
+        Pratique: practice.name,
+        Tarif: practice.price,
+        Date: slot.date,
+        Plage: slotLabel,
+        Lieu: lieuLabel,
+      },
+      message: slot.note,
+    });
     setProcessing(false);
-    setOrderRef(generateOrderRef("RDV"));
+    setOrderRef(ref);
     setStep("succes");
   };
 
