@@ -23,6 +23,16 @@ const familyLabels: Record<string, string> = {
   cacao: "Cœur & rituel",
 };
 
+const RESERVABLE_SLUGS: string[] = [
+  "numerologie",
+  "hypnose",
+  "cellrelease",
+  "massage-energetique",
+  "massage-liberation-reconnexion",
+  "reflexologie",
+  "breathwork",
+];
+
 const familyVisuals: Record<string, SacredFallbackKey> = {
   comprendre: "numerologie",
   apaiser: "hypnose",
@@ -83,6 +93,10 @@ export default async function AccompagnementDetailPage({ params }: { params: Par
         title={practice.name}
         description={practice.pitch}
       />
+
+      {/* Animation numérologie remontée juste après le hero pour les visiteurs
+          de cette page — la danse des chiffres est l'accroche principale. */}
+      {practice.slug === "numerologie" && <NumerologyInvitation />}
 
       <section className="relative section overflow-hidden">
         <SacredBackdrop variant={backdropVariant} />
@@ -197,13 +211,20 @@ export default async function AccompagnementDetailPage({ params }: { params: Par
                 )}
 
                 <div className="flex flex-wrap gap-3 pt-2">
-                  <Link
-                    href={`/contact?sujet=${encodeURIComponent(practice.name)}`}
-                    className="btn-primary"
-                  >
-                    Demander un rendez-vous
-                    <ArrowRight className="h-4 w-4" />
-                  </Link>
+                  {RESERVABLE_SLUGS.includes(practice.slug) ? (
+                    <Link href={`/reserver/${practice.slug}`} className="btn-primary">
+                      Réserver une séance — {practice.price}
+                      <ArrowRight className="h-4 w-4" />
+                    </Link>
+                  ) : (
+                    <Link
+                      href={`/contact?sujet=${encodeURIComponent(practice.name)}`}
+                      className="btn-primary"
+                    >
+                      Demander un rendez-vous
+                      <ArrowRight className="h-4 w-4" />
+                    </Link>
+                  )}
                   <WhatsAppButton
                     message={`Bonjour Céline, j'aimerais réserver une séance de ${practice.name}.`}
                     variant="outline"
@@ -232,9 +253,6 @@ export default async function AccompagnementDetailPage({ params }: { params: Par
           </div>
         </Container>
       </section>
-
-      {/* Animation invitation — uniquement pour la numérologie */}
-      {practice.slug === "numerologie" && <NumerologyInvitation />}
 
       {/* Ce que cette pratique n'est pas — pour les pratiques sensibles */}
       {nestPasFor(practice.family).length > 0 && (

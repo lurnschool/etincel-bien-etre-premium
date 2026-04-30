@@ -3,13 +3,13 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ChevronDown, Compass, Gift, MessageSquare } from "lucide-react";
+import { Menu, X, ChevronDown, Compass, Gift, MessageSquare, ReceiptText } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { brand, contact, navigation, navigationActions } from "@/lib/data";
 import { Etincelle } from "@/components/ui/Etincelle";
 
 const actionIcons = {
-  Bilan: Compass,
+  Tarifs: ReceiptText,
   Offrir: Gift,
   Contact: MessageSquare,
 } as const;
@@ -124,11 +124,9 @@ export function Header() {
         <div className="flex items-center gap-1 md:gap-2 shrink-0">
           {/* Liens texte sur grand écran, icônes sur xl en dessous */}
           <div className="hidden md:flex items-center">
-            {navigationActions
-              .filter((a) => a.label !== "Bilan")
-              .map((action) => {
-                const Icon = actionIcons[action.label as keyof typeof actionIcons];
-                return (
+            {navigationActions.map((action) => {
+              const Icon = actionIcons[action.label as keyof typeof actionIcons];
+              return (
                   <Link
                     key={action.href}
                     href={action.href}

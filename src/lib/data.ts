@@ -99,7 +99,7 @@ export const navigation = [
  * Actions secondaires affichées à droite du header (texte court ou icône).
  */
 export const navigationActions = [
-  { label: "Bilan", href: "/diagnostic" },
+  { label: "Tarifs", href: "/tarifs" },
   { label: "Offrir", href: "/cartes-cadeaux" },
   { label: "Contact", href: "/contact" },
 ] as const;

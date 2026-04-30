@@ -30,21 +30,24 @@ export function NumerologyInvitation() {
     if (!birthdate) return;
     setAnimating(true);
     setRevealed(false);
+    setAnimatedNumbers([]);
 
     const digits = birthdate.replace(/-/g, "").split("").map(Number);
     let i = 0;
+    // Cadence rapide pour que la danse des chiffres arrive vite (90ms),
+    // puis légère pause avant le reveal pour que la vibration se déploie.
     const interval = window.setInterval(() => {
       if (i >= digits.length) {
         window.clearInterval(interval);
         window.setTimeout(() => {
           setAnimating(false);
           setRevealed(true);
-        }, 600);
+        }, 350);
         return;
       }
       setAnimatedNumbers((prev) => [...prev, digits[i]]);
       i++;
-    }, 200);
+    }, 90);
   };
 
   const reset = () => {
@@ -160,20 +163,26 @@ export function NumerologyInvitation() {
           ) : (
             <motion.div
               key="reveal"
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 1.6, ease: [0.22, 1, 0.36, 1] }}
               className="rounded-[2rem] border border-gold-soft/40 bg-white/5 backdrop-blur-md p-8 md:p-12 max-w-3xl mx-auto space-y-8"
             >
-              <div className="flex flex-wrap items-center justify-center gap-3">
+              <motion.div
+                className="flex flex-wrap items-center justify-center gap-3"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+              >
                 {animatedNumbers.map((n, i) => (
                   <motion.span
                     key={i}
-                    initial={{ opacity: 0, scale: 0 }}
-                    animate={{ opacity: 0.4, scale: 1 }}
+                    initial={{ opacity: 0, scale: 0, rotate: -90 }}
+                    animate={{ opacity: 0.5, scale: 1, rotate: 0 }}
                     transition={{
-                      duration: 0.4,
-                      delay: i * 0.05,
+                      duration: 0.7,
+                      delay: 0.15 + i * 0.08,
+                      ease: [0.22, 1, 0.36, 1],
                     }}
                     className={cn(
                       "font-display-italic text-2xl md:text-3xl",
@@ -183,18 +192,28 @@ export function NumerologyInvitation() {
                     {n}
                   </motion.span>
                 ))}
-              </div>
+              </motion.div>
 
-              <blockquote className="font-display-italic text-balance text-2xl md:text-[1.9rem] leading-[1.3] text-text-on-dark text-center max-w-2xl mx-auto">
+              <motion.blockquote
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1, delay: 0.6 + animatedNumbers.length * 0.08 }}
+                className="font-display-italic text-balance text-2xl md:text-[1.9rem] leading-[1.3] text-text-on-dark text-center max-w-2xl mx-auto"
+              >
                 « Chaque date porte une vibration. Céline vous aide à lire cette information dans son ensemble, avec votre histoire, vos cycles et vos ressources. »
-              </blockquote>
+              </motion.blockquote>
 
-              <div className="flex flex-wrap gap-3 justify-center pt-4 border-t border-white/10">
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.8, delay: 1.4 + animatedNumbers.length * 0.08 }}
+                className="flex flex-wrap gap-3 justify-center pt-4 border-t border-white/10"
+              >
                 <Link
-                  href="/accompagnements/numerologie"
+                  href="/reserver/numerologie"
                   className="inline-flex items-center gap-2 rounded-full bg-gold px-7 py-3.5 text-sm font-medium text-text-deep hover:bg-gold-soft transition-colors"
                 >
-                  Demander une lecture personnalisée — 110 €
+                  Réserver ma lecture
                   <ArrowRight className="h-4 w-4" />
                 </Link>
                 <WhatsAppButton message={whatsappMessages.numerologie} variant="outline">
@@ -207,7 +226,7 @@ export function NumerologyInvitation() {
                 >
                   Recommencer
                 </button>
-              </div>
+              </motion.div>
 
               <p className="text-[0.7rem] text-text-on-dark-soft/60 leading-relaxed text-center max-w-xl mx-auto pt-2 border-t border-white/5">
                 Cette page n&apos;effectue pas d&apos;interprétation numérologique automatisée. La lecture se fait avec Céline, en présence ou à distance.
