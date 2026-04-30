@@ -321,6 +321,9 @@ body {
  * pour que les utilities Tailwind (ex. `hidden`) puissent les overrider
  * via la cascade des layers. */
 @layer components {
+  /* btn-primary intègre nativement la lumière dorée qui orbite —
+   * tous les CTA primaires du site sont mis en valeur sans avoir
+   * besoin d'ajouter `.orbit-shine` partout. */
   .btn-primary {
     display: inline-flex;
     align-items: center;
@@ -333,30 +336,69 @@ body {
     font-weight: 500;
     font-size: 0.95rem;
     letter-spacing: 0.02em;
-    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: background 0.4s ease, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease;
     position: relative;
     isolation: isolate;
     box-shadow: 0 6px 20px rgba(74, 52, 99, 0.25);
   }
 
-  .btn-primary::before {
+  .btn-primary::before,
+  .btn-primary::after {
     content: "";
     position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, var(--accent), var(--accent-deep));
-    opacity: 0;
-    transition: opacity 0.4s ease;
     border-radius: inherit;
-    z-index: -1;
     pointer-events: none;
+    animation: orbit-spin 5s linear infinite;
+  }
+
+  /* Halo doré flouté */
+  .btn-primary::before {
+    inset: -5px;
+    padding: 5px;
+    background: conic-gradient(
+      from var(--orbit-angle),
+      rgba(201, 168, 106, 0.45) 0deg,
+      rgba(232, 213, 173, 0.7) 30deg,
+      rgba(255, 240, 200, 1) 60deg,
+      rgba(232, 213, 173, 0.7) 90deg,
+      rgba(201, 168, 106, 0.45) 120deg,
+      rgba(201, 168, 106, 0.3) 240deg,
+      rgba(201, 168, 106, 0.45) 360deg
+    );
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    filter: blur(6px);
+  }
+
+  /* Trait doré net */
+  .btn-primary::after {
+    inset: -1px;
+    padding: 2px;
+    background: conic-gradient(
+      from var(--orbit-angle),
+      rgba(201, 168, 106, 0.7) 0deg,
+      rgba(255, 240, 200, 1) 30deg,
+      rgba(255, 255, 240, 1) 60deg,
+      rgba(255, 240, 200, 1) 90deg,
+      rgba(201, 168, 106, 0.7) 120deg,
+      rgba(201, 168, 106, 0.5) 240deg,
+      rgba(201, 168, 106, 0.7) 360deg
+    );
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
   }
 
   .btn-primary:hover {
+    background: linear-gradient(135deg, var(--accent), var(--accent-deep));
     transform: translateY(-2px);
     box-shadow: 0 10px 30px rgba(74, 52, 99, 0.35);
   }
 
-  .btn-primary:hover::before { opacity: 1; }
+  .btn-primary:hover::before { filter: blur(8px); }
 
   .btn-secondary {
     display: inline-flex;

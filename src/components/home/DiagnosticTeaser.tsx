@@ -27,7 +27,7 @@ export function DiagnosticTeaser() {
                   Un parcours doux et confidentiel pour identifier la pratique qui correspond à votre besoin du moment. Le résultat reste indicatif — il prépare l'échange avec Céline.
                 </p>
               </div>
-              <Link href="/diagnostic" className="btn-primary orbit-shine self-start lg:self-center">
+              <Link href="/diagnostic" className="btn-primary self-start lg:self-center">
                 Faire le bilan d&apos;orientation
                 <ArrowRight className="h-4 w-4" />
               </Link>
