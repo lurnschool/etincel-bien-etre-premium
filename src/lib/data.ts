@@ -470,8 +470,8 @@ export const heroSlides = [
     primaryCta: { label: "Faire mon bilan d'orientation", href: "/diagnostic" },
     secondaryCta: { label: "Découvrir les 3 chemins", href: "/#chemins" },
     palette: "rose-velvet",
-    image: "/images/celine/portrait-celine.png",
-    imagePosition: "object-[center_top]",
+    image: "/images/celine/approche-philosophie.jpg",
+    imagePosition: "object-[center_30%]",
   },
   {
     id: "memoires",
@@ -494,8 +494,8 @@ export const heroSlides = [
     primaryCta: { label: "Découvrir l'axe Féminin", href: "/feminin-cacao" },
     secondaryCta: { label: "Rejoindre un cercle", href: "/cercles-de-femmes" },
     palette: "rose-velvet",
-    image: "/images/celine/approche-philosophie.jpg",
-    imagePosition: "object-[center_30%]",
+    image: "/images/celine/portrait-celine.png",
+    imagePosition: "object-[center_top]",
   },
   {
     id: "corps",
