@@ -66,7 +66,7 @@ export function GiftCardStudioTeaser() {
               <div className="flex flex-wrap gap-3 pt-3">
                 <Link
                   href="/cartes-cadeaux"
-                  className="btn-primary"
+                  className="btn-primary orbit-shine"
                 >
                   Créer ma carte cadeau
                   <ArrowRight className="h-4 w-4" />

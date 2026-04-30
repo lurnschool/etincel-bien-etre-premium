@@ -345,7 +345,7 @@ export default function CerclePage() {
                     type="button"
                     onClick={handleSubscribe}
                     disabled={processing}
-                    className="w-full inline-flex items-center justify-center gap-2 rounded-full bg-accent-deep px-7 py-4 text-base font-medium text-text-on-dark hover:bg-accent transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="orbit-shine w-full inline-flex items-center justify-center gap-2 rounded-full bg-accent-deep px-7 py-4 text-base font-medium text-text-on-dark hover:bg-accent transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {processing ? (
                       <>

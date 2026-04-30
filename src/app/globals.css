@@ -121,122 +121,39 @@
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* Lumière qui orbite — un trait doré + son halo flouté qui tournent
- * autour de l'élément, comme une braise précieuse qui caresse le
- * contour. Suffisamment visible pour valoriser un CTA, sans surcharger.
- *
- * Deux couches superposées :
- *   ::before  — halo doré flouté (drop-shadow vivant)
- *   ::after   — trait doré net qui dessine précisément le contour
- *
- * Les deux tournent en synchronisation sur 6s. */
-@property --orbit-angle {
-  syntax: "<angle>";
-  inherits: false;
-  initial-value: 0deg;
-}
-
-@keyframes orbit-spin {
-  to { --orbit-angle: 360deg; }
-}
-
+/* Aura dorée premium — box-shadow + bordure qui pulsent doucement.
+ * Approche simple et robuste (supportée partout) : pas de conic-gradient
+ * ni de @property — juste deux box-shadows superposées qui respirent.
+ * Réservée aux 5 boutons stratégiques du site (lead, paiement,
+ * souscription, achat impulsif, engagement IA). */
 .orbit-shine {
   position: relative;
-  isolation: isolate;
+  animation: orbit-aura 3.2s ease-in-out infinite;
 }
 
-.orbit-shine::before,
-.orbit-shine::after {
-  content: "";
-  position: absolute;
-  border-radius: inherit;
-  pointer-events: none;
-  animation: orbit-spin 5s linear infinite;
+@keyframes orbit-aura {
+  0%, 100% {
+    box-shadow:
+      0 0 0 1px rgba(201, 168, 106, 0.55),
+      0 0 12px 0 rgba(201, 168, 106, 0.35),
+      0 0 28px 4px rgba(201, 168, 106, 0.18),
+      0 6px 22px rgba(74, 52, 99, 0.28);
+  }
+  50% {
+    box-shadow:
+      0 0 0 2px rgba(255, 240, 200, 0.9),
+      0 0 18px 2px rgba(255, 240, 200, 0.55),
+      0 0 38px 8px rgba(201, 168, 106, 0.32),
+      0 8px 26px rgba(74, 52, 99, 0.32);
+  }
 }
 
-/* Halo doré flouté — rayonne autour du bouton, toujours présent
- * pour qu'on voie clairement que le bouton est mis en valeur */
-.orbit-shine::before {
-  inset: -5px;
-  padding: 5px;
-  background: conic-gradient(
-    from var(--orbit-angle),
-    rgba(201, 168, 106, 0.45) 0deg,
-    rgba(232, 213, 173, 0.7) 30deg,
-    rgba(255, 240, 200, 1) 60deg,
-    rgba(232, 213, 173, 0.7) 90deg,
-    rgba(201, 168, 106, 0.45) 120deg,
-    rgba(201, 168, 106, 0.3) 240deg,
-    rgba(201, 168, 106, 0.45) 360deg
-  );
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  filter: blur(6px);
-}
-
-/* Trait net — dessine la bordure lumineuse, présente sur tout le tour
- * avec un pic d'éclat qui orbite. Le contour est toujours visible. */
-.orbit-shine::after {
-  inset: -1px;
-  padding: 2px;
-  background: conic-gradient(
-    from var(--orbit-angle),
-    rgba(201, 168, 106, 0.7) 0deg,
-    rgba(255, 240, 200, 1) 30deg,
-    rgba(255, 255, 240, 1) 60deg,
-    rgba(255, 240, 200, 1) 90deg,
-    rgba(201, 168, 106, 0.7) 120deg,
-    rgba(201, 168, 106, 0.5) 240deg,
-    rgba(201, 168, 106, 0.7) 360deg
-  );
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-}
-
-.orbit-shine:hover::before { filter: blur(8px); }
-
-/* Variante améthyste — pour blocs sombres ou décor onirique */
-.orbit-shine-amethyst::before {
-  background: conic-gradient(
-    from var(--orbit-angle),
-    rgba(154, 126, 192, 0.45) 0deg,
-    rgba(201, 168, 106, 0.9) 60deg,
-    rgba(154, 126, 192, 0.45) 120deg,
-    rgba(154, 126, 192, 0.3) 240deg,
-    rgba(154, 126, 192, 0.45) 360deg
-  );
-}
-.orbit-shine-amethyst::after {
-  background: conic-gradient(
-    from var(--orbit-angle),
-    rgba(154, 126, 192, 0.7) 0deg,
-    rgba(255, 240, 200, 1) 60deg,
-    rgba(154, 126, 192, 0.7) 120deg,
-    rgba(154, 126, 192, 0.5) 240deg,
-    rgba(154, 126, 192, 0.7) 360deg
-  );
-}
-
-/* Variante au survol uniquement — discret au repos */
-.orbit-shine-hover::before,
-.orbit-shine-hover::after {
-  opacity: 0;
-  transition: opacity 0.6s ease;
-}
-.orbit-shine-hover:hover::before,
-.orbit-shine-hover:hover::after,
-.group:hover .orbit-shine-hover::before,
-.group:hover .orbit-shine-hover::after {
-  opacity: 1;
+.orbit-shine:hover {
+  animation-duration: 1.6s;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .orbit-shine::before,
-  .orbit-shine::after { animation: none; }
+  .orbit-shine { animation: none; box-shadow: 0 0 0 1px rgba(201, 168, 106, 0.6), 0 0 14px rgba(201, 168, 106, 0.4); }
 }
 
 /* Base */
@@ -321,9 +238,6 @@ body {
  * pour que les utilities Tailwind (ex. `hidden`) puissent les overrider
  * via la cascade des layers. */
 @layer components {
-  /* btn-primary intègre nativement la lumière dorée qui orbite —
-   * tous les CTA primaires du site sont mis en valeur sans avoir
-   * besoin d'ajouter `.orbit-shine` partout. */
   .btn-primary {
     display: inline-flex;
     align-items: center;
@@ -336,69 +250,30 @@ body {
     font-weight: 500;
     font-size: 0.95rem;
     letter-spacing: 0.02em;
-    transition: background 0.4s ease, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease;
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
     position: relative;
     isolation: isolate;
     box-shadow: 0 6px 20px rgba(74, 52, 99, 0.25);
   }
 
-  .btn-primary::before,
-  .btn-primary::after {
+  .btn-primary::before {
     content: "";
     position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+    opacity: 0;
+    transition: opacity 0.4s ease;
     border-radius: inherit;
+    z-index: -1;
     pointer-events: none;
-    animation: orbit-spin 5s linear infinite;
-  }
-
-  /* Halo doré flouté */
-  .btn-primary::before {
-    inset: -5px;
-    padding: 5px;
-    background: conic-gradient(
-      from var(--orbit-angle),
-      rgba(201, 168, 106, 0.45) 0deg,
-      rgba(232, 213, 173, 0.7) 30deg,
-      rgba(255, 240, 200, 1) 60deg,
-      rgba(232, 213, 173, 0.7) 90deg,
-      rgba(201, 168, 106, 0.45) 120deg,
-      rgba(201, 168, 106, 0.3) 240deg,
-      rgba(201, 168, 106, 0.45) 360deg
-    );
-    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    filter: blur(6px);
-  }
-
-  /* Trait doré net */
-  .btn-primary::after {
-    inset: -1px;
-    padding: 2px;
-    background: conic-gradient(
-      from var(--orbit-angle),
-      rgba(201, 168, 106, 0.7) 0deg,
-      rgba(255, 240, 200, 1) 30deg,
-      rgba(255, 255, 240, 1) 60deg,
-      rgba(255, 240, 200, 1) 90deg,
-      rgba(201, 168, 106, 0.7) 120deg,
-      rgba(201, 168, 106, 0.5) 240deg,
-      rgba(201, 168, 106, 0.7) 360deg
-    );
-    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
   }
 
   .btn-primary:hover {
-    background: linear-gradient(135deg, var(--accent), var(--accent-deep));
     transform: translateY(-2px);
     box-shadow: 0 10px 30px rgba(74, 52, 99, 0.35);
   }
 
-  .btn-primary:hover::before { filter: blur(8px); }
+  .btn-primary:hover::before { opacity: 1; }
 
   .btn-secondary {
     display: inline-flex;

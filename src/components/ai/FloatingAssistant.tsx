@@ -274,7 +274,7 @@ export function FloatingAssistant() {
 
               <button
                 onClick={() => setOpen(true)}
-                className="group/cta inline-flex items-center gap-1.5 rounded-full bg-accent-deep px-4 py-2 text-[0.78rem] font-medium text-text-on-dark hover:bg-accent transition-colors"
+                className="orbit-shine group/cta inline-flex items-center gap-1.5 rounded-full bg-accent-deep px-4 py-2 text-[0.78rem] font-medium text-text-on-dark hover:bg-accent transition-colors"
               >
                 Discuter avec Etincel
                 <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover/cta:translate-x-0.5" />
