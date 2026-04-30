@@ -17,16 +17,17 @@ import {
   Heart,
   Mountain,
   Gift,
+  Quote,
 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Etincelle } from "@/components/ui/Etincelle";
 import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
-import { accompagnementsIndividuels } from "@/lib/data";
 import { whatsappMessages } from "@/lib/whatsapp";
 import { asset } from "@/lib/assets";
 import { cn } from "@/lib/utils";
+import { buildBilan } from "@/lib/bilan";
 
 type Question = {
   id: string;
@@ -139,76 +140,6 @@ const questions: Question[] = [
   },
 ];
 
-type Profile = {
-  id: string;
-  title: string;
-  catchphrase: string;
-  description: string;
-};
-
-function buildProfile(intentions: string[]): Profile {
-  const top = intentions[0] ?? "comprendre";
-  const profiles: Record<string, Profile> = {
-    cacao: {
-      id: "cacao",
-      title: "La chercheuse de présence",
-      catchphrase: "Ralentir pour réentendre ce qui appelle au cœur.",
-      description:
-        "Vous êtes prête pour un travail sensoriel et symbolique — pas pour une thérapie verbale. Le rituel cacao, les cercles de femmes et les retraites sont vos territoires.",
-    },
-    constellations: {
-      id: "constellations",
-      title: "L'éclaireuse des liens",
-      catchphrase: "Voir l'invisible pour reprendre sa place.",
-      description:
-        "Quelque chose, derrière, demande à être vu. Les constellations familiales ou de naissance Rebirth sont l'outil le plus juste pour ce moment.",
-    },
-    comprendre: {
-      id: "comprendre",
-      title: "L'âme cartographe",
-      catchphrase: "Lire la carte avant de marcher.",
-      description:
-        "Vous voulez du sens, des repères, une lecture de votre trajectoire. La numérologie est votre porte d'entrée — elle révèle des cycles et des ressources que vous portez déjà.",
-    },
-    apaiser: {
-      id: "apaiser",
-      title: "La voyageuse fatiguée",
-      catchphrase: "Déposer ce qui n'a plus à être porté.",
-      description:
-        "Hypnose, CellRelease®, massage énergétique — Céline vous propose d'abord un soin profond. Ensuite, on regarde ce qui se libère.",
-    },
-    corps: {
-      id: "corps",
-      title: "L'habitante du sensible",
-      catchphrase: "Le corps comme première maison.",
-      description:
-        "Massage Libération Reconnexion, réflexologie amérindienne, breathwork — votre travail commence par le toucher, le souffle, la sensation.",
-    },
-    explorer: {
-      id: "explorer",
-      title: "La voyageuse intérieure",
-      catchphrase: "Aller chercher ce qui demande à émerger.",
-      description:
-        "Innerdance, breathwork chamanique, retraites immersives — vous êtes prête pour un travail puissant qui mobilise tout l'être.",
-    },
-    feminin: {
-      id: "feminin",
-      title: "La femme qui revient à elle",
-      catchphrase: "Réhabiter le féminin comme territoire vivant.",
-      description:
-        "Cercles de femmes, féminin sacré, cérémonie cacao en sororité — vous cherchez un espace symbolique pour votre corps, vos cycles, votre intuition.",
-    },
-    retraite: {
-      id: "retraite",
-      title: "La voyageuse en immersion",
-      catchphrase: "Sortir du quotidien pour se retrouver.",
-      description:
-        "Une retraite est votre porte d'entrée idéale — temps long, groupe, dépaysement. C'est là que les choses se posent vraiment.",
-    },
-  };
-  return profiles[top] ?? profiles.comprendre;
-}
-
 export default function DiagnosticPage() {
   const [phase, setPhase] = useState<"intro" | "questions" | "gate" | "result">("intro");
   const [step, setStep] = useState(0);
@@ -250,48 +181,7 @@ export default function DiagnosticPage() {
     setLead({ firstname: "", email: "", phone: "", consent: false });
   };
 
-  const intent = useMemo(() => {
-    const tags: string[] = [];
-    Object.entries(answers).forEach(([qId, values]) => {
-      const q = questions.find((q) => q.id === qId);
-      values.forEach((v) => {
-        const opt = q?.options.find((o) => o.value === v);
-        if (opt?.tag) tags.push(...opt.tag);
-      });
-    });
-
-    const counts: Record<string, number> = {};
-    tags.forEach((t) => {
-      counts[t] = (counts[t] || 0) + 1;
-    });
-    const sorted = Object.entries(counts)
-      .sort(([, a], [, b]) => b - a)
-      .map(([k]) => k);
-
-    const dominantTags = sorted.length > 0 ? sorted : ["comprendre"];
-    const profile = buildProfile(dominantTags);
-
-    const matched = accompagnementsIndividuels.filter((a) => dominantTags.slice(0, 3).includes(a.family));
-    const principale = matched[0] ?? accompagnementsIndividuels[0];
-    const secondaires = matched.slice(1, 4);
-
-    const wantsCollective = answers.format?.includes("collectif");
-    const wantsImmersion =
-      answers.frequence?.includes("immersion") || answers.budget?.includes("immersion") || dominantTags.includes("retraite");
-    const wantsCacao = dominantTags.includes("cacao");
-    const wantsConstellations = dominantTags.includes("constellations");
-
-    return {
-      tags: dominantTags,
-      profile,
-      principale,
-      secondaires,
-      wantsCollective,
-      wantsImmersion,
-      wantsCacao,
-      wantsConstellations,
-    };
-  }, [answers]);
+  const bilan = useMemo(() => buildBilan(answers, lead.firstname), [answers, lead.firstname]);
 
   const handleLeadSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -621,56 +511,89 @@ export default function DiagnosticPage() {
                 transition={{ duration: 0.6 }}
                 className="space-y-6"
               >
-                <div className="rounded-[2rem] border border-gold-soft/60 bg-gradient-to-br from-gold-soft/30 via-bg-card to-bg-card p-8 md:p-12 space-y-7">
+                {/* Bloc 1 — Profil archétypal */}
+                <div className="rounded-[2rem] border border-gold-soft/60 bg-gradient-to-br from-gold-soft/30 via-bg-card to-bg-card p-8 md:p-12 space-y-6">
                   <div className="flex items-center gap-3">
                     <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gold-soft/60 text-gold-deep">
                       <Sparkles className="h-5 w-5" />
                     </div>
                     <div>
                       <p className="text-xs uppercase tracking-[0.24em] text-gold-deep">
-                        Votre profil
+                        Votre profil — {lead.firstname || "vous"}
                       </p>
                       <h2 className="font-display text-3xl md:text-4xl text-text-deep mt-1 leading-tight">
-                        {intent.profile.title}
+                        {bilan.profile.title}
                       </h2>
                     </div>
                   </div>
                   <p className="font-display-italic text-xl md:text-2xl text-gold-deep leading-snug">
-                    « {intent.profile.catchphrase} »
+                    « {bilan.profile.catchphrase} »
                   </p>
                   <p className="text-text-medium leading-relaxed text-base md:text-lg">
-                    {intent.profile.description}
+                    {bilan.profile.shortDescription}
                   </p>
                 </div>
 
+                {/* Bloc 2 — Ce qui se joue pour vous */}
                 <div className="rounded-[2rem] border border-border-soft bg-bg-card p-8 md:p-10 space-y-5">
                   <div>
-                    <p className="text-xs uppercase tracking-[0.24em] text-gold-deep">
-                      Votre porte d&apos;entrée principale
+                    <p className="text-xs uppercase tracking-[0.24em] text-gold-deep flex items-center gap-2">
+                      <Etincelle size={11} />
+                      <span>Ce qui se joue pour vous</span>
                     </p>
-                    <h3 className="font-display text-2xl md:text-3xl text-text-deep mt-1">
-                      {intent.principale.name} · {intent.principale.price}
+                    <h3 className="font-display text-2xl md:text-3xl text-text-deep mt-2 leading-tight">
+                      Une lecture sensible de vos réponses.
                     </h3>
                   </div>
+                  <div className="space-y-4 text-text-medium leading-relaxed">
+                    {bilan.whatsAtPlay.map((p, i) => (
+                      <p key={i} className="text-base md:text-[1.05rem]">
+                        {p}
+                      </p>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Bloc 3 — Pratique principale + raison */}
+                <div className="rounded-[2rem] border-2 border-accent/30 bg-gradient-to-br from-accent/5 via-bg-card to-bg-card p-8 md:p-10 space-y-5">
+                  <div className="flex items-start justify-between gap-4 flex-wrap">
+                    <div>
+                      <p className="text-xs uppercase tracking-[0.24em] text-gold-deep">
+                        Votre porte d&apos;entrée principale
+                      </p>
+                      <h3 className="font-display text-2xl md:text-3xl text-text-deep mt-1">
+                        {bilan.whyThisPractice.practice.name}
+                      </h3>
+                      <p className="text-sm text-text-soft mt-1">
+                        {bilan.whyThisPractice.practice.duration} ·{" "}
+                        {bilan.whyThisPractice.practice.format}
+                      </p>
+                    </div>
+                    <span className="font-display text-3xl text-gold-deep">
+                      {bilan.whyThisPractice.practice.price}
+                    </span>
+                  </div>
                   <p className="text-text-medium leading-relaxed">
-                    {intent.principale.pitch}
+                    {bilan.whyThisPractice.practice.pitch}
                   </p>
-                  <p className="text-sm text-text-soft">
-                    Durée : {intent.principale.duration} · Format : {intent.principale.format}
-                  </p>
+                  <div className="rounded-2xl bg-bg-soft/60 border border-border-soft p-5">
+                    <p className="text-[0.7rem] uppercase tracking-[0.24em] text-gold-deep mb-2">
+                      Pourquoi cette pratique pour vous
+                    </p>
+                    <p className="text-sm text-text-medium leading-relaxed">
+                      {bilan.whyThisPractice.reason}
+                    </p>
+                  </div>
                   <div className="flex flex-wrap gap-3 pt-2">
-                    <Link
-                      href={`/accompagnements/${intent.principale.slug}`}
-                      className="btn-primary"
-                    >
-                      Découvrir cette pratique
+                    <Link href={bilan.reservationHref} className="btn-primary">
+                      Réserver une séance
                       <ArrowRight className="h-4 w-4" />
                     </Link>
                     <Link
-                      href={`/contact?sujet=${encodeURIComponent(intent.principale.name)}`}
+                      href={`/accompagnements/${bilan.whyThisPractice.practice.slug}`}
                       className="btn-secondary"
                     >
-                      Demander un rendez-vous
+                      En savoir plus sur la pratique
                     </Link>
                     <WhatsAppButton message={whatsappMessages.bilan} variant="outline">
                       WhatsApp
@@ -678,18 +601,144 @@ export default function DiagnosticPage() {
                   </div>
                 </div>
 
-                {intent.secondaires.length > 0 && (
+                {/* Bloc 4 — Parcours 3 mois */}
+                <div className="rounded-[2rem] border border-border-soft bg-bg-deep text-text-on-dark p-8 md:p-10 space-y-6 relative overflow-hidden">
+                  <div className="absolute -top-24 -right-16 h-64 w-64 rounded-full bg-accent/30 blur-3xl pointer-events-none" />
+                  <div className="absolute -bottom-20 -left-16 h-56 w-56 rounded-full bg-gold/15 blur-3xl pointer-events-none" />
+
+                  <div className="relative">
+                    <p className="text-xs uppercase tracking-[0.24em] text-gold-soft">
+                      Votre parcours suggéré · 3 mois
+                    </p>
+                    <h3 className="font-display text-2xl md:text-3xl text-text-on-dark mt-1 leading-tight">
+                      Un cheminement, pas une séance isolée.
+                    </h3>
+                    <p className="text-text-on-dark-soft leading-relaxed mt-3 max-w-2xl">
+                      Une trajectoire indicative que Céline ajuste avec vous. Chaque brique se réserve séparément — vous restez libre du rythme.
+                    </p>
+                  </div>
+
+                  <ol className="relative space-y-3">
+                    {bilan.parcours3Months.map((m, i) => (
+                      <li
+                        key={m.month}
+                        className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-5 md:p-6"
+                      >
+                        <div className="flex items-baseline gap-4 mb-2 flex-wrap">
+                          <span className="font-display-italic text-gold tabular-nums text-lg shrink-0">
+                            Mois {String(i + 1).padStart(2, "0")}
+                          </span>
+                          <span className="font-display text-xl md:text-2xl text-text-on-dark">
+                            {m.label}
+                          </span>
+                        </div>
+                        <p className="text-sm text-text-on-dark-soft leading-relaxed mb-3">
+                          {m.intention}
+                        </p>
+                        <ul className="space-y-1.5">
+                          {m.practices.map((p, j) => (
+                            <li key={j} className="flex items-baseline justify-between gap-3 text-sm">
+                              {p.href ? (
+                                <Link
+                                  href={p.href}
+                                  className="text-gold-soft hover:text-gold inline-flex items-center gap-1.5 transition-colors"
+                                >
+                                  <span>{p.name}</span>
+                                  <ArrowRight className="h-3 w-3" />
+                                </Link>
+                              ) : (
+                                <span className="text-text-on-dark/90">{p.name}</span>
+                              )}
+                              {p.price && (
+                                <span className="text-text-on-dark-soft/80 text-xs shrink-0">{p.price}</span>
+                              )}
+                            </li>
+                          ))}
+                        </ul>
+                      </li>
+                    ))}
+                  </ol>
+
+                  <div className="relative rounded-2xl bg-gold-soft/15 border border-gold-soft/30 p-5">
+                    <p className="text-sm text-text-on-dark leading-relaxed">
+                      <strong>Envie d&apos;un parcours sur-mesure de 3 mois ?</strong>{" "}
+                      Céline construit aussi des accompagnements dédiés (briques choisies ensemble + paiement échelonné). Demandez-lui directement.
+                    </p>
+                    <div className="flex flex-wrap gap-3 mt-3">
+                      <WhatsAppButton
+                        message="Bonjour Céline, j'aimerais discuter d'un accompagnement sur 3 mois personnalisé suite à mon bilan."
+                        size="sm"
+                      >
+                        Demander un parcours sur-mesure
+                      </WhatsAppButton>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Bloc 5 — Ce que vous pourriez ressentir */}
+                <div className="rounded-[2rem] border border-border-soft bg-bg-card p-8 md:p-10 space-y-5">
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.24em] text-gold-deep">
+                      Après quelques séances
+                    </p>
+                    <h3 className="font-display text-2xl md:text-3xl text-text-deep mt-1 leading-tight">
+                      Ce que vous pourriez vivre.
+                    </h3>
+                    <p className="text-sm text-text-soft mt-2 italic">
+                      Aucune promesse — chaque cheminement est singulier. Voici ce que de nombreuses personnes accompagnées rapportent.
+                    </p>
+                  </div>
+                  <ul className="space-y-2.5">
+                    {bilan.couldFeel.map((item, i) => (
+                      <li key={i} className="flex items-start gap-3 text-text-medium leading-relaxed">
+                        <CheckCircle2 className="h-4 w-4 text-gold-deep mt-1 shrink-0" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Bloc 6 — Mot de Céline */}
+                <div className="rounded-[2rem] border border-gold-soft/40 bg-gradient-to-br from-gold-soft/20 via-bg-card to-bg-card p-8 md:p-10 space-y-5">
+                  <div className="flex items-center gap-3">
+                    <Quote className="h-5 w-5 text-gold-deep" />
+                    <p className="text-xs uppercase tracking-[0.28em] text-gold-deep">
+                      Le mot de Céline
+                    </p>
+                  </div>
+                  <p className="font-display-italic text-xl md:text-2xl leading-[1.4] text-text-deep">
+                    {bilan.celineMessage}
+                  </p>
+                  <div className="flex flex-wrap gap-3 pt-3 border-t border-border-soft">
+                    <Link href={bilan.reservationHref} className="btn-primary">
+                      Réserver maintenant
+                      <ArrowRight className="h-4 w-4" />
+                    </Link>
+                    <WhatsAppButton message={whatsappMessages.bilan}>
+                      Échanger sur WhatsApp
+                    </WhatsAppButton>
+                    <Link
+                      href={`/contact?sujet=${encodeURIComponent("Bilan — " + bilan.whyThisPractice.practice.name)}`}
+                      className="btn-secondary"
+                    >
+                      Lui écrire
+                    </Link>
+                  </div>
+                </div>
+
+                {/* Bloc 7 — Pratiques secondaires */}
+                {bilan.recommendedSecondary.length > 0 && (
                   <div className="rounded-[2rem] border border-border-soft bg-bg-card p-8 md:p-10 space-y-5">
                     <div>
                       <p className="text-xs uppercase tracking-[0.24em] text-gold-deep">
-                        D&apos;autres pistes qui résonnent
+                        En complément
                       </p>
                       <h3 className="font-display text-2xl text-text-deep mt-1">
-                        Pratiques en résonance
+                        Trois autres pratiques qui résonnent.
                       </h3>
                     </div>
                     <div className="grid gap-3 sm:grid-cols-2">
-                      {intent.secondaires.map((reco) => (
+                      {bilan.recommendedSecondary.map((reco) => (
                         <Link
                           key={reco.slug}
                           href={`/accompagnements/${reco.slug}`}
@@ -712,8 +761,9 @@ export default function DiagnosticPage() {
                   </div>
                 )}
 
+                {/* Bloc 8 — Cartes contextuelles (immersion / cadeau) */}
                 <div className="grid gap-3 sm:grid-cols-2">
-                  {intent.wantsImmersion && (
+                  {bilan.suggestRetreat && (
                     <Link
                       href="/retraites#interet"
                       className="rounded-2xl border border-border-soft bg-bg-card p-5 hover:border-gold-soft transition-colors flex items-start gap-3"
@@ -729,38 +779,6 @@ export default function DiagnosticPage() {
                       </div>
                     </Link>
                   )}
-                  {intent.wantsCacao && (
-                    <Link
-                      href="/cacao"
-                      className="rounded-2xl border border-border-soft bg-bg-card p-5 hover:border-gold-soft transition-colors flex items-start gap-3"
-                    >
-                      <Heart className="h-5 w-5 text-gold-deep mt-0.5 shrink-0" />
-                      <div>
-                        <p className="text-xs uppercase tracking-[0.22em] text-gold-deep mb-1">
-                          L&apos;ouverture du cœur
-                        </p>
-                        <p className="font-display text-lg text-text-deep">
-                          Découvrir les rituels cacao →
-                        </p>
-                      </div>
-                    </Link>
-                  )}
-                  {intent.wantsConstellations && (
-                    <Link
-                      href="/constellations"
-                      className="rounded-2xl border border-border-soft bg-bg-card p-5 hover:border-gold-soft transition-colors flex items-start gap-3"
-                    >
-                      <Etincelle size={18} />
-                      <div>
-                        <p className="text-xs uppercase tracking-[0.22em] text-gold-deep mb-1">
-                          Éclairer les liens invisibles
-                        </p>
-                        <p className="font-display text-lg text-text-deep">
-                          Constellation · 95 € →
-                        </p>
-                      </div>
-                    </Link>
-                  )}
                   <Link
                     href="/cartes-cadeaux"
                     className="rounded-2xl border border-border-soft bg-bg-card p-5 hover:border-gold-soft transition-colors flex items-start gap-3"
@@ -768,7 +786,7 @@ export default function DiagnosticPage() {
                     <Gift className="h-5 w-5 text-gold-deep mt-0.5 shrink-0" />
                     <div>
                       <p className="text-xs uppercase tracking-[0.22em] text-gold-deep mb-1">
-                        Offrir un moment
+                        Offrir une parenthèse
                       </p>
                       <p className="font-display text-lg text-text-deep">
                         Composer une carte cadeau →

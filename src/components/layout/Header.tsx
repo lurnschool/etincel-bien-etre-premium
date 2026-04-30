@@ -120,33 +120,28 @@ export function Header() {
           })}
         </nav>
 
-        {/* Actions secondaires (droite) */}
-        <div className="flex items-center gap-1 md:gap-2 shrink-0">
-          {/* Liens texte sur grand écran, icônes sur xl en dessous */}
-          <div className="hidden md:flex items-center">
+        {/* Actions secondaires (droite) — texte lisible plutôt qu'icônes */}
+        <div className="flex items-center gap-1 md:gap-1.5 shrink-0">
+          <div className="hidden md:flex items-center gap-1">
             {navigationActions.map((action) => {
               const Icon = actionIcons[action.label as keyof typeof actionIcons];
               return (
-                  <Link
-                    key={action.href}
-                    href={action.href}
-                    className="group inline-flex items-center justify-center h-9 w-9 rounded-full text-text-deep/70 hover:text-accent hover:bg-bg-soft transition-colors relative"
-                    aria-label={action.label}
-                    title={action.label}
-                  >
-                    <Icon className="h-4 w-4" />
-                    <span className="pointer-events-none absolute top-full mt-1.5 whitespace-nowrap rounded-md bg-text-deep/95 px-2 py-1 text-[0.65rem] text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100">
-                      {action.label}
-                    </span>
-                  </Link>
-                );
-              })}
+                <Link
+                  key={action.href}
+                  href={action.href}
+                  className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[0.8rem] font-medium text-text-deep hover:text-accent hover:bg-bg-soft transition-colors"
+                >
+                  <Icon className="h-3.5 w-3.5 opacity-70" />
+                  {action.label}
+                </Link>
+              );
+            })}
           </div>
 
           {/* CTA primaire : Bilan */}
           <Link
             href="/diagnostic"
-            className="hidden md:inline-flex items-center gap-1.5 rounded-full bg-accent-deep px-4 py-2 text-[0.78rem] font-medium tracking-wide text-text-on-dark hover:bg-accent transition-colors ml-1"
+            className="hidden md:inline-flex items-center gap-1.5 rounded-full bg-accent-deep px-4 py-2 text-[0.78rem] font-medium tracking-wide text-text-on-dark hover:bg-accent transition-colors ml-2"
           >
             <Compass className="h-3.5 w-3.5" />
             Faire mon bilan

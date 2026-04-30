@@ -21,6 +21,8 @@ import { Etincelle } from "@/components/ui/Etincelle";
 import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
 import { whatsappLink } from "@/lib/whatsapp";
 import { redirectToCheckout, generateOrderRef } from "@/lib/stripeProducts";
+import { getCalendlyUrl, isCalendlyEnabled } from "@/lib/booking";
+import { CalendlyInline } from "@/components/reserver/CalendlyInline";
 import { cn } from "@/lib/utils";
 
 export type ReservationPractice = {
@@ -56,6 +58,8 @@ type Step = "creneau" | "coordonnees" | "paiement" | "succes";
 type PaymentMode = "stripe" | "manual";
 
 export function ReservationFlow({ practice }: { practice: ReservationPractice }) {
+  const calendlyUrl = getCalendlyUrl(practice.slug);
+  const calendlyActive = isCalendlyEnabled() && Boolean(calendlyUrl);
   const [step, setStep] = useState<Step>("creneau");
   const [slot, setSlot] = useState({
     date: "",
@@ -221,14 +225,46 @@ export function ReservationFlow({ practice }: { practice: ReservationPractice })
                 className="rounded-3xl border border-border-soft bg-bg-card p-7 md:p-9 space-y-6"
               >
                 <div className="flex items-center gap-3 text-[0.65rem] uppercase tracking-[0.32em] text-gold-deep">
-                  <Calendar className="h-3.5 w-3.5" /> Étape 1 — Quand venir ?
+                  <Calendar className="h-3.5 w-3.5" /> Étape 1 — Choisir mon créneau
                 </div>
-                <h3 className="font-display text-2xl md:text-3xl text-text-deep leading-tight">
-                  Indiquez votre créneau préféré.
-                </h3>
-                <p className="text-sm text-text-medium leading-relaxed">
-                  Céline confirmera la date exacte après votre réservation, en fonction de ses disponibilités. Si votre choix n&apos;est pas possible, elle vous proposera 2 alternatives proches.
-                </p>
+
+                {calendlyActive && calendlyUrl ? (
+                  <>
+                    <h3 className="font-display text-2xl md:text-3xl text-text-deep leading-tight">
+                      Choisissez directement votre créneau.
+                    </h3>
+                    <p className="text-sm text-text-medium leading-relaxed">
+                      Le calendrier ci-dessous affiche les disponibilités réelles de Céline. Réservez en un clic — confirmation immédiate par email, paiement Stripe sécurisé intégré.
+                    </p>
+                    <CalendlyInline
+                      url={calendlyUrl}
+                      prefill={{ name: contact.firstname, email: contact.email }}
+                      height={680}
+                    />
+                    <div className="flex justify-between items-center pt-2 text-xs">
+                      <Link
+                        href={`/accompagnements/${practice.slug}`}
+                        className="inline-flex items-center gap-1.5 text-text-medium hover:text-text-deep"
+                      >
+                        <ArrowLeft className="h-3 w-3" /> Retour à la pratique
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={() => setStep("coordonnees")}
+                        className="text-text-soft hover:text-text-deep underline-offset-2 hover:underline"
+                      >
+                        Préférer le règlement manuel →
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <h3 className="font-display text-2xl md:text-3xl text-text-deep leading-tight">
+                      Indiquez votre créneau préféré.
+                    </h3>
+                    <p className="text-sm text-text-medium leading-relaxed">
+                      Céline branchera son agenda Calendly prochainement (réservation en temps réel + paiement Stripe intégré). En attendant, indiquez-nous votre disponibilité — Céline vous propose 2 alternatives sous 24h.
+                    </p>
 
                 <div className="space-y-4">
                   <div className="space-y-2">
@@ -316,6 +352,8 @@ export function ReservationFlow({ practice }: { practice: ReservationPractice })
                     <ArrowRight className="h-4 w-4" />
                   </button>
                 </div>
+                  </>
+                )}
               </motion.div>
             )}
 
