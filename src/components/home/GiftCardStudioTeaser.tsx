@@ -28,14 +28,14 @@ export function GiftCardStudioTeaser() {
       <Container>
         <div className="grid gap-12 lg:grid-cols-[1fr_1.05fr] items-center">
           <Reveal>
-            <div className="space-y-6">
+            <div className="space-y-6 min-w-0">
               <div className="inline-flex items-center gap-3 text-xs uppercase tracking-[0.32em] text-gold-deep">
                 <span className="text-gold">
                   <Etincelle size={12} />
                 </span>
                 <span>Studio carte cadeau</span>
               </div>
-              <h2 className="font-display text-4xl md:text-5xl lg:text-[3.5rem] leading-[1.05] tracking-tight text-text-deep">
+              <h2 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] leading-[1.1] tracking-tight text-text-deep break-words">
                 Composez une{" "}
                 <span className="font-display-italic text-gold-deep">
                   carte cadeau

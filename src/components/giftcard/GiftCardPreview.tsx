@@ -74,7 +74,6 @@ export const GiftCardPreview = forwardRef<
         "shadow-[0_30px_80px_rgba(31,26,46,0.18)]",
         styleConfig.container,
       )}
-      style={{ minHeight: 360 }}
     >
       {styleConfig.background}
 
