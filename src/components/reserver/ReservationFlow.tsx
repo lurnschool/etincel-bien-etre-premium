@@ -20,7 +20,9 @@ import { Container } from "@/components/ui/Container";
 import { Etincelle } from "@/components/ui/Etincelle";
 import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
 import { whatsappLink } from "@/lib/whatsapp";
-import { redirectToCheckout, generateOrderRef } from "@/lib/stripeProducts";
+import { createCheckoutSession, generateOrderRef } from "@/lib/stripeProducts";
+import { useCart } from "@/lib/cart";
+import { AddToCartButton } from "@/components/cart/AddToCartButton";
 import { getCalendlyUrl, isCalendlyEnabled } from "@/lib/booking";
 import { CalendlyInline } from "@/components/reserver/CalendlyInline";
 import { cn } from "@/lib/utils";
@@ -60,6 +62,7 @@ type PaymentMode = "stripe" | "manual";
 export function ReservationFlow({ practice }: { practice: ReservationPractice }) {
   const calendlyUrl = getCalendlyUrl(practice.slug);
   const calendlyActive = isCalendlyEnabled() && Boolean(calendlyUrl);
+  const { open: openCart } = useCart();
   const [step, setStep] = useState<Step>("creneau");
   const [slot, setSlot] = useState({
     date: "",
@@ -76,6 +79,7 @@ export function ReservationFlow({ practice }: { practice: ReservationPractice })
   const [paymentMode, setPaymentMode] = useState<PaymentMode | null>(null);
   const [processing, setProcessing] = useState(false);
   const [orderRef, setOrderRef] = useState<string>("");
+  const [stripeError, setStripeError] = useState<string | null>(null);
 
   const slotLabel = slots.find((s) => s.value === slot.time)?.label ?? "";
   const lieuLabel = lieux.find((l) => l.value === slot.lieu)?.label ?? "";
@@ -85,17 +89,45 @@ export function ReservationFlow({ practice }: { practice: ReservationPractice })
 
   const stripeMessage = `Bonjour Céline, je viens de réserver une séance de ${practice.name} (référence à venir). Mon créneau préféré : ${slot.date} - ${slotLabel} - ${lieuLabel}.`;
   const manualMessage = `Bonjour Céline, je souhaite réserver une séance de ${practice.name} (${practice.price}). Mon créneau préféré : ${slot.date} - ${slotLabel} - ${lieuLabel}. ${slot.note ? `Note : ${slot.note}` : ""}`;
+  const noteToCeline = `${practice.name} · ${slot.date} ${slotLabel} · ${lieuLabel}${slot.note ? ` · ${slot.note}` : ""}`;
 
   const handleStripe = async () => {
     if (!isContactValid) return;
     setPaymentMode("stripe");
     setProcessing(true);
-    const res = await redirectToCheckout(practice.productId);
-    setProcessing(false);
+    setStripeError(null);
+    const res = await createCheckoutSession(
+      [
+        {
+          productId: practice.productId,
+          quantity: 1,
+          noteToCeline,
+        },
+      ],
+      {
+        contact: {
+          firstname: contact.firstname,
+          email: contact.email,
+          phone: contact.phone,
+        },
+        metadata: {
+          practice: practice.slug,
+          slot_date: slot.date,
+          slot_time: slot.time,
+          slot_lieu: slot.lieu,
+        },
+      },
+    );
     if (res.ok) {
-      setOrderRef(res.ref);
-      setStep("succes");
+      window.location.href = res.url;
+      return;
     }
+    setProcessing(false);
+    setStripeError(
+      res.fallback
+        ? "Le paiement Stripe n'est pas encore activé sur cet hébergement. Continuez avec Céline en un clic ci-dessous — votre récapitulatif lui est transmis."
+        : res.error,
+    );
   };
 
   const handleManual = async () => {
@@ -491,6 +523,11 @@ export function ReservationFlow({ practice }: { practice: ReservationPractice })
                   <p className="text-[0.7rem] text-text-soft leading-relaxed">
                     Paiement 3D Secure · Visa, MasterCard, Amex · facturation immédiate · annulation 100 % remboursée à 7 jours du rendez-vous.
                   </p>
+                  {stripeError && (
+                    <div className="rounded-2xl border border-gold-soft/60 bg-bg-soft p-4 text-xs text-text-medium leading-relaxed">
+                      {stripeError}
+                    </div>
+                  )}
                 </div>
 
                 <div className="rounded-3xl border border-border-soft bg-bg-card p-7 space-y-4">
@@ -500,12 +537,18 @@ export function ReservationFlow({ practice }: { practice: ReservationPractice })
                     <span className="h-px flex-1 bg-border-soft" />
                   </div>
                   <p className="font-display text-lg text-text-deep">
-                    Régler manuellement avec Céline
+                    Ajouter au panier ou régler avec Céline
                   </p>
                   <p className="text-sm text-text-medium leading-relaxed">
-                    Virement, espèces ou chèque le jour de la séance. Céline vous recontacte par email pour confirmer la date.
+                    Ajoutez la séance au panier pour la combiner avec une carte cadeau, un cercle, ou un autre accompagnement. Vous pouvez aussi régler virement, espèces ou chèque le jour J — Céline vous recontacte pour confirmer la date.
                   </p>
                   <div className="flex flex-wrap gap-3">
+                    <AddToCartButton
+                      productId={practice.productId}
+                      noteToCeline={noteToCeline}
+                      label={`Ajouter ${practice.price} au panier`}
+                      onAdded={openCart}
+                    />
                     <button
                       type="button"
                       onClick={handleManual}
@@ -520,7 +563,7 @@ export function ReservationFlow({ practice }: { practice: ReservationPractice })
                       ) : (
                         <>
                           <Send className="h-4 w-4" />
-                          Envoyer ma demande
+                          Régler avec Céline
                         </>
                       )}
                     </button>

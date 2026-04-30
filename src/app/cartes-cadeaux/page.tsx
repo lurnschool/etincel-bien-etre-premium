@@ -30,7 +30,8 @@ import {
 } from "@/components/giftcard/GiftCardPreview";
 import { cn } from "@/lib/utils";
 import { whatsappMessages } from "@/lib/whatsapp";
-import { redirectToCheckout, generateOrderRef } from "@/lib/stripeProducts";
+import { createCheckoutSession, generateOrderRef, findProduct } from "@/lib/stripeProducts";
+import { useCart } from "@/lib/cart";
 
 type GiftType = {
   id: string;
@@ -190,16 +191,77 @@ export default function CartesCadeauxPage() {
     }
   };
 
+  const { addItem, open: openCart } = useCart();
+  const [stripeError, setStripeError] = useState<string | null>(null);
+
+  const customAmountCents = (() => {
+    if (!selectedType) return undefined;
+    const product = findProduct(selectedType.productId);
+    if (!product || product.metadata.customAmount !== "true") return undefined;
+    const numeric = parseInt(data.amount.replace(/[^0-9]/g, ""), 10);
+    if (Number.isFinite(numeric) && numeric >= 1) return numeric * 100;
+    return undefined;
+  })();
+
+  const giftNote = (() => {
+    if (!selectedType) return undefined;
+    const parts = [
+      data.toName ? `Pour : ${data.toName}` : null,
+      data.fromName ? `De : ${data.fromName}` : null,
+      data.message ? `Message : ${data.message}` : null,
+    ].filter(Boolean);
+    return parts.length > 0 ? parts.join(" · ") : undefined;
+  })();
+
+  const handleAddToCart = () => {
+    if (!selectedType) return;
+    addItem({
+      productId: selectedType.productId,
+      quantity: 1,
+      customAmountCents,
+      noteToCeline: giftNote,
+    });
+    openCart();
+  };
+
   const handleStripePay = async () => {
     if (!selectedType || !contactInfo.email || !contactInfo.consent) return;
     setProcessing(true);
     setPaymentMode("stripe");
-    const res = await redirectToCheckout(selectedType.productId);
-    setProcessing(false);
+    setStripeError(null);
+    const res = await createCheckoutSession(
+      [
+        {
+          productId: selectedType.productId,
+          quantity: 1,
+          customAmountCents,
+          noteToCeline: giftNote,
+        },
+      ],
+      {
+        contact: {
+          email: contactInfo.email,
+          phone: contactInfo.phone,
+          firstname: data.fromName,
+        },
+        metadata: {
+          flow: "carte-cadeau",
+          gift_type: selectedType.id,
+          to_name: data.toName.slice(0, 80),
+          occasion: data.occasion.slice(0, 80),
+        },
+      },
+    );
     if (res.ok) {
-      setOrderRef(res.ref);
-      setStep("succes");
+      window.location.href = res.url;
+      return;
     }
+    setProcessing(false);
+    setStripeError(
+      res.fallback
+        ? "Le paiement Stripe n'est pas encore activé sur cet hébergement. Continuez avec Céline ci-dessous — votre carte cadeau lui est transmise."
+        : res.error,
+    );
   };
 
   const handleManualRequest = (e: React.FormEvent) => {
@@ -547,13 +609,18 @@ export default function CartesCadeauxPage() {
                         ) : (
                           <>
                             <Shield className="h-4 w-4" />
-                            Payer avec Stripe — {selectedType.price}
+                            Payer maintenant — {selectedType.price}
                           </>
                         )}
                       </button>
                       <p className="text-[0.7rem] text-text-soft leading-relaxed">
                         Paiement 3D Secure · cartes Visa, MasterCard, Amex acceptées · facturation immédiate.
                       </p>
+                      {stripeError && (
+                        <div className="rounded-2xl border border-gold-soft/60 bg-bg-soft p-4 text-xs text-text-medium leading-relaxed">
+                          {stripeError}
+                        </div>
+                      )}
                     </div>
 
                     <div className="rounded-3xl border border-border-soft bg-bg-card p-7 space-y-4">
@@ -563,11 +630,19 @@ export default function CartesCadeauxPage() {
                         <span className="h-px flex-1 bg-border-soft" />
                       </div>
                       <p className="font-display text-lg text-text-deep">
-                        Régler manuellement avec Céline
+                        Ajouter au panier ou régler avec Céline
                       </p>
                       <p className="text-sm text-text-medium leading-relaxed">
-                        Virement, espèces, chèque — Céline vous recontacte personnellement.
+                        Vous voulez offrir plusieurs cartes, ou la combiner avec une séance ? Ajoutez au panier puis finalisez l&apos;ensemble. Sinon, virement, espèces ou chèque — Céline vous recontacte personnellement.
                       </p>
+                      <button
+                        type="button"
+                        onClick={handleAddToCart}
+                        className="btn-primary w-full justify-center"
+                      >
+                        Ajouter au panier
+                        <ArrowRight className="h-4 w-4" />
+                      </button>
                       <form onSubmit={handleManualRequest} className="space-y-3">
                         <button
                           type="submit"

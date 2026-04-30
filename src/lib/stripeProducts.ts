@@ -182,16 +182,10 @@ export const stripeProducts: StripeProduct[] = [
 ];
 
 /**
- * État de l'intégration Stripe.
- * UI activée — Céline brandera les clés réelles. Tant que les clés
- * publiques/serveur ne sont pas posées, `redirectToCheckout` simule
- * la redirection vers la page de succès en attendant.
- */
-export const stripeEnabled = true;
-
-/**
  * Génère une référence unique de commande lisible — utilisée comme
- * référence client pour la carte cadeau finalisée.
+ * référence interne pour les flows manuels (carte cadeau finalisée,
+ * envoi récap WhatsApp). Le vrai numéro de transaction côté Stripe
+ * remonte via l'API.
  */
 export function generateOrderRef(prefix = "EBE"): string {
   const date = new Date();
@@ -202,16 +196,77 @@ export function generateOrderRef(prefix = "EBE"): string {
   return `${prefix}-${stamp}-${rand}`;
 }
 
+export type CheckoutLineInput = {
+  productId: string;
+  quantity?: number;
+  customAmountCents?: number;
+  noteToCeline?: string;
+};
+
+export type CheckoutContact = {
+  firstname?: string;
+  email?: string;
+  phone?: string;
+};
+
+export type CheckoutResult =
+  | { ok: true; url: string; sessionId: string }
+  | { ok: false; fallback: boolean; error: string };
+
 /**
- * Lance la redirection vers Stripe Checkout. Tant que les clés Stripe
- * ne sont pas branchées, on simule via une promesse — l'UI bascule
- * directement vers l'écran de succès. Quand les clés seront en place,
- * remplacer le corps de la fonction par un fetch vers /api/checkout
- * + window.location.href = session.url.
+ * Crée une session Stripe Checkout réelle via /api/checkout et renvoie
+ * l'URL de redirection. En cas d'absence de clé serveur (export GitHub
+ * Pages ou variable Vercel non configurée), renvoie `{ ok: false,
+ * fallback: true }` pour que l'UI bascule sur le règlement manuel
+ * (WhatsApp / email) — aucune simulation de paiement.
  */
-export async function redirectToCheckout(productId: string): Promise<{ ok: boolean; ref: string }> {
-  await new Promise((r) => setTimeout(r, 1400));
-  return { ok: true, ref: generateOrderRef(productId.slice(0, 4).toUpperCase()) };
+export async function createCheckoutSession(
+  lines: CheckoutLineInput[],
+  options: {
+    contact?: CheckoutContact;
+    mode?: "payment" | "subscription";
+    metadata?: Record<string, string>;
+  } = {},
+): Promise<CheckoutResult> {
+  try {
+    const res = await fetch("/api/checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        mode: options.mode ?? "payment",
+        contact: options.contact,
+        metadata: options.metadata,
+        lines: lines.map((l) => ({
+          productId: l.productId,
+          quantity: l.quantity ?? 1,
+          customAmountCents: l.customAmountCents,
+          noteToCeline: l.noteToCeline,
+        })),
+      }),
+    });
+
+    const data = (await res.json().catch(() => ({}))) as {
+      url?: string;
+      id?: string;
+      error?: string;
+      fallback?: boolean;
+    };
+
+    if (!res.ok || !data.url || !data.id) {
+      return {
+        ok: false,
+        fallback: Boolean(data.fallback) || res.status === 503,
+        error: data.error ?? "Création de session Stripe impossible.",
+      };
+    }
+    return { ok: true, url: data.url, sessionId: data.id };
+  } catch (err) {
+    return {
+      ok: false,
+      fallback: true,
+      error: err instanceof Error ? err.message : "Réseau indisponible.",
+    };
+  }
 }
 
 /**

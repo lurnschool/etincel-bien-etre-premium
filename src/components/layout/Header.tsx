@@ -9,6 +9,7 @@ import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { brand, contact, navigation, navigationActions, navigationOffers } from "@/lib/data";
 import { Etincelle } from "@/components/ui/Etincelle";
+import { CartButton } from "@/components/cart/CartButton";
 
 const actionIcons: Record<string, LucideIcon> = {
   Tarifs: ReceiptText,
@@ -204,6 +205,9 @@ export function Header() {
               );
             })}
           </div>
+
+          {/* Panier */}
+          <CartButton className="ml-1" />
 
           {/* CTA primaire : Bilan */}
           <Link

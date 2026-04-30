@@ -24,8 +24,8 @@ import { Etincelle } from "@/components/ui/Etincelle";
 import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
 import { SacredBackdrop } from "@/components/ornaments/SacredBackdrop";
 import { studio } from "@/lib/parcours";
-import { redirectToCheckout, generateOrderRef } from "@/lib/stripeProducts";
-import { whatsappMessages } from "@/lib/whatsapp";
+import { createCheckoutSession } from "@/lib/stripeProducts";
+import { whatsappMessages, whatsappLink } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
 
 const iconMap = {
@@ -49,19 +49,32 @@ const sampleContent = [
 export default function CerclePage() {
   const [plan, setPlan] = useState<"monthly" | "yearly">("yearly");
   const [processing, setProcessing] = useState(false);
-  const [confirmed, setConfirmed] = useState<{ ref: string; plan: string } | null>(null);
+  const [stripeError, setStripeError] = useState<string | null>(null);
 
   const handleSubscribe = async () => {
     setProcessing(true);
+    setStripeError(null);
     const productId = plan === "yearly" ? studio.productYearly : studio.productMonthly;
-    const res = await redirectToCheckout(productId);
-    setProcessing(false);
+    const res = await createCheckoutSession(
+      [{ productId, quantity: 1 }],
+      {
+        mode: "subscription",
+        metadata: {
+          flow: "le-cercle",
+          plan: plan === "yearly" ? "annuel" : "mensuel",
+        },
+      },
+    );
     if (res.ok) {
-      setConfirmed({
-        ref: generateOrderRef("CRC"),
-        plan: plan === "yearly" ? "annuel" : "mensuel",
-      });
+      window.location.href = res.url;
+      return;
     }
+    setProcessing(false);
+    setStripeError(
+      res.fallback
+        ? "L'abonnement Stripe n'est pas encore activé sur cet hébergement. Écrivez à Céline pour rejoindre Le Cercle — elle vous envoie le lien personnel."
+        : res.error,
+    );
   };
 
   return (
@@ -263,32 +276,7 @@ export default function CerclePage() {
             </div>
           </Reveal>
 
-          {confirmed ? (
-            <Reveal>
-              <div className="rounded-[2rem] border border-gold-soft/60 bg-gradient-to-br from-gold-soft/30 via-bg-card to-bg-card p-10 md:p-12 text-center space-y-5">
-                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-gold-soft/60 text-gold-deep">
-                  <CheckCircle2 className="h-7 w-7" />
-                </div>
-                <h3 className="font-display text-3xl md:text-4xl text-text-deep leading-tight">
-                  Bienvenue dans le Cercle.
-                </h3>
-                <p className="text-text-medium leading-relaxed max-w-md mx-auto">
-                  Votre abonnement {confirmed.plan} est confirmé · référence{" "}
-                  <span className="font-mono font-medium text-text-deep">{confirmed.ref}</span>.
-                  Un email vient de partir avec vos accès au catalogue, l&apos;invitation au prochain cercle live et le lien de la communauté privée.
-                </p>
-                <div className="flex flex-wrap gap-3 justify-center pt-4">
-                  <WhatsAppButton message={`Bonjour Céline, je viens de rejoindre le Cercle (réf ${confirmed.ref}) — j'ai hâte de découvrir le catalogue !`}>
-                    Dire bonjour à Céline
-                  </WhatsAppButton>
-                  <Link href="/" className="btn-secondary">
-                    Retour à l&apos;accueil
-                  </Link>
-                </div>
-              </div>
-            </Reveal>
-          ) : (
-            <>
+          <>
               <div className="flex justify-center mb-6">
                 <div className="inline-flex items-center rounded-full border border-border-medium bg-bg-card p-1">
                   <button
@@ -378,11 +366,32 @@ export default function CerclePage() {
                 </div>
               </Reveal>
 
+              {stripeError && (
+                <div className="mt-6 max-w-xl mx-auto rounded-2xl border border-gold-soft/60 bg-bg-card p-5 text-sm text-text-medium leading-relaxed space-y-3">
+                  <p>{stripeError}</p>
+                  <div className="flex flex-wrap gap-2">
+                    <a
+                      href={whatsappLink(`Bonjour Céline, je souhaite rejoindre Le Cercle (formule ${plan === "yearly" ? "annuelle" : "mensuelle"}). Pouvez-vous m'envoyer le lien ?`)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 rounded-full bg-[#25D366] px-4 py-2 text-xs font-medium text-white hover:bg-[#1ebe5a] transition-colors"
+                    >
+                      Continuer sur WhatsApp
+                    </a>
+                    <a
+                      href={`mailto:etincel33@gmail.com?subject=${encodeURIComponent("Rejoindre Le Cercle")}&body=${encodeURIComponent(`Bonjour Céline, je souhaite rejoindre Le Cercle (formule ${plan === "yearly" ? "annuelle (290 €/an)" : "mensuelle (29 €/mois)"}).`)}`}
+                      className="inline-flex items-center gap-2 rounded-full bg-bg-card border border-border-soft px-4 py-2 text-xs font-medium text-text-deep hover:bg-bg-soft transition-colors"
+                    >
+                      Envoyer un email
+                    </a>
+                  </div>
+                </div>
+              )}
+
               <p className="mt-6 text-center text-xs text-text-soft italic">
                 Vous suivez déjà un parcours 3 mois ? Le Cercle est inclus pendant la durée du parcours — pas besoin de souscrire.
               </p>
             </>
-          )}
         </Container>
       </section>
 

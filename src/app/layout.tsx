@@ -6,6 +6,8 @@ import { Footer } from "@/components/layout/Footer";
 import { FloatingWhatsApp } from "@/components/layout/FloatingWhatsApp";
 import { FloatingAssistant } from "@/components/ai/FloatingAssistant";
 import { SmartPopup } from "@/components/popups/SmartPopup";
+import { CartProvider } from "@/lib/cart";
+import { CartDrawer } from "@/components/cart/CartDrawer";
 import { seoDefaults, brand } from "@/lib/data";
 
 const inter = Inter({
@@ -81,12 +83,15 @@ export default function RootLayout({
       className={`${inter.variable} ${cormorant.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-bg-base text-text-deep">
-        <Header />
-        <main className="flex-1">{children}</main>
-        <Footer />
-        <FloatingWhatsApp />
-        <FloatingAssistant />
-        <SmartPopup />
+        <CartProvider>
+          <Header />
+          <main className="flex-1">{children}</main>
+          <Footer />
+          <FloatingWhatsApp />
+          <FloatingAssistant />
+          <SmartPopup />
+          <CartDrawer />
+        </CartProvider>
       </body>
     </html>
   );
