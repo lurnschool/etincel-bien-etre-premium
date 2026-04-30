@@ -200,29 +200,24 @@ export function FloatingAssistant() {
       <motion.button
         onClick={() => setOpen(true)}
         className={cn(
-          "fixed bottom-6 right-6 z-40 group flex items-center gap-3 rounded-full",
-          "bg-gradient-to-br from-accent to-accent-deep text-text-on-dark shadow-[0_12px_40px_rgba(74,52,99,0.4)]",
-          "pl-3 pr-5 py-3 hover:shadow-[0_16px_48px_rgba(74,52,99,0.55)] transition-all",
+          "group fixed bottom-6 right-6 z-40 flex h-12 w-12 items-center justify-center rounded-full",
+          "bg-gradient-to-br from-accent to-accent-deep text-text-on-dark",
+          "shadow-[0_8px_24px_rgba(74,52,99,0.35)] hover:shadow-[0_12px_32px_rgba(74,52,99,0.5)] transition-all",
           open && "pointer-events-none opacity-0",
         )}
-        whileHover={{ scale: 1.02, y: -2 }}
-        whileTap={{ scale: 0.98 }}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: open ? 0 : 1, y: 0 }}
+        transition={{ delay: 0.7, duration: 0.4 }}
         aria-label="Ouvrir la conciergerie IA"
       >
-        <motion.span
-          className="absolute inset-0 rounded-full bg-gold/30"
-          animate={{ scale: [1, 1.15, 1], opacity: [0.5, 0, 0.5] }}
-          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-          aria-hidden
-        />
-        <span className="relative flex h-9 w-9 items-center justify-center rounded-full bg-gold text-text-deep">
-          <Sparkles className="h-4 w-4" />
-        </span>
-        <span className="relative font-display-italic text-[0.95rem] hidden sm:inline">
-          Conciergerie IA
-        </span>
-        <span className="relative font-display-italic text-[0.95rem] sm:hidden">
-          IA
+        <Sparkles className="h-5 w-5 text-gold" />
+        <span
+          className="pointer-events-none absolute right-full mr-3 whitespace-nowrap rounded-full bg-text-deep/95 px-3 py-1.5 text-[0.72rem] font-medium text-white opacity-0 shadow-lg backdrop-blur-sm transition-opacity duration-200 group-hover:opacity-100"
+          role="tooltip"
+        >
+          Conciergerie IA · Etincel
         </span>
       </motion.button>
 

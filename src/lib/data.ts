@@ -67,40 +67,38 @@ export const contact = {
 } as const;
 
 /**
- * Navigation simplifiée — direction "boussole".
- * Le visiteur n'est plus confronté à un labyrinthe : il choisit d'abord
- * une intention via "Être guidée" ou explore les grandes familles.
+ * Navigation principale — réduite à 5 piliers visibles + sous-menus
+ * pour les pratiques détaillées et le collectif. Les actions secondaires
+ * (Bilan, Offrir, Contact) sont en zone droite du header.
  */
 export const navigation = [
-  { label: "Accueil", href: "/" },
   { label: "Cacao", href: "/cacao" },
   { label: "Constellations", href: "/constellations" },
   { label: "Numérologie", href: "/accompagnements/numerologie" },
+  { label: "Retraites", href: "/retraites" },
   {
-    label: "Autres pratiques",
+    label: "Pratiques",
     href: "/accompagnements",
     children: [
-      { label: "Tous les accompagnements", href: "/accompagnements" },
+      { label: "Toutes les pratiques", href: "/accompagnements" },
       { label: "Hypnose", href: "/accompagnements/hypnose" },
       { label: "CellRelease®", href: "/accompagnements/cellrelease" },
       { label: "Massage énergétique", href: "/accompagnements/massage-energetique" },
+      { label: "Massage Libération Reconnexion", href: "/accompagnements/massage-liberation-reconnexion" },
       { label: "Réflexologie amérindienne", href: "/accompagnements/reflexologie" },
       { label: "Breathwork", href: "/accompagnements/breathwork" },
-      { label: "Innerdance", href: "/innerdance#individuel" },
+      { label: "Innerdance", href: "/innerdance" },
       { label: "Féminin sacré", href: "/feminin-sacre" },
-    ],
-  },
-  {
-    label: "Collectif",
-    href: "/collectif",
-    children: [
       { label: "Cercles de femmes", href: "/cercles-de-femmes" },
-      { label: "Innerdance collectif", href: "/innerdance#collectif" },
-      { label: "Breathwork collectif", href: "/collectif#breathwork" },
-      { label: "Ateliers", href: "/collectif#ateliers" },
+      { label: "Formations numérologie", href: "/formations" },
     ],
   },
-  { label: "Retraites", href: "/retraites" },
+] as const;
+
+/**
+ * Actions secondaires affichées à droite du header (texte court ou icône).
+ */
+export const navigationActions = [
   { label: "Bilan", href: "/diagnostic" },
   { label: "Offrir", href: "/cartes-cadeaux" },
   { label: "Contact", href: "/contact" },

@@ -1,14 +1,22 @@
 import Link from "next/link";
 import { Phone, Mail, MapPin } from "lucide-react";
-import { brand, contact, navigation, disclaimers } from "@/lib/data";
+import { brand, contact, navigation, navigationActions, disclaimers } from "@/lib/data";
 import { Container } from "@/components/ui/Container";
 import { Etincelle } from "@/components/ui/Etincelle";
 import { InstagramIcon, FacebookIcon } from "@/components/ui/SocialIcons";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
-  const navColumn1 = navigation.slice(0, 4);
-  const navColumn2 = navigation.slice(4);
+  const navColumn1 = [...navigation];
+  const navColumn2 = [
+    ...navigationActions,
+    { label: "À propos", href: "/a-propos" },
+    { label: "Formations", href: "/formations" },
+    { label: "Évènements", href: "/evenements" },
+    { label: "Cercles de femmes", href: "/cercles-de-femmes" },
+    { label: "Féminin sacré", href: "/feminin-sacre" },
+    { label: "Innerdance", href: "/innerdance" },
+  ];
 
   return (
     <footer className="relative bg-bg-deep text-text-on-dark overflow-hidden mt-24">
@@ -84,14 +92,6 @@ export function Footer() {
                   </Link>
                 </li>
               ))}
-              <li>
-                <Link
-                  href="/contact"
-                  className="text-sm text-text-on-dark-soft hover:text-gold transition-colors"
-                >
-                  Contact
-                </Link>
-              </li>
             </ul>
           </div>
 
