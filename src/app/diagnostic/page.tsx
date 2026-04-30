@@ -675,6 +675,71 @@ export default function DiagnosticPage() {
                   </div>
                 </div>
 
+                {/* Bloc 4.5 — Parcours 3 mois recommandé */}
+                <div className="rounded-[2rem] border-2 border-accent/30 bg-gradient-to-br from-accent/8 via-bg-card to-bg-card p-8 md:p-10 space-y-5">
+                  <div className="flex items-start justify-between gap-4 flex-wrap">
+                    <div>
+                      <p className="text-xs uppercase tracking-[0.24em] text-accent-deep">
+                        Pour aller plus loin · parcours 3 mois
+                      </p>
+                      <h3 className="font-display text-2xl md:text-3xl text-text-deep mt-1">
+                        Le parcours « {bilan.recommendedParcours.parcours.name} »
+                      </h3>
+                      <p className="font-display-italic text-sm md:text-base text-gold-deep mt-1">
+                        {bilan.recommendedParcours.parcours.tagline}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-display text-3xl text-accent-deep">
+                        {bilan.recommendedParcours.parcours.priceLabel}
+                      </p>
+                      <p className="text-xs text-text-soft">
+                        {bilan.recommendedParcours.parcours.duration} ·{" "}
+                        {bilan.recommendedParcours.parcours.installments}
+                      </p>
+                    </div>
+                  </div>
+                  <p className="text-text-medium leading-relaxed">
+                    {bilan.recommendedParcours.reason}
+                  </p>
+                  <div className="rounded-2xl bg-bg-soft/60 border border-border-soft p-5">
+                    <p className="text-[0.7rem] uppercase tracking-[0.24em] text-gold-deep mb-2">
+                      Inclus dans ce parcours
+                    </p>
+                    <ul className="space-y-1.5 text-sm text-text-medium">
+                      {bilan.recommendedParcours.parcours.bricks.slice(0, 4).map((b) => (
+                        <li key={b.name} className="flex items-start gap-2">
+                          <CheckCircle2 className="h-3.5 w-3.5 text-gold-deep mt-0.5 shrink-0" />
+                          <span>
+                            <strong className="text-text-deep">{b.name}</strong>
+                            {b.detail && <span className="text-xs text-text-soft"> · {b.detail}</span>}
+                          </span>
+                        </li>
+                      ))}
+                      {bilan.recommendedParcours.parcours.bricks.length > 4 && (
+                        <li className="text-xs text-text-soft italic pl-5">
+                          + {bilan.recommendedParcours.parcours.bricks.length - 4} autre{bilan.recommendedParcours.parcours.bricks.length - 4 > 1 ? "s" : ""} brique{bilan.recommendedParcours.parcours.bricks.length - 4 > 1 ? "s" : ""}…
+                        </li>
+                      )}
+                    </ul>
+                  </div>
+                  <div className="flex flex-wrap gap-3 pt-2">
+                    <Link href="/accompagnement-3-mois#parcours" className="btn-primary">
+                      Découvrir le parcours
+                      <ArrowRight className="h-4 w-4" />
+                    </Link>
+                    <Link
+                      href={`/contact?sujet=${encodeURIComponent(`Parcours ${bilan.recommendedParcours.parcours.name} — demande d'échange`)}`}
+                      className="btn-secondary"
+                    >
+                      Demander un échange préalable
+                    </Link>
+                  </div>
+                  <p className="text-xs text-text-soft italic">
+                    Le bilan est gratuit · l&apos;échange préalable de 30 min aussi · vous payez seulement si vous démarrez le parcours.
+                  </p>
+                </div>
+
                 {/* Bloc 5 — Ce que vous pourriez ressentir */}
                 <div className="rounded-[2rem] border border-border-soft bg-bg-card p-8 md:p-10 space-y-5">
                   <div>

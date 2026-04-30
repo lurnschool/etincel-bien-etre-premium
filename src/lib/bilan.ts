@@ -18,6 +18,7 @@
  */
 
 import { accompagnementsIndividuels, type Practice } from "./data";
+import { parcours, type Parcours } from "./parcours";
 
 export type BilanAnswers = Record<string, string[]>;
 
@@ -41,6 +42,7 @@ export type BilanContent = {
   whatsAtPlay: string[];
   whyThisPractice: { practice: Practice; reason: string };
   parcours3Months: BilanParcours[];
+  recommendedParcours: { parcours: Parcours; reason: string };
   couldFeel: string[];
   celineMessage: string;
   recommendedSecondary: Practice[];
@@ -649,6 +651,41 @@ function celineMessageFor(firstname: string, profile: BilanProfile, principale: 
   return `${opening} ${middle} ${closing}`;
 }
 
+function recommendParcours(profileId: string, frequence?: string, budget?: string): { parcours: Parcours; reason: string } {
+  // Mapping archétype → parcours suggéré
+  const map: Record<string, string> = {
+    apaiser: "reflet",
+    corps: "reflet",
+    comprendre: "boussole",
+    constellations: "boussole",
+    feminin: "boussole",
+    cacao: "boussole",
+    explorer: "metamorphose",
+    retraite: "metamorphose",
+  };
+  let suggested = map[profileId] ?? "boussole";
+
+  // Ajustement selon frequence / budget
+  if (frequence === "immersion" || budget === "immersion") suggested = "metamorphose";
+  if (frequence === "ponctuel" && budget === "decouverte") suggested = "reflet";
+
+  const found = parcours.find((p) => p.slug === suggested) ?? parcours[1];
+
+  const reasons: Record<string, string> = {
+    reflet:
+      "C'est le format le plus juste pour vous : 12 semaines pour relâcher, libérer, retrouver de l'énergie — sans précipiter le travail d'analyse. Le suivi continu fait toute la différence quand on traverse une fatigue.",
+    boussole:
+      "C'est le parcours qui correspond à votre demande de clarté. Numérologie + séances individuelles + constellation : vous obtenez la lecture d'ensemble que vous cherchez, ancrée dans votre corps et votre lignée.",
+    metamorphose:
+      "Vous êtes prête pour un travail puissant — la retraite week-end intégrée fait basculer ce qui pourrait demander des années en cabinet. Le parcours le plus profond, pour celles qui veulent vraiment changer de territoire intérieur.",
+  };
+
+  return {
+    parcours: found,
+    reason: reasons[found.slug] ?? reasons.boussole,
+  };
+}
+
 export function buildBilan(answers: BilanAnswers, firstname: string = ""): BilanContent {
   const tags: string[] = [];
   const allQuestions = ["ressenti", "contexte", "format", "attire", "objectif", "frequence", "niveau", "budget"];
@@ -685,6 +722,7 @@ export function buildBilan(answers: BilanAnswers, firstname: string = ""): Bilan
       reason: whyThisPracticeReason(principale, profile.id, ressenti),
     },
     parcours3Months: parcours3Months(profile, principale, frequence),
+    recommendedParcours: recommendParcours(profile.id, frequence, answers.budget?.[0]),
     couldFeel: couldFeelFor(profile),
     celineMessage: celineMessageFor(firstname, profile, principale),
     recommendedSecondary: secondaires,

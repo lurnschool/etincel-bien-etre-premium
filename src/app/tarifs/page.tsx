@@ -3,13 +3,16 @@ import type { Metadata } from "next";
 import {
   ArrowRight,
   Calendar,
+  CheckCircle2,
   Compass,
   Flame,
   Gift,
   GraduationCap,
+  Headphones,
   Heart,
   Mountain,
   Sparkles,
+  Star,
   Users,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
@@ -20,6 +23,7 @@ import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
 import { BilanGiftBanner } from "@/components/layout/BilanGiftBanner";
 import { disclaimers } from "@/lib/data";
 import { whatsappMessages } from "@/lib/whatsapp";
+import { parcours, studio } from "@/lib/parcours";
 
 export const metadata: Metadata = {
   title: "Tarifs — Toutes les pratiques",
@@ -335,6 +339,18 @@ export default function TarifsPage() {
       <section className="bg-bg-soft border-b border-border-soft py-6">
         <Container>
           <nav className="flex flex-wrap gap-2 justify-center">
+            <a
+              href="#cercle"
+              className="rounded-full border border-gold-soft bg-gold-soft/20 px-4 py-1.5 text-[0.78rem] font-medium text-gold-deep hover:bg-gold-soft/40 transition-colors"
+            >
+              Le Cercle
+            </a>
+            <a
+              href="#parcours"
+              className="rounded-full border border-accent/30 bg-accent/10 px-4 py-1.5 text-[0.78rem] font-medium text-accent-deep hover:bg-accent/20 transition-colors"
+            >
+              Parcours 3 mois
+            </a>
             {sections.map((s) => (
               <a
                 key={s.id}
@@ -345,6 +361,140 @@ export default function TarifsPage() {
               </a>
             ))}
           </nav>
+        </Container>
+      </section>
+
+      {/* Studio Le Cercle — premier produit récurrent à 29 €/mois */}
+      <section id="cercle" className="py-16 md:py-20 bg-gradient-to-br from-gold-soft/20 via-bg-base to-rose-soft/15 border-b border-border-soft scroll-mt-24">
+        <Container>
+          <Reveal>
+            <div className="grid lg:grid-cols-[1.4fr_1fr] gap-10 items-center">
+              <div className="space-y-5">
+                <div className="inline-flex items-center gap-3 text-[0.7rem] uppercase tracking-[0.32em] text-gold-deep">
+                  <Headphones className="h-3.5 w-3.5" />
+                  <span>Abonnement Studio · récurrent</span>
+                </div>
+                <h2 className="font-display text-4xl md:text-5xl text-text-deep leading-[1.05]">
+                  Le Cercle{" "}
+                  <span className="font-display-italic text-gold-deep">Etincel</span>.
+                </h2>
+                <p className="text-text-medium leading-relaxed text-base md:text-lg max-w-xl">
+                  Méditations, cercles live mensuels, communauté privée tenue par Céline. L&apos;espace pour avancer à votre rythme entre les séances individuelles.
+                </p>
+                <ul className="space-y-2 text-sm text-text-medium">
+                  {[
+                    "30+ méditations guidées (10 à 30 min)",
+                    "1 cercle live mensuel en visio + replay 30 jours",
+                    "Audio mensuel d'écriture & introspection",
+                    "Communauté WhatsApp privée tenue par Céline",
+                    "Accès prioritaire aux retraites et parcours",
+                  ].map((b) => (
+                    <li key={b} className="flex items-start gap-3">
+                      <CheckCircle2 className="h-4 w-4 text-gold-deep mt-0.5 shrink-0" />
+                      <span>{b}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="rounded-3xl border-2 border-gold-soft/50 bg-bg-card p-7 md:p-8 space-y-5">
+                <div className="space-y-3">
+                  <div className="flex items-baseline justify-between gap-3">
+                    <span className="text-[0.65rem] uppercase tracking-[0.22em] text-text-soft">
+                      Mensuel
+                    </span>
+                    <span className="font-display text-2xl text-text-deep">
+                      {studio.monthlyPriceLabel}
+                      <span className="text-sm text-text-soft font-normal">/mois</span>
+                    </span>
+                  </div>
+                  <div className="flex items-baseline justify-between gap-3 pt-3 border-t border-border-soft">
+                    <span className="text-[0.65rem] uppercase tracking-[0.22em] text-gold-deep">
+                      Annuel · {studio.yearlySavingsLabel}
+                    </span>
+                    <span className="font-display text-3xl text-gold-deep">
+                      {studio.yearlyPriceLabel}
+                      <span className="text-sm text-text-soft font-normal">/an</span>
+                    </span>
+                  </div>
+                </div>
+                <Link
+                  href="/le-cercle"
+                  className="btn-primary w-full justify-center"
+                >
+                  Découvrir Le Cercle
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+                <p className="text-[0.7rem] text-text-soft text-center">
+                  Sans engagement · résiliation 1 clic · Stripe sécurisé
+                </p>
+              </div>
+            </div>
+          </Reveal>
+        </Container>
+      </section>
+
+      {/* Parcours 3 mois — produits premium */}
+      <section id="parcours" className="py-16 md:py-20 bg-bg-deep text-text-on-dark border-b border-white/10 relative overflow-hidden scroll-mt-24">
+        <div className="absolute -top-32 left-1/4 h-96 w-96 rounded-full bg-accent/30 blur-[120px] pointer-events-none" />
+        <div className="absolute -bottom-20 right-1/4 h-80 w-80 rounded-full bg-gold/15 blur-[120px] pointer-events-none" />
+        <Container className="relative">
+          <Reveal>
+            <div className="max-w-3xl space-y-4 mb-12">
+              <div className="inline-flex items-center gap-3 text-[0.7rem] uppercase tracking-[0.32em] text-gold-soft">
+                <Star className="h-3.5 w-3.5" />
+                <span>Accompagnement personnalisé · 12 semaines</span>
+              </div>
+              <h2 className="font-display text-4xl md:text-5xl text-text-on-dark leading-[1.05]">
+                Trois parcours, conçus par{" "}
+                <span className="font-display-italic text-gold-soft">Céline</span>.
+              </h2>
+              <p className="text-text-on-dark-soft leading-relaxed text-base md:text-lg">
+                Reflet, Boussole, Métamorphose. Trois directions possibles que Céline attribue après un échange préalable de 30 min. Studio Le Cercle inclus, suivi WhatsApp continu, accès prioritaire.
+              </p>
+            </div>
+          </Reveal>
+
+          <div className="grid gap-5 md:grid-cols-3">
+            {parcours.map((p, i) => (
+              <Reveal key={p.slug} delay={i * 0.07}>
+                <article className="rounded-3xl border border-white/15 bg-white/5 backdrop-blur-sm p-7 h-full flex flex-col">
+                  <p className="text-[0.65rem] uppercase tracking-[0.28em] text-gold-soft mb-2">
+                    Niveau {p.level} · {p.duration}
+                  </p>
+                  <h3 className="font-display text-3xl text-text-on-dark leading-tight mb-2">
+                    {p.name}
+                  </h3>
+                  <p className="font-display-italic text-base text-gold-soft leading-snug mb-4 flex-1">
+                    {p.tagline}
+                  </p>
+                  <div className="space-y-2 pt-4 border-t border-white/10 mb-4">
+                    <p className="text-[0.65rem] uppercase tracking-[0.22em] text-gold-soft">
+                      Investissement total
+                    </p>
+                    <p className="font-display text-3xl text-gold">{p.priceLabel}</p>
+                    <p className="text-xs text-text-on-dark-soft">{p.installments}</p>
+                  </div>
+                  <Link
+                    href="/accompagnement-3-mois#parcours"
+                    className="inline-flex items-center justify-between gap-2 rounded-full bg-gold px-5 py-2.5 text-sm font-medium text-text-deep hover:bg-gold-soft transition-colors"
+                  >
+                    Découvrir le parcours
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </Link>
+                </article>
+              </Reveal>
+            ))}
+          </div>
+
+          <Reveal>
+            <p className="mt-8 text-center text-sm text-text-on-dark-soft">
+              <Link href="/accompagnement-3-mois" className="text-gold hover:text-gold-soft underline-offset-2 hover:underline inline-flex items-center gap-1.5">
+                Comment ça marche · les 4 étapes
+                <ArrowRight className="h-3 w-3" />
+              </Link>
+            </p>
+          </Reveal>
         </Container>
       </section>
 

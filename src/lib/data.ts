@@ -67,15 +67,18 @@ export const contact = {
 } as const;
 
 /**
- * Navigation principale — réduite à 5 piliers visibles + sous-menus
- * pour les pratiques détaillées et le collectif. Les actions secondaires
- * (Bilan, Offrir, Contact) sont en zone droite du header.
+ * Navigation principale — 6 piliers + un sous-menu Pratiques.
+ * Les 4 piliers de pratiques (Cacao, Constellations, Numérologie,
+ * Retraites) restent en accès direct. « Le Cercle » et « Parcours »
+ * mettent en avant les offres récurrentes et premium.
  */
 export const navigation = [
   { label: "Cacao", href: "/cacao" },
   { label: "Constellations", href: "/constellations" },
   { label: "Numérologie", href: "/accompagnements/numerologie" },
   { label: "Retraites", href: "/retraites" },
+  { label: "Le Cercle", href: "/le-cercle" },
+  { label: "Parcours", href: "/accompagnement-3-mois" },
   {
     label: "Pratiques",
     href: "/accompagnements",
