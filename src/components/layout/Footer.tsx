@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Phone, Mail, MapPin } from "lucide-react";
-import { brand, contact, navigation, navigationActions, toolsLinks, disclaimers } from "@/lib/data";
+import { brand, contact, navigation, navigationActions, navigationOffers, toolsLinks, disclaimers } from "@/lib/data";
 import { Container } from "@/components/ui/Container";
 import { Etincelle } from "@/components/ui/Etincelle";
 import { InstagramIcon, FacebookIcon } from "@/components/ui/SocialIcons";
@@ -12,6 +12,7 @@ export function Footer() {
   // Colonne 2 : offres et accès rapides
   const navColumn2 = [
     ...navigationActions,
+    ...navigationOffers,
     { label: "Bilan d'orientation", href: "/diagnostic" },
     { label: "Formations", href: "/formations" },
     { label: "Évènements", href: "/evenements" },

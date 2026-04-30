@@ -67,17 +67,11 @@ export const contact = {
 } as const;
 
 /**
- * Navigation principale — 7 items autour des 3 axes de Céline.
- * Architecture pivot : Mémoires & constellations · Féminin & cacao ·
- * Corps & intégration. Les outils (hypnose, CellRelease, massages,
- * breathwork, innerdance, numérologie) sont accessibles via les pages
- * piliers et le footer, plus comme catalogue principal.
- *
- * Les labels visibles sont courts (« Mémoires », « Féminin & cacao »,
- * « Corps ») mais les slugs sont explicites pour le SEO.
+ * Navigation principale — 6 items centrés autour des 3 axes de Céline.
+ * Le logo Etincel sert de retour à l'accueil (pas besoin d'item « Accueil »).
+ * Les labels visibles sont courts mais les slugs sont explicites pour le SEO.
  */
 export const navigation = [
-  { label: "Accueil", href: "/" },
   { label: "Mémoires", href: "/memoires-constellations" },
   { label: "Féminin & cacao", href: "/feminin-cacao" },
   { label: "Corps", href: "/corps-integration" },
@@ -87,14 +81,19 @@ export const navigation = [
 ] as const;
 
 /**
- * Actions secondaires (footer + drawer mobile uniquement).
- * Plus dans le header desktop pour préserver la légèreté de la nav.
+ * Actions secondaires (header desktop allégé + footer + drawer mobile).
+ * Le Cercle et Parcours 3 mois sont accessibles via le footer et les
+ * pages piliers, pour ne pas surcharger le header.
  */
 export const navigationActions = [
   { label: "Tarifs", href: "/tarifs" },
   { label: "Offrir", href: "/cartes-cadeaux" },
-  { label: "Le Cercle", href: "/le-cercle" },
-  { label: "Parcours 3 mois", href: "/accompagnement-3-mois" },
+] as const;
+
+/** Offres premium accessibles depuis le footer + drawer mobile. */
+export const navigationOffers = [
+  { label: "Le Cercle Etincel · 29 €/mois", href: "/le-cercle" },
+  { label: "Parcours 3 mois · à partir de 1 800 €", href: "/accompagnement-3-mois" },
 ] as const;
 
 /**

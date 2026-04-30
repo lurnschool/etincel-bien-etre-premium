@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Compass, Gift, Headphones, MessageSquare, ReceiptText, Sparkles } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { brand, contact, navigation, navigationActions } from "@/lib/data";
+import { brand, contact, navigation, navigationActions, navigationOffers } from "@/lib/data";
 import { Etincelle } from "@/components/ui/Etincelle";
 
 const actionIcons: Record<string, LucideIcon> = {
@@ -101,7 +101,7 @@ export function Header() {
               ))}
 
               <div className="mt-6 pt-6 border-t border-border-soft space-y-1">
-                {navigationActions.map((a) => {
+                {[...navigationActions, ...navigationOffers].map((a) => {
                   const Icon = actionIcons[a.label] ?? Compass;
                   return (
                     <Link

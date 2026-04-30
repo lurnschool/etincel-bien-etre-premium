@@ -7,7 +7,6 @@ import { corePathways } from "@/lib/data";
 import { Container } from "@/components/ui/Container";
 import { Etincelle } from "@/components/ui/Etincelle";
 import { SacredVisual } from "@/components/ornaments/SacredVisual";
-import { cn } from "@/lib/utils";
 
 /**
  * Triptyque éditorial des 3 axes structurants — Mémoires & constellations,
@@ -60,10 +59,7 @@ export function CorePathwaysShowcase() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.9, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] }}
-              className={cn(
-                "col-span-12 md:col-span-6 lg:col-span-4 group",
-                i === 1 && "lg:translate-y-12",
-              )}
+              className="col-span-12 md:col-span-6 lg:col-span-4 group"
             >
               <Link
                 href={pathway.href}
