@@ -1,22 +1,23 @@
 import Link from "next/link";
 import { Phone, Mail, MapPin } from "lucide-react";
-import { brand, contact, navigation, navigationActions, disclaimers } from "@/lib/data";
+import { brand, contact, navigation, navigationActions, toolsLinks, disclaimers } from "@/lib/data";
 import { Container } from "@/components/ui/Container";
 import { Etincelle } from "@/components/ui/Etincelle";
 import { InstagramIcon, FacebookIcon } from "@/components/ui/SocialIcons";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
+  // Colonne 1 : nav principale (les 3 axes + structure)
   const navColumn1 = [...navigation];
+  // Colonne 2 : offres et accès rapides
   const navColumn2 = [
     ...navigationActions,
-    { label: "À propos", href: "/a-propos" },
+    { label: "Bilan d'orientation", href: "/diagnostic" },
     { label: "Formations", href: "/formations" },
     { label: "Évènements", href: "/evenements" },
-    { label: "Cercles de femmes", href: "/cercles-de-femmes" },
-    { label: "Féminin sacré", href: "/feminin-sacre" },
-    { label: "Innerdance", href: "/innerdance" },
   ];
+  // Colonne 3 : outils complémentaires
+  const navColumn3 = [...toolsLinks];
 
   return (
     <footer className="relative bg-bg-deep text-text-on-dark overflow-hidden mt-24">
@@ -80,13 +81,27 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="font-display text-lg mb-5 text-text-on-dark">Explorer</h4>
+            <h4 className="font-display text-lg mb-5 text-text-on-dark">Offres & accès</h4>
             <ul className="space-y-2.5">
               {navColumn2.map((item) => (
                 <li key={item.href}>
                   <Link
                     href={item.href}
                     className="text-sm text-text-on-dark-soft hover:text-gold transition-colors"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+
+            <h4 className="font-display text-lg mt-7 mb-4 text-text-on-dark">Outils mobilisés</h4>
+            <ul className="space-y-1.5">
+              {navColumn3.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className="text-[0.78rem] text-text-on-dark-soft/80 hover:text-gold transition-colors"
                   >
                     {item.label}
                   </Link>

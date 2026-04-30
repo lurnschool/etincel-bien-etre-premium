@@ -67,44 +67,56 @@ export const contact = {
 } as const;
 
 /**
- * Navigation principale — 6 piliers + un sous-menu Pratiques.
- * Les 4 piliers de pratiques (Cacao, Constellations, Numérologie,
- * Retraites) restent en accès direct. « Le Cercle » et « Parcours »
- * mettent en avant les offres récurrentes et premium.
+ * Navigation principale — 7 items autour des 3 axes de Céline.
+ * Architecture pivot : Mémoires & constellations · Féminin & cacao ·
+ * Corps & intégration. Les outils (hypnose, CellRelease, massages,
+ * breathwork, innerdance, numérologie) sont accessibles via les pages
+ * piliers et le footer, plus comme catalogue principal.
+ *
+ * Les labels visibles sont courts (« Mémoires », « Féminin & cacao »,
+ * « Corps ») mais les slugs sont explicites pour le SEO.
  */
 export const navigation = [
-  { label: "Cacao", href: "/cacao" },
-  { label: "Constellations", href: "/constellations" },
-  { label: "Numérologie", href: "/accompagnements/numerologie" },
+  { label: "Accueil", href: "/" },
+  { label: "Mémoires", href: "/memoires-constellations" },
+  { label: "Féminin & cacao", href: "/feminin-cacao" },
+  { label: "Corps", href: "/corps-integration" },
   { label: "Retraites", href: "/retraites" },
-  { label: "Le Cercle", href: "/le-cercle" },
-  { label: "Parcours", href: "/accompagnement-3-mois" },
-  {
-    label: "Pratiques",
-    href: "/accompagnements",
-    children: [
-      { label: "Toutes les pratiques", href: "/accompagnements" },
-      { label: "Hypnose", href: "/accompagnements/hypnose" },
-      { label: "CellRelease®", href: "/accompagnements/cellrelease" },
-      { label: "Massage énergétique", href: "/accompagnements/massage-energetique" },
-      { label: "Massage Libération Reconnexion", href: "/accompagnements/massage-liberation-reconnexion" },
-      { label: "Réflexologie amérindienne", href: "/accompagnements/reflexologie" },
-      { label: "Breathwork", href: "/accompagnements/breathwork" },
-      { label: "Innerdance", href: "/innerdance" },
-      { label: "Féminin sacré", href: "/feminin-sacre" },
-      { label: "Cercles de femmes", href: "/cercles-de-femmes" },
-      { label: "Formations numérologie", href: "/formations" },
-    ],
-  },
+  { label: "Céline", href: "/a-propos" },
+  { label: "Contact", href: "/contact" },
 ] as const;
 
 /**
- * Actions secondaires affichées à droite du header (texte court ou icône).
+ * Actions secondaires (footer + drawer mobile uniquement).
+ * Plus dans le header desktop pour préserver la légèreté de la nav.
  */
 export const navigationActions = [
   { label: "Tarifs", href: "/tarifs" },
   { label: "Offrir", href: "/cartes-cadeaux" },
-  { label: "Contact", href: "/contact" },
+  { label: "Le Cercle", href: "/le-cercle" },
+  { label: "Parcours 3 mois", href: "/accompagnement-3-mois" },
+] as const;
+
+/**
+ * Outils mobilisés par Céline — accessibles depuis le footer et les
+ * pages piliers. Ne sont PAS des offres centrales mais des moyens au
+ * service des 3 axes.
+ */
+export const toolsLinks = [
+  { label: "Numérologie", href: "/accompagnements/numerologie" },
+  { label: "Hypnose", href: "/accompagnements/hypnose" },
+  { label: "CellRelease®", href: "/accompagnements/cellrelease" },
+  { label: "Massage Libération Reconnexion", href: "/accompagnements/massage-liberation-reconnexion" },
+  { label: "Massage énergétique", href: "/accompagnements/massage-energetique" },
+  { label: "Réflexologie amérindienne", href: "/accompagnements/reflexologie" },
+  { label: "Breathwork chamanique", href: "/accompagnements/breathwork" },
+  { label: "Innerdance", href: "/innerdance" },
+  { label: "Cercles de femmes", href: "/cercles-de-femmes" },
+  { label: "Cérémonie cacao", href: "/cacao" },
+  { label: "Constellations", href: "/constellations" },
+  { label: "Féminin sacré", href: "/feminin-sacre" },
+  { label: "Formations numérologie", href: "/formations" },
+  { label: "Catalogue complet", href: "/accompagnements" },
 ] as const;
 
 export const portesEntree = [
@@ -396,8 +408,9 @@ export const formations = [
 ] as const;
 
 /**
- * Témoignages réels du site existant — verbatim conservé.
+ * Témoignages réels — verbatim aligné au site original etinceldebienetre.fr.
  * Ne pas en ajouter sans validation écrite de la personne concernée.
+ * Ne pas reformuler — garder le sens et les mots réels.
  */
 export const temoignages = [
   {
@@ -411,14 +424,14 @@ export const temoignages = [
     name: "Ludovic M.",
     fullName: "Ludovic Mauresmo",
     quote:
-      "Si vous avez des blocages à libérer, je vous garantis à 100% que la méthode de Céline en constellation familiale est l'une des meilleures que j'ai pu faire.",
+      "Si vous avez des blocages à libérer, je vous garantis à 100% que la méthode de Céline en constellation familiale est vraiment l'une des meilleures que j'ai pu faire.",
     source: "confirmed" as DataSource,
   },
   {
     name: "Sandrine S.",
     fullName: "Sandrine Satsa",
     quote:
-      "Céline a ce petit supplément d'âme qui inspire sa vie et accompagne l'autre sur son cheminement. Merci à toi belle Etincelle.",
+      "Céline a ce petit supplément d'âme qui inspire. Chacun y trouvera ce dont il a besoin. Merci à toi belle Etincelle.",
     source: "confirmed" as DataSource,
   },
 ] as const;
@@ -445,79 +458,79 @@ export const cta = {
 
 /**
  * Slides du CinematicHeroSlider — Céline en premier (présence humaine
- * avant promesse), puis les 3 piliers Cacao / Constellations / Numérologie,
- * puis féminin et retraites.
+ * et message global), puis les 3 axes structurants (Mémoires · Féminin
+ * & cacao · Corps & intégration), puis Retraites et Bilan.
  */
 export const heroSlides = [
   {
     id: "celine",
     category: "Etincel · Céline Dusseval",
-    title: "Céline Dusseval — accompagnatrice holistique en Gironde.",
+    title: "Libérer les mémoires, revenir au corps, retrouver votre élan.",
     text:
-      "Cacao, constellations, numérologie, hypnose, breathwork, féminin sacré : un espace pour ralentir, déposer et retrouver votre étincelle intérieure.",
+      "Céline Dusseval accompagne les mémoires, le féminin et l'intégration par le corps à travers les constellations, le cacao, les retraites et les pratiques sensibles.",
     primaryCta: { label: "Faire mon bilan d'orientation", href: "/diagnostic" },
-    secondaryCta: { label: "Échanger avec Céline", href: "/contact" },
+    secondaryCta: { label: "Découvrir les 3 chemins", href: "/#chemins" },
     palette: "rose-velvet",
     image: "/images/celine/portrait-celine.png",
     imagePosition: "object-[center_top]",
   },
   {
-    id: "cacao",
-    category: "Pilier · Rituel cacao",
-    title: "Le cacao comme cérémonie du cœur.",
+    id: "memoires",
+    category: "Axe 1 · Mémoires & constellations",
+    title: "Libérer les mémoires qui ne vous appartiennent plus.",
     text:
-      "Une expérience sensorielle et symbolique pour ralentir, écouter le corps et revenir à soi — en individuel, en cercle ou en retraite.",
-    primaryCta: { label: "Découvrir les rituels cacao", href: "/cacao" },
-    secondaryCta: { label: "Être informée du prochain rituel", href: "/contact?sujet=Cacao" },
-    palette: "cacao",
-    image: undefined,
-    imagePosition: undefined,
-  },
-  {
-    id: "constellations",
-    category: "Pilier · Constellations · 95 €",
-    title: "Éclairer les liens invisibles.",
-    text:
-      "Explorer les dynamiques familiales, symboliques ou intérieures qui influencent votre chemin — en individuel ou en cercle.",
-    primaryCta: { label: "Découvrir les constellations", href: "/constellations" },
-    secondaryCta: { label: "Faire le diagnostic", href: "/diagnostic" },
+      "Constellations familiales, transgénérationnel, mémoires portées — mettre en lumière les dynamiques invisibles qui influencent votre histoire pour retrouver votre place.",
+    primaryCta: { label: "Découvrir l'axe Mémoires", href: "/memoires-constellations" },
+    secondaryCta: { label: "Faire le bilan d'orientation", href: "/diagnostic" },
     palette: "deep-night",
     image: undefined,
     imagePosition: undefined,
   },
   {
-    id: "numerologie",
-    category: "Pilier · Numérologie · 110 €",
-    title: "Lire les cycles et les ressources de votre chemin.",
-    text:
-      "Une lecture symbolique pour mieux comprendre vos élans, vos passages et vos points d'appui.",
-    primaryCta: { label: "Demander une lecture", href: "/accompagnements/numerologie" },
-    secondaryCta: { label: "Découvrir les formations", href: "/formations" },
-    palette: "amethyst",
-    image: "/images/celine/numerologie.png",
-    imagePosition: "object-center",
-  },
-  {
     id: "feminin",
-    category: "Féminin · Intuition",
-    title: "Revenir au corps, aux cycles et à l'intuition.",
+    category: "Axe 2 · Féminin & cacao",
+    title: "Revenir au corps, au cœur et au féminin.",
     text:
-      "Un accompagnement symbolique autour du féminin, de la mémoire du corps et de l'énergie créatrice.",
-    primaryCta: { label: "Explorer le féminin sacré", href: "/feminin-sacre" },
-    secondaryCta: { label: "Découvrir les cercles", href: "/cercles-de-femmes" },
+      "Cérémonies cacao, cercles de femmes, accompagnement symbolique autour du féminin et de l'intuition. Un espace de douceur, de présence et de reconnexion.",
+    primaryCta: { label: "Découvrir l'axe Féminin", href: "/feminin-cacao" },
+    secondaryCta: { label: "Rejoindre un cercle", href: "/cercles-de-femmes" },
     palette: "rose-velvet",
     image: "/images/celine/approche-philosophie.jpg",
     imagePosition: "object-[center_30%]",
   },
   {
+    id: "corps",
+    category: "Axe 3 · Corps & intégration",
+    title: "Intégrer par le corps ce que les mots ne suffisent pas à transformer.",
+    text:
+      "Innerdance, breathwork chamanique, retraites immersives — le souffle, le mouvement et l'expérience intérieure pour ancrer ce qui demande à se transformer.",
+    primaryCta: { label: "Découvrir l'axe Corps", href: "/corps-integration" },
+    secondaryCta: { label: "Voir les retraites", href: "/retraites" },
+    palette: "amethyst",
+    image: undefined,
+    imagePosition: undefined,
+  },
+  {
     id: "retraites",
-    category: "Expériences immersives",
+    category: "Immersions premium",
     title: "Retraites & cercles : avancer ensemble autrement.",
     text:
-      "Cercles de femmes, retraites, breathwork, innerdance, ateliers — des espaces de partage et de transformation profonde.",
+      "6 à 12 personnes · pension complète · séance individuelle intégrée · une expérience pensée comme une transformation, pas comme un séjour.",
     primaryCta: { label: "Découvrir les retraites", href: "/retraites" },
-    secondaryCta: { label: "Voir les prochaines dates", href: "/evenements" },
+    secondaryCta: { label: "Voir les prochaines dates", href: "/retraites#interet" },
     palette: "rose-gold",
+    image: undefined,
+    imagePosition: undefined,
+  },
+  {
+    id: "bilan",
+    category: "Bilan d'orientation · gratuit · 4 minutes",
+    title: "Trouver votre chemin parmi les trois axes.",
+    text:
+      "Huit questions sensibles pour identifier l'axe principal qui résonne avec votre moment de vie. Bilan personnalisé envoyé par email + guide PDF de 6 pages offert.",
+    primaryCta: { label: "Faire mon bilan", href: "/diagnostic" },
+    secondaryCta: { label: "Échanger avec Céline", href: "/contact" },
+    palette: "cacao",
     image: undefined,
     imagePosition: undefined,
   },
@@ -526,53 +539,61 @@ export const heroSlides = [
 export type HeroSlide = (typeof heroSlides)[number];
 
 /**
- * Les 3 piliers de Céline — porte d'entrée principale du site.
- * Mis en avant dans le composant CorePillars (triptyque éditorial).
+ * Les 3 axes structurants — repositionnement stratégique 2026.
+ * Céline ne vend plus une liste de prestations : elle accompagne les
+ * mémoires, le féminin et l'intégration par le corps. Chaque axe
+ * mobilise différents outils selon la personne.
+ *
+ * Mis en avant dans le composant CorePathwaysShowcase de la home.
  */
-export const corePillars = [
+export const corePathways = [
   {
-    id: "cacao",
+    id: "memoires-constellations",
     number: "01",
-    name: "Rituel cacao",
-    catchphrase: "Ouvrir un espace de cœur et de présence.",
+    name: "Mémoires & constellations",
+    catchphrase: "Libérer les mémoires qui ne vous appartiennent plus.",
     description:
-      "Une expérience sensorielle et symbolique pour ralentir, écouter le corps et revenir à soi.",
+      "Constellations familiales, transgénérationnel, mémoires portées. Mettre en lumière les loyautés, les répétitions et les dynamiques invisibles qui traversent votre histoire pour retrouver une place plus juste.",
     image: undefined,
-    fallback: "cacao" as const,
-    href: "/cacao",
-    cta: "Découvrir les rituels",
-    price: "Tarif selon événement",
-    formats: ["Individuel", "Cercle", "Retraite"],
-  },
-  {
-    id: "constellations",
-    number: "02",
-    name: "Constellations",
-    catchphrase: "Éclairer les liens invisibles.",
-    description:
-      "Explorer les dynamiques familiales, symboliques ou intérieures qui influencent votre chemin.",
-    image: "/images/celine/constellations.png",
     fallback: "feminin" as const,
-    href: "/constellations",
-    cta: "Découvrir les constellations",
-    price: "À partir de 95 €",
-    formats: ["Familiale", "Naissance / Rebirth"],
+    href: "/memoires-constellations",
+    cta: "Explorer cet axe",
+    tools: ["Constellations familiales", "Constellation Rebirth", "Hypnose transgénérationnelle", "CellRelease®"],
+    palette: "deep-night" as const,
   },
   {
-    id: "numerologie",
-    number: "03",
-    name: "Numérologie",
-    catchphrase: "Lire les cycles et les ressources de votre chemin.",
+    id: "feminin-cacao",
+    number: "02",
+    name: "Féminin & cacao",
+    catchphrase: "Revenir au corps, au cœur et au féminin.",
     description:
-      "Une lecture symbolique pour mieux comprendre vos élans, vos passages et vos points d'appui.",
-    image: "/images/celine/numerologie.png",
-    fallback: "numerologie" as const,
-    href: "/accompagnements/numerologie",
-    cta: "Demander une lecture",
-    price: "110 € · Formation 320 €",
-    formats: ["Lecture individuelle", "Formation M1", "Formation M2"],
+      "Cérémonies cacao, cercles de femmes, accompagnement symbolique autour du féminin sacré, des cycles, du corps et de l'intuition. Un espace de douceur, de présence et de reconnexion.",
+    image: "/images/celine/approche-philosophie.jpg",
+    fallback: "feminin" as const,
+    href: "/feminin-cacao",
+    cta: "Explorer cet axe",
+    tools: ["Cérémonies cacao", "Cercles de femmes", "Médecine symbolique de l'utérus", "Massages comme retour au corps"],
+    palette: "rose-velvet" as const,
+  },
+  {
+    id: "corps-integration",
+    number: "03",
+    name: "Corps & intégration",
+    catchphrase: "Intégrer par le corps ce que les mots ne suffisent pas à transformer.",
+    description:
+      "Innerdance, breathwork chamanique, retraites immersives. Le souffle, le mouvement et l'expérience intérieure pour ancrer ce qui demande à se transformer après une constellation, un travail sur le féminin, ou une transition de vie.",
+    image: undefined,
+    fallback: "souffle" as const,
+    href: "/corps-integration",
+    cta: "Explorer cet axe",
+    tools: ["Innerdance", "Breathwork chamanique", "Retraites immersives", "Pratiques corporelles"],
+    palette: "amethyst" as const,
   },
 ];
+
+/** Alias temporaire pour compatibilité avec l'ancien composant CorePillars.
+ *  À supprimer quand le composant aura été remplacé par CorePathwaysShowcase. */
+export const corePillars = corePathways;
 
 /**
  * Pratiques secondaires regroupées par intention — alimentent

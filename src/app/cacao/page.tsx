@@ -10,6 +10,7 @@ import { SmartImage } from "@/components/ui/SmartImage";
 import { ImageMosaic } from "@/components/ui/ImageMosaic";
 import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
 import { SacredBackdrop } from "@/components/ornaments/SacredBackdrop";
+import { PathwayBadge } from "@/components/layout/PathwayBadge";
 import { accompagnementsIndividuels, whisperLines, disclaimers } from "@/lib/data";
 import { whatsappMessages } from "@/lib/whatsapp";
 import { pageVisuals } from "@/lib/visualAssetMap";
@@ -120,6 +121,8 @@ export default function CacaoPage() {
         }
         description={cacao.pitch}
       />
+
+      <PathwayBadge pathway="feminin" />
 
       <section className="relative section overflow-hidden">
         <SacredBackdrop variant="cacao" />

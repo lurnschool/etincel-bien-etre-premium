@@ -6,6 +6,7 @@ import { Reveal } from "@/components/ui/Reveal";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Etincelle } from "@/components/ui/Etincelle";
 import { BilanGiftBanner } from "@/components/layout/BilanGiftBanner";
+import { PathwayBadge } from "@/components/layout/PathwayBadge";
 import { disclaimers } from "@/lib/data";
 
 export const metadata: Metadata = {
@@ -58,6 +59,8 @@ export default function FemininSacrePage() {
         }
         description="Un accompagnement symbolique et énergétique autour du féminin, de la mémoire du corps, des cycles et de la reconnexion à soi."
       />
+
+      <PathwayBadge pathway="feminin" />
 
       <section className="section">
         <Container>

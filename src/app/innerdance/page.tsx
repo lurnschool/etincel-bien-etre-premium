@@ -6,6 +6,7 @@ import { Reveal } from "@/components/ui/Reveal";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Etincelle } from "@/components/ui/Etincelle";
 import { BilanGiftBanner } from "@/components/layout/BilanGiftBanner";
+import { PathwayBadge } from "@/components/layout/PathwayBadge";
 import { disclaimers } from "@/lib/data";
 
 export const metadata: Metadata = {
@@ -52,6 +53,8 @@ export default function InnerdancePage() {
         }
         description="Une immersion intérieure pour écouter ce qui cherche à émerger, à travers la musique, le corps et la présence."
       />
+
+      <PathwayBadge pathway="corps" />
 
       <section className="section">
         <Container>

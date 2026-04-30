@@ -9,6 +9,7 @@ import { WhisperLine } from "@/components/ui/WhisperLine";
 import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
 import { SmartImage } from "@/components/ui/SmartImage";
 import { SacredBackdrop } from "@/components/ornaments/SacredBackdrop";
+import { PathwayBadge } from "@/components/layout/PathwayBadge";
 import { whisperLines, disclaimers } from "@/lib/data";
 import { whatsappMessages } from "@/lib/whatsapp";
 
@@ -111,6 +112,8 @@ export default function ConstellationsPage() {
         }
         description="Une démarche symbolique et systémique pour explorer ce qui se transmet, ce qui se rejoue, ce qui demande à être vu. 95 € la séance, en individuel ou en groupe."
       />
+
+      <PathwayBadge pathway="memoires" />
 
       <section className="relative py-24 md:py-32 overflow-hidden">
         <SacredBackdrop variant="feminin" />

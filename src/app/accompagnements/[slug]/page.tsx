@@ -11,6 +11,7 @@ import { SmartImage } from "@/components/ui/SmartImage";
 import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
 import { SacredBackdrop } from "@/components/ornaments/SacredBackdrop";
 import { NumerologyInvitation } from "@/components/numerology/NumerologyInvitation";
+import { PathwayBadge } from "@/components/layout/PathwayBadge";
 import { accompagnementsIndividuels, disclaimers, whisperLines } from "@/lib/data";
 import type { SacredFallbackKey } from "@/lib/visualAssetMap";
 
@@ -32,6 +33,20 @@ const RESERVABLE_SLUGS: string[] = [
   "reflexologie",
   "breathwork",
 ];
+
+/** Mapping de chaque pratique vers son axe principal (recontextualisation). */
+const PATHWAY_BY_SLUG: Record<string, "memoires" | "feminin" | "corps" | "transverse"> = {
+  hypnose: "memoires",
+  cellrelease: "memoires",
+  numerologie: "transverse",
+  "massage-energetique": "feminin",
+  "massage-liberation-reconnexion": "feminin",
+  reflexologie: "feminin",
+  "feminin-sacre": "feminin",
+  "cacao-rituel": "feminin",
+  breathwork: "corps",
+  "innerdance-individuel": "corps",
+};
 
 const familyVisuals: Record<string, SacredFallbackKey> = {
   comprendre: "numerologie",
@@ -93,6 +108,11 @@ export default async function AccompagnementDetailPage({ params }: { params: Par
         title={practice.name}
         description={practice.pitch}
       />
+
+      {/* Bandeau de recontextualisation : cet outil sert un des 3 axes */}
+      {PATHWAY_BY_SLUG[practice.slug] && (
+        <PathwayBadge pathway={PATHWAY_BY_SLUG[practice.slug]} />
+      )}
 
       {/* Animation numérologie remontée juste après le hero pour les visiteurs
           de cette page — la danse des chiffres est l'accroche principale. */}

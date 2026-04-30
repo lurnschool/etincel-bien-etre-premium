@@ -4,16 +4,19 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ChevronDown, Compass, Gift, MessageSquare, ReceiptText } from "lucide-react";
+import { Menu, X, Compass, Gift, Headphones, MessageSquare, ReceiptText, Sparkles } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { brand, contact, navigation, navigationActions } from "@/lib/data";
 import { Etincelle } from "@/components/ui/Etincelle";
 
-const actionIcons = {
+const actionIcons: Record<string, LucideIcon> = {
   Tarifs: ReceiptText,
   Offrir: Gift,
   Contact: MessageSquare,
-} as const;
+  "Le Cercle": Headphones,
+  "Parcours 3 mois": Sparkles,
+};
 
 /**
  * Header éditorial compact — 68px desktop / 60px mobile.
@@ -24,7 +27,6 @@ const actionIcons = {
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -95,27 +97,12 @@ export function Header() {
                   >
                     {item.label}
                   </Link>
-                  {"children" in item && item.children && (
-                    <ul className="pb-3 pl-1 space-y-1">
-                      {item.children.map((c) => (
-                        <li key={c.href}>
-                          <Link
-                            href={c.href}
-                            onClick={() => setMobileOpen(false)}
-                            className="block text-sm text-text-medium hover:text-accent py-1"
-                          >
-                            {c.label}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
                 </div>
               ))}
 
               <div className="mt-6 pt-6 border-t border-border-soft space-y-1">
                 {navigationActions.map((a) => {
-                  const Icon = actionIcons[a.label as keyof typeof actionIcons];
+                  const Icon = actionIcons[a.label] ?? Compass;
                   return (
                     <Link
                       key={a.href}
@@ -187,57 +174,24 @@ export function Header() {
           </span>
         </Link>
 
-        {/* Nav principale (centre) */}
+        {/* Nav principale (centre) — 7 items, plus de sous-menu */}
         <nav className="hidden lg:flex items-center gap-1 mx-auto">
-          {navigation.map((item) => {
-            const hasChildren = "children" in item && item.children?.length;
-            return (
-              <div
-                key={item.href}
-                className="relative"
-                onMouseEnter={() => hasChildren && setOpenDropdown(item.href)}
-                onMouseLeave={() => setOpenDropdown(null)}
-              >
-                <Link
-                  href={item.href}
-                  className="flex items-center gap-1 px-3 py-2 text-[0.82rem] font-medium text-text-deep hover:text-accent transition-colors"
-                >
-                  {item.label}
-                  {hasChildren && <ChevronDown className="h-3 w-3 opacity-60" />}
-                </Link>
-                <AnimatePresence>
-                  {hasChildren && openDropdown === item.href && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 4 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 4 }}
-                      transition={{ duration: 0.18 }}
-                      className="absolute left-1/2 -translate-x-1/2 top-full pt-2 min-w-[19rem]"
-                    >
-                      <div className="rounded-2xl border border-border-soft bg-bg-card/95 backdrop-blur-xl shadow-[0_24px_60px_rgba(31,26,46,0.1)] p-2 overflow-hidden">
-                        {item.children!.map((child) => (
-                          <Link
-                            key={child.href}
-                            href={child.href}
-                            className="block rounded-xl px-4 py-2 text-[0.82rem] font-medium text-text-deep hover:bg-bg-soft hover:text-accent transition-colors"
-                          >
-                            {child.label}
-                          </Link>
-                        ))}
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            );
-          })}
+          {navigation.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="flex items-center gap-1 px-3 py-2 text-[0.82rem] font-medium text-text-deep hover:text-accent transition-colors"
+            >
+              {item.label}
+            </Link>
+          ))}
         </nav>
 
         {/* Actions secondaires (droite) — texte lisible plutôt qu'icônes */}
         <div className="flex items-center gap-1 md:gap-1.5 shrink-0">
           <div className="hidden md:flex items-center gap-1">
             {navigationActions.map((action) => {
-              const Icon = actionIcons[action.label as keyof typeof actionIcons];
+              const Icon = actionIcons[action.label] ?? Compass;
               return (
                 <Link
                   key={action.href}

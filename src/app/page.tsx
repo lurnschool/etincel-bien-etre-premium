@@ -1,66 +1,57 @@
 import { CinematicHeroSlider } from "@/components/home/CinematicHeroSlider";
-import { CorePillars } from "@/components/home/CorePillars";
-import { ComplementaryPracticesExplorer } from "@/components/home/ComplementaryPracticesExplorer";
-import { MeetCeline } from "@/components/home/MeetCeline";
+import { CorePathwaysShowcase } from "@/components/home/CorePathwaysShowcase";
 import { WhatToDeposit } from "@/components/home/WhatToDeposit";
+import { MeetCeline } from "@/components/home/MeetCeline";
+import { ToolsMobilized } from "@/components/home/ToolsMobilized";
 import { QuoteScene } from "@/components/home/QuoteScene";
 import { Temoignages } from "@/components/home/Temoignages";
 import { GiftCardStudioTeaser } from "@/components/home/GiftCardStudioTeaser";
 import { DiagnosticTeaser } from "@/components/home/DiagnosticTeaser";
-import { LeadMagnet } from "@/components/home/LeadMagnet";
 import { ContactRapide } from "@/components/home/ContactRapide";
 
+/**
+ * Home Etincel — refondue autour des 3 axes (Mémoires & constellations,
+ * Féminin & cacao, Corps & intégration). Ordre stratégique :
+ *
+ * 1. Hero cinématographique avec Céline en premier
+ * 2. Trois chemins pour revenir à soi (3 axes)
+ * 3. Ce que vous venez déposer (signaux émotionnels)
+ * 4. Rencontrer Céline (posture, pas catalogue)
+ * 5. Les outils qu'elle peut mobiliser (présentés comme moyens)
+ * 6. Retraites / immersions (parallax)
+ * 7. Bilan d'orientation
+ * 8. Avis & retours d'expérience (témoignages réels)
+ * 9. Cartes cadeaux
+ * 10. Contact / WhatsApp / réseaux
+ */
 export default function HomePage() {
   return (
     <>
-      {/* 1. Slider hero pleine largeur — orienté business sur 3 piliers */}
       <CinematicHeroSlider />
 
-      {/* 2. Rencontrer Céline — espace personnel fort */}
-      <MeetCeline />
+      <CorePathwaysShowcase />
 
-      {/* 3. Les 3 piliers — Cacao, Constellations, Numérologie */}
-      <CorePillars />
-
-      {/* 4. Pratiques complémentaires — explorer par intention */}
-      <ComplementaryPracticesExplorer />
-
-      {/* 5. Ce que vous pouvez venir déposer */}
       <WhatToDeposit />
 
-      {/* 6. Scène féminin sacré pleine largeur avec parallax */}
-      <QuoteScene
-        image="/images/celine/approche-philosophie.jpg"
-        alt="Céline avec son tambour chamanique"
-        eyebrow="Féminin sacré · Énergie d'Isis"
-        quote="Le féminin n'est pas un concept. C'est une présence à retrouver."
-        body="Cercles, rituels symboliques, médecine du cacao, accompagnement individuel — un espace pour habiter à nouveau son corps, ses cycles et son intuition."
-        cta={{ label: "Explorer le féminin sacré", href: "/feminin-sacre" }}
-      />
+      <MeetCeline />
 
-      {/* 7. Scène retraites — bande immersive */}
+      <ToolsMobilized />
+
       <QuoteScene
         image="/images/celine/portrait-celine.png"
         alt="Retraite immersive"
-        eyebrow="Retraites immersives"
+        eyebrow="Retraites · immersions"
         quote="Une retraite n'est pas une fuite. C'est un retour."
-        body="Quelques jours pour ralentir, respirer, partager — souffle, innerdance, cercles, cacao, féminin sacré, nature."
-        cta={{ label: "Rejoindre la liste d'intérêt", href: "/retraites#interet" }}
+        body="Quelques jours pour ralentir, respirer, partager — souffle, innerdance, cercles, cacao, féminin sacré, nature. 6 à 12 personnes maximum, séance individuelle intégrée, écrins choisis."
+        cta={{ label: "Découvrir les retraites", href: "/retraites" }}
       />
 
-      {/* 8. Témoignages style avis premium */}
-      <Temoignages />
-
-      {/* 9. Diagnostic teaser */}
       <DiagnosticTeaser />
 
-      {/* 10. Carte cadeau — teaser */}
+      <Temoignages />
+
       <GiftCardStudioTeaser />
 
-      {/* 11. Lead magnet */}
-      <LeadMagnet />
-
-      {/* 12. Contact rapide */}
       <ContactRapide />
     </>
   );

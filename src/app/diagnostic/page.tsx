@@ -511,7 +511,7 @@ export default function DiagnosticPage() {
                 transition={{ duration: 0.6 }}
                 className="space-y-6"
               >
-                {/* Bloc 1 — Profil archétypal */}
+                {/* Bloc 1 — Axe principal recommandé */}
                 <div className="rounded-[2rem] border border-gold-soft/60 bg-gradient-to-br from-gold-soft/30 via-bg-card to-bg-card p-8 md:p-12 space-y-6">
                   <div className="flex items-center gap-3">
                     <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gold-soft/60 text-gold-deep">
@@ -519,19 +519,36 @@ export default function DiagnosticPage() {
                     </div>
                     <div>
                       <p className="text-xs uppercase tracking-[0.24em] text-gold-deep">
-                        Votre profil — {lead.firstname || "vous"}
+                        Axe principal — {lead.firstname || "vous"}
                       </p>
                       <h2 className="font-display text-3xl md:text-4xl text-text-deep mt-1 leading-tight">
-                        {bilan.profile.title}
+                        {bilan.axePrincipal.name}
                       </h2>
                     </div>
                   </div>
                   <p className="font-display-italic text-xl md:text-2xl text-gold-deep leading-snug">
-                    « {bilan.profile.catchphrase} »
+                    « {bilan.axePrincipal.catchphrase} »
                   </p>
                   <p className="text-text-medium leading-relaxed text-base md:text-lg">
-                    {bilan.profile.shortDescription}
+                    {bilan.axePrincipal.shortDescription}
                   </p>
+                  {bilan.axeSecondaire && (
+                    <div className="pt-4 border-t border-gold-soft/40">
+                      <p className="text-xs uppercase tracking-[0.22em] text-gold-deep mb-1">
+                        Axe secondaire qui résonne aussi
+                      </p>
+                      <Link
+                        href={bilan.axeSecondaire.href}
+                        className="inline-flex items-center gap-2 font-display text-xl text-text-deep hover:text-accent transition-colors"
+                      >
+                        {bilan.axeSecondaire.name}
+                        <ArrowRight className="h-4 w-4" />
+                      </Link>
+                      <p className="text-sm text-text-medium leading-relaxed mt-1">
+                        {bilan.axeSecondaire.shortDescription}
+                      </p>
+                    </div>
+                  )}
                 </div>
 
                 {/* Bloc 2 — Ce qui se joue pour vous */}
@@ -556,44 +573,52 @@ export default function DiagnosticPage() {
 
                 {/* Bloc 3 — Pratique principale + raison */}
                 <div className="rounded-[2rem] border-2 border-accent/30 bg-gradient-to-br from-accent/5 via-bg-card to-bg-card p-8 md:p-10 space-y-5">
-                  <div className="flex items-start justify-between gap-4 flex-wrap">
-                    <div>
-                      <p className="text-xs uppercase tracking-[0.24em] text-gold-deep">
-                        Votre porte d&apos;entrée principale
-                      </p>
-                      <h3 className="font-display text-2xl md:text-3xl text-text-deep mt-1">
-                        {bilan.whyThisPractice.practice.name}
-                      </h3>
-                      <p className="text-sm text-text-soft mt-1">
-                        {bilan.whyThisPractice.practice.duration} ·{" "}
-                        {bilan.whyThisPractice.practice.format}
-                      </p>
-                    </div>
-                    <span className="font-display text-3xl text-gold-deep">
-                      {bilan.whyThisPractice.practice.price}
-                    </span>
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.24em] text-gold-deep">
+                      Outils mobilisés au service de cet axe
+                    </p>
+                    <h3 className="font-display text-2xl md:text-3xl text-text-deep mt-1 leading-tight">
+                      Ce que Céline pourrait{" "}
+                      <span className="font-display-italic text-gold-deep">vous proposer</span>.
+                    </h3>
                   </div>
                   <p className="text-text-medium leading-relaxed">
-                    {bilan.whyThisPractice.practice.pitch}
+                    {bilan.reasonAxePrincipal}
                   </p>
-                  <div className="rounded-2xl bg-bg-soft/60 border border-border-soft p-5">
-                    <p className="text-[0.7rem] uppercase tracking-[0.24em] text-gold-deep mb-2">
-                      Pourquoi cette pratique pour vous
-                    </p>
-                    <p className="text-sm text-text-medium leading-relaxed">
-                      {bilan.whyThisPractice.reason}
-                    </p>
-                  </div>
-                  <div className="flex flex-wrap gap-3 pt-2">
-                    <Link href={bilan.reservationHref} className="btn-primary">
-                      Réserver une séance
+                  <ul className="space-y-3">
+                    {bilan.toolsMobilized.map((tool) => (
+                      <li
+                        key={tool.name}
+                        className="rounded-2xl bg-bg-soft/60 border border-border-soft p-4"
+                      >
+                        <div className="flex items-baseline justify-between gap-3 flex-wrap">
+                          <p className="font-display text-lg text-text-deep">{tool.name}</p>
+                          {tool.href && (
+                            <Link
+                              href={tool.href}
+                              className="text-xs text-accent hover:text-accent-deep inline-flex items-center gap-1"
+                            >
+                              En savoir plus
+                              <ArrowRight className="h-3 w-3" />
+                            </Link>
+                          )}
+                        </div>
+                        <p className="text-sm text-text-medium leading-relaxed mt-1">
+                          {tool.reason}
+                        </p>
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="flex flex-wrap gap-3 pt-3 border-t border-border-soft">
+                    <Link href={bilan.axePrincipal.href} className="btn-primary">
+                      Découvrir l&apos;axe complet
                       <ArrowRight className="h-4 w-4" />
                     </Link>
                     <Link
-                      href={`/accompagnements/${bilan.whyThisPractice.practice.slug}`}
+                      href={`/contact?sujet=${encodeURIComponent("Bilan — " + bilan.axePrincipal.name)}`}
                       className="btn-secondary"
                     >
-                      En savoir plus sur la pratique
+                      Demander un échange
                     </Link>
                     <WhatsAppButton message={whatsappMessages.bilan} variant="outline">
                       WhatsApp
@@ -775,15 +800,15 @@ export default function DiagnosticPage() {
                     {bilan.celineMessage}
                   </p>
                   <div className="flex flex-wrap gap-3 pt-3 border-t border-border-soft">
-                    <Link href={bilan.reservationHref} className="btn-primary">
-                      Réserver maintenant
+                    <Link href={bilan.axePrincipal.href} className="btn-primary">
+                      Découvrir l&apos;axe complet
                       <ArrowRight className="h-4 w-4" />
                     </Link>
                     <WhatsAppButton message={whatsappMessages.bilan}>
                       Échanger sur WhatsApp
                     </WhatsAppButton>
                     <Link
-                      href={`/contact?sujet=${encodeURIComponent("Bilan — " + bilan.whyThisPractice.practice.name)}`}
+                      href={`/contact?sujet=${encodeURIComponent("Bilan — " + bilan.axePrincipal.name)}`}
                       className="btn-secondary"
                     >
                       Lui écrire
@@ -791,40 +816,25 @@ export default function DiagnosticPage() {
                   </div>
                 </div>
 
-                {/* Bloc 7 — Pratiques secondaires */}
-                {bilan.recommendedSecondary.length > 0 && (
-                  <div className="rounded-[2rem] border border-border-soft bg-bg-card p-8 md:p-10 space-y-5">
-                    <div>
-                      <p className="text-xs uppercase tracking-[0.24em] text-gold-deep">
-                        En complément
-                      </p>
-                      <h3 className="font-display text-2xl text-text-deep mt-1">
-                        Trois autres pratiques qui résonnent.
-                      </h3>
-                    </div>
-                    <div className="grid gap-3 sm:grid-cols-2">
-                      {bilan.recommendedSecondary.map((reco) => (
-                        <Link
-                          key={reco.slug}
-                          href={`/accompagnements/${reco.slug}`}
-                          className="group rounded-2xl border border-border-soft bg-bg-soft/40 p-5 hover:border-gold-soft hover:bg-bg-card transition-all"
-                        >
-                          <div className="flex items-baseline justify-between gap-3 mb-1">
-                            <h4 className="font-display text-lg text-text-deep">{reco.name}</h4>
-                            <span className="text-xs text-gold-deep shrink-0">{reco.price}</span>
-                          </div>
-                          <p className="text-sm text-text-medium leading-relaxed line-clamp-2">
-                            {reco.pitch}
-                          </p>
-                          <span className="inline-flex items-center gap-1 text-xs text-accent mt-3 group-hover:text-accent-deep">
-                            Découvrir
-                            <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
-                          </span>
-                        </Link>
-                      ))}
-                    </div>
+                {/* Bloc 7 — Le Cercle Etincel */}
+                <div className="rounded-[2rem] border border-gold-soft/40 bg-gradient-to-br from-gold-soft/15 via-bg-card to-bg-card p-8 md:p-10 space-y-4">
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.24em] text-gold-deep">
+                      Pour rester en lien · Le Cercle Etincel
+                    </p>
+                    <h3 className="font-display text-2xl text-text-deep mt-1 leading-tight">
+                      Un espace pour avancer entre les rendez-vous.
+                    </h3>
                   </div>
-                )}
+                  <p className="text-text-medium leading-relaxed">{bilan.cercleSuggestion}</p>
+                  <Link
+                    href="/le-cercle"
+                    className="inline-flex items-center gap-2 text-sm text-accent hover:text-accent-deep group"
+                  >
+                    Découvrir Le Cercle (29 €/mois)
+                    <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+                  </Link>
+                </div>
 
                 {/* Bloc 8 — Cartes contextuelles (immersion / cadeau) */}
                 <div className="grid gap-3 sm:grid-cols-2">

@@ -104,9 +104,9 @@ export function CorePillars() {
                     {pillar.description}
                   </p>
 
-                  {/* Formats */}
+                  {/* Outils mobilisés */}
                   <ul className="mt-6 flex flex-wrap gap-x-3 gap-y-1.5 text-[0.7rem] uppercase tracking-[0.18em] text-text-soft">
-                    {pillar.formats.map((f) => (
+                    {pillar.tools.slice(0, 3).map((f) => (
                       <li key={f} className="border border-border-medium px-2.5 py-1">
                         {f}
                       </li>

@@ -7,6 +7,7 @@ import { PageHeader } from "@/components/ui/PageHeader";
 import { Etincelle } from "@/components/ui/Etincelle";
 import { WhisperLine } from "@/components/ui/WhisperLine";
 import { BilanGiftBanner } from "@/components/layout/BilanGiftBanner";
+import { PathwayBadge } from "@/components/layout/PathwayBadge";
 import { whisperLines } from "@/lib/data";
 
 export const metadata: Metadata = {
@@ -67,6 +68,8 @@ export default function CerclesPage() {
         }
         description="Une fois par mois, un espace tenu pour partager, écouter et se relier en sororité."
       />
+
+      <PathwayBadge pathway="feminin" />
 
       <section className="section">
         <WhisperLine text={whisperLines[8]} position="left" tone="amethyst" />
