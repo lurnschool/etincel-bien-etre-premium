@@ -63,9 +63,9 @@ export function CorePathwaysShowcase() {
             >
               <Link
                 href={pathway.href}
-                className="block h-full rounded-[1.5rem] bg-bg-card border border-border-soft transition-all duration-700 hover:border-gold/60 hover:shadow-[0_30px_80px_rgba(31,26,46,0.12)] hover:-translate-y-1 overflow-hidden"
+                className="flex flex-col h-full rounded-[1.5rem] bg-bg-card border border-border-soft transition-all duration-700 hover:border-gold/60 hover:shadow-[0_30px_80px_rgba(31,26,46,0.12)] hover:-translate-y-1 overflow-hidden"
               >
-                <div className="relative aspect-[5/4] overflow-hidden">
+                <div className="relative aspect-[5/4] overflow-hidden shrink-0">
                   <SacredVisual
                     variant={pathway.fallback}
                     ratio="landscape"
@@ -78,14 +78,14 @@ export function CorePathwaysShowcase() {
                   </div>
                 </div>
 
-                <div className="p-7 md:p-8 flex flex-col gap-3">
+                <div className="p-7 md:p-8 flex flex-col flex-1">
                   <h3 className="font-display text-[clamp(26px,3vw,38px)] leading-[1.05] tracking-tight text-text-deep">
                     {pathway.name}
                   </h3>
-                  <p className="font-display-italic text-lg text-gold-deep leading-snug">
+                  <p className="font-display-italic text-lg text-gold-deep leading-snug mt-3">
                     {pathway.catchphrase}
                   </p>
-                  <p className="text-text-medium leading-relaxed text-[0.93rem] mt-2">
+                  <p className="text-text-medium leading-relaxed text-[0.93rem] mt-3">
                     {pathway.description}
                   </p>
 
@@ -97,7 +97,7 @@ export function CorePathwaysShowcase() {
                     ))}
                   </ul>
 
-                  <div className="mt-6 pt-5 border-t border-border-soft flex items-center justify-between">
+                  <div className="mt-auto pt-6 border-t border-border-soft flex items-center justify-between">
                     <span className="font-display text-base text-text-deep group-hover:text-accent transition-colors">
                       {pathway.cta}
                     </span>

@@ -554,7 +554,7 @@ export const corePathways = [
     description:
       "Constellations familiales, transgénérationnel, mémoires portées. Mettre en lumière les loyautés, les répétitions et les dynamiques invisibles qui traversent votre histoire pour retrouver une place plus juste.",
     image: undefined,
-    fallback: "feminin" as const,
+    fallback: "hypnose" as const,
     href: "/memoires-constellations",
     cta: "Explorer cet axe",
     tools: ["Constellations familiales", "Constellation Rebirth", "Hypnose transgénérationnelle", "CellRelease®"],
@@ -568,7 +568,7 @@ export const corePathways = [
     description:
       "Cérémonies cacao, cercles de femmes, accompagnement symbolique autour du féminin sacré, des cycles, du corps et de l'intuition. Un espace de douceur, de présence et de reconnexion.",
     image: "/images/celine/approche-philosophie.jpg",
-    fallback: "feminin" as const,
+    fallback: "cacao" as const,
     href: "/feminin-cacao",
     cta: "Explorer cet axe",
     tools: ["Cérémonies cacao", "Cercles de femmes", "Médecine symbolique de l'utérus", "Massages comme retour au corps"],
