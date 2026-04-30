@@ -20,6 +20,11 @@ type Props = {
   attribution?: string;
   body?: string;
   cta?: { label: string; href: string };
+  /**
+   * Cadrage de l'image — utilise les classes Tailwind object-position.
+   * Exemple : "object-top", "object-[center_30%]". Défaut : "object-center".
+   */
+  imagePosition?: string;
 };
 
 export function QuoteScene({
@@ -30,6 +35,7 @@ export function QuoteScene({
   attribution,
   body,
   cta,
+  imagePosition = "object-center",
 }: Props) {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
@@ -51,7 +57,7 @@ export function QuoteScene({
           alt={alt}
           fill
           sizes="100vw"
-          className="object-cover"
+          className={`object-cover ${imagePosition}`}
         />
         <div className="absolute inset-0 bg-gradient-to-r from-bg-deep/85 via-bg-deep/40 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-b from-bg-deep/30 via-transparent to-bg-deep/40" />

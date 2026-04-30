@@ -39,11 +39,12 @@ export default function HomePage() {
 
       <QuoteScene
         image="/images/celine/portrait-celine.png"
-        alt="Retraite immersive"
+        alt="Céline avec son tambour chamanique"
         eyebrow="Retraites · immersions"
         quote="Une retraite n'est pas une fuite. C'est un retour."
         body="Quelques jours pour ralentir, respirer, partager — souffle, innerdance, cercles, cacao, féminin sacré, nature. 6 à 12 personnes maximum, séance individuelle intégrée, écrins choisis."
         cta={{ label: "Découvrir les retraites", href: "/retraites" }}
+        imagePosition="object-[center_15%]"
       />
 
       <DiagnosticTeaser />
