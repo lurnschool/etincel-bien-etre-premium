@@ -363,7 +363,7 @@ export default function PanierPage() {
                     type="button"
                     onClick={handleStripeCheckout}
                     disabled={processing || !isContactValid}
-                    className="w-full inline-flex items-center justify-center gap-2 rounded-full bg-accent-deep px-6 py-3.5 text-sm font-medium text-text-on-dark hover:bg-accent transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="orbit-shine w-full inline-flex items-center justify-center gap-2 rounded-full bg-accent-deep px-6 py-3.5 text-sm font-medium text-text-on-dark hover:bg-accent transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {processing ? (
                       <>

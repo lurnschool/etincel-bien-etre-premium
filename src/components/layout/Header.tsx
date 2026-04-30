@@ -212,7 +212,7 @@ export function Header() {
           {/* CTA primaire : Bilan */}
           <Link
             href="/diagnostic"
-            className="hidden md:inline-flex items-center gap-1.5 rounded-full bg-accent-deep px-4 py-2 text-[0.78rem] font-medium tracking-wide text-text-on-dark hover:bg-accent transition-colors ml-2"
+            className="orbit-shine hidden md:inline-flex items-center gap-1.5 rounded-full bg-accent-deep px-4 py-2 text-[0.78rem] font-medium tracking-wide text-text-on-dark hover:bg-accent transition-colors ml-2"
           >
             <Compass className="h-3.5 w-3.5" />
             Faire mon bilan

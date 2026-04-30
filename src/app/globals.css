@@ -121,6 +121,75 @@
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
+/* Lumière qui orbite — ajoute un fin trait lumineux qui tourne autour
+ * de l'élément, comme une braise dorée qui caresse le contour.
+ * Subtil par défaut (gold à ~50% sur un secteur de 90°). */
+@property --orbit-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes orbit-spin {
+  to { --orbit-angle: 360deg; }
+}
+
+.orbit-shine {
+  position: relative;
+  isolation: isolate;
+}
+
+.orbit-shine::before {
+  content: "";
+  position: absolute;
+  inset: -1.5px;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: conic-gradient(
+    from var(--orbit-angle),
+    transparent 0deg,
+    transparent 270deg,
+    rgba(201, 168, 106, 0.85) 320deg,
+    rgba(232, 213, 173, 1) 350deg,
+    rgba(201, 168, 106, 0.85) 360deg,
+    transparent 360deg
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: orbit-spin 9s linear infinite;
+  pointer-events: none;
+}
+
+/* Variante améthyste — pour blocs sombres ou décor onirique */
+.orbit-shine-amethyst::before {
+  background: conic-gradient(
+    from var(--orbit-angle),
+    transparent 0deg,
+    transparent 270deg,
+    rgba(154, 126, 192, 0.75) 320deg,
+    rgba(201, 168, 106, 1) 350deg,
+    rgba(154, 126, 192, 0.75) 360deg,
+    transparent 360deg
+  );
+}
+
+/* Variante au survol uniquement — discret au repos */
+.orbit-shine-hover::before {
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.orbit-shine-hover:hover::before,
+.group:hover .orbit-shine-hover::before {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orbit-shine::before { animation: none; }
+}
+
 /* Base */
 html {
   scroll-behavior: smooth;
