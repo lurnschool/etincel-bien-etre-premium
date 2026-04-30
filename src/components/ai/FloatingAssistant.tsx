@@ -41,12 +41,16 @@ const intro: ChatMessage = {
  *   simulation. La personne est invitée à WhatsApp ou aux liens internes.
  * - Le mode est annoncé honnêtement dans l'en-tête du panneau.
  */
+const BUBBLE_DISMISS_KEY = "etincel-ai-bubble-dismissed";
+const BUBBLE_DELAY_MS = 6000;
+
 export function FloatingAssistant() {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([intro]);
   const [input, setInput] = useState("");
   const [status, setStatus] = useState<ChatStatus>("idle");
   const [errorDetail, setErrorDetail] = useState<string | null>(null);
+  const [bubbleVisible, setBubbleVisible] = useState(false);
 
   const panelRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -67,6 +71,39 @@ export function FloatingAssistant() {
       document.removeEventListener("mousedown", handler);
     };
   }, [open]);
+
+  // Bulle d'invitation : apparaît après BUBBLE_DELAY_MS si jamais fermée
+  // dans la session courante. Une fois fermée par l'utilisateur, ne
+  // réapparaît pas avant la prochaine visite.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const dismissed = window.sessionStorage.getItem(BUBBLE_DISMISS_KEY) === "1";
+    if (dismissed) return;
+    const timer = window.setTimeout(() => setBubbleVisible(true), BUBBLE_DELAY_MS);
+    return () => window.clearTimeout(timer);
+  }, []);
+
+  // Si on ouvre le chat, la bulle disparaît silencieusement (le clic vaut
+  // déjà confirmation que l'utilisateur a vu et compris l'invitation).
+  useEffect(() => {
+    if (open && bubbleVisible) {
+      setBubbleVisible(false);
+      try {
+        window.sessionStorage.setItem(BUBBLE_DISMISS_KEY, "1");
+      } catch {
+        // sessionStorage indisponible — la bulle peut juste réapparaître au refresh, pas grave
+      }
+    }
+  }, [open, bubbleVisible]);
+
+  const dismissBubble = () => {
+    setBubbleVisible(false);
+    try {
+      window.sessionStorage.setItem(BUBBLE_DISMISS_KEY, "1");
+    } catch {
+      // ignore
+    }
+  };
 
   useEffect(() => {
     if (open) {
@@ -197,6 +234,55 @@ export function FloatingAssistant() {
 
   return (
     <>
+      {/* Bulle d'invitation — apparaît automatiquement après quelques secondes */}
+      {bubbleVisible && !open && (
+        <div
+          className="fixed bottom-[5.5rem] right-6 z-40 w-[19rem] max-w-[calc(100vw-3rem)] animate-[bubbleIn_0.55s_cubic-bezier(0.22,1,0.36,1)_both]"
+        >
+            <div className="relative rounded-2xl bg-bg-card/98 backdrop-blur-md border border-gold-soft/50 shadow-[0_18px_44px_rgba(31,26,46,0.16)] p-5">
+              {/* Petit triangle pointer vers le bouton */}
+              <span
+                aria-hidden
+                className="absolute -bottom-2 right-7 h-3 w-3 rotate-45 bg-bg-card border-r border-b border-gold-soft/50"
+              />
+
+              <button
+                onClick={dismissBubble}
+                aria-label="Masquer l'invitation"
+                className="absolute top-2.5 right-2.5 flex h-6 w-6 items-center justify-center rounded-full text-text-soft hover:bg-bg-soft hover:text-text-deep transition-colors"
+              >
+                <X className="h-3 w-3" />
+              </button>
+
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-gold drop-shadow-[0_1px_3px_rgba(201,168,106,0.5)]">
+                  <Etincelle size={11} />
+                </span>
+                <span className="text-[0.6rem] uppercase tracking-[0.28em] text-gold-deep">
+                  Etincel · IA
+                </span>
+              </div>
+
+              <p className="font-display text-[1.05rem] leading-snug text-text-deep mb-1">
+                Bonjour, je suis l&apos;assistante d&apos;Etincel.
+              </p>
+              <p className="text-[0.82rem] leading-relaxed text-text-medium mb-4">
+                Je peux vous orienter vers ce qui résonne pour vous —{" "}
+                <span className="text-text-deep">mémoires, féminin ou corps</span>.
+                Une question sur les pratiques de Céline&nbsp;?
+              </p>
+
+              <button
+                onClick={() => setOpen(true)}
+                className="group/cta inline-flex items-center gap-1.5 rounded-full bg-accent-deep px-4 py-2 text-[0.78rem] font-medium text-text-on-dark hover:bg-accent transition-colors"
+              >
+                Discuter avec Etincel
+                <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover/cta:translate-x-0.5" />
+              </button>
+            </div>
+          </div>
+        )}
+
       <div
         className={cn(
           "group fixed bottom-6 right-6 z-40 flex items-center gap-3",
@@ -204,7 +290,11 @@ export function FloatingAssistant() {
         )}
       >
         <span
-          className="pointer-events-none flex items-center gap-2.5 rounded-full bg-bg-card/95 backdrop-blur-md border border-gold-soft/60 pl-4 pr-1 py-1 shadow-[0_8px_24px_rgba(31,26,46,0.12)] opacity-0 -translate-x-2 transition-all duration-500 ease-out group-hover:opacity-100 group-hover:translate-x-0"
+          className={cn(
+            "pointer-events-none flex items-center gap-2.5 rounded-full bg-bg-card/95 backdrop-blur-md border border-gold-soft/60 pl-4 pr-1 py-1 shadow-[0_8px_24px_rgba(31,26,46,0.12)] -translate-x-2 transition-all duration-500 ease-out group-hover:translate-x-0",
+            // Le tooltip se masque tant que la bulle d'invitation est affichée
+            bubbleVisible ? "opacity-0" : "opacity-0 group-hover:opacity-100",
+          )}
           role="tooltip"
         >
           <span className="font-display-italic text-[0.85rem] tracking-tight text-text-deep whitespace-nowrap">
