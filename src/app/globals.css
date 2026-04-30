@@ -197,7 +197,7 @@ body {
     letter-spacing: 0.02em;
     transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
     position: relative;
-    overflow: hidden;
+    isolation: isolate;
     box-shadow: 0 6px 20px rgba(74, 52, 99, 0.25);
   }
 
@@ -208,6 +208,9 @@ body {
     background: linear-gradient(135deg, var(--accent), var(--accent-deep));
     opacity: 0;
     transition: opacity 0.4s ease;
+    border-radius: inherit;
+    z-index: -1;
+    pointer-events: none;
   }
 
   .btn-primary:hover {
@@ -216,8 +219,6 @@ body {
   }
 
   .btn-primary:hover::before { opacity: 1; }
-
-  .btn-primary > * { position: relative; z-index: 1; }
 
   .btn-secondary {
     display: inline-flex;

@@ -403,16 +403,16 @@ export default function TarifsPage() {
                     <span className="text-[0.65rem] uppercase tracking-[0.22em] text-text-soft">
                       Mensuel
                     </span>
-                    <span className="font-display text-2xl text-text-deep">
+                    <span className="font-display text-2xl text-text-deep whitespace-nowrap">
                       {studio.monthlyPriceLabel}
                       <span className="text-sm text-text-soft font-normal">/mois</span>
                     </span>
                   </div>
                   <div className="flex items-baseline justify-between gap-3 pt-3 border-t border-border-soft">
-                    <span className="text-[0.65rem] uppercase tracking-[0.22em] text-gold-deep">
+                    <span className="text-[0.65rem] uppercase tracking-[0.22em] text-gold-deep flex-1">
                       Annuel · {studio.yearlySavingsLabel}
                     </span>
-                    <span className="font-display text-3xl text-gold-deep">
+                    <span className="font-display text-2xl md:text-3xl text-gold-deep whitespace-nowrap shrink-0">
                       {studio.yearlyPriceLabel}
                       <span className="text-sm text-text-soft font-normal">/an</span>
                     </span>
