@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect, FormEvent } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Sparkles, ArrowRight, Send, AlertTriangle, Loader2 } from "lucide-react";
+import { X, ArrowRight, Send, AlertTriangle, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { disclaimers } from "@/lib/data";
 import { whatsappLink, whatsappMessages } from "@/lib/whatsapp";
@@ -197,29 +197,65 @@ export function FloatingAssistant() {
 
   return (
     <>
-      <motion.button
-        onClick={() => setOpen(true)}
+      <div
         className={cn(
-          "group fixed bottom-6 right-6 z-40 flex h-12 w-12 items-center justify-center rounded-full",
-          "bg-gradient-to-br from-accent to-accent-deep text-text-on-dark",
-          "shadow-[0_8px_24px_rgba(74,52,99,0.35)] hover:shadow-[0_12px_32px_rgba(74,52,99,0.5)] transition-all",
-          open && "pointer-events-none opacity-0",
+          "group fixed bottom-6 right-6 z-40 flex items-center gap-3",
+          open && "pointer-events-none opacity-0 transition-opacity duration-300",
         )}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: open ? 0 : 1, y: 0 }}
-        transition={{ delay: 0.7, duration: 0.4 }}
-        aria-label="Ouvrir la conciergerie IA"
       >
-        <Sparkles className="h-5 w-5 text-gold" />
         <span
-          className="pointer-events-none absolute right-full mr-3 whitespace-nowrap rounded-full bg-text-deep/95 px-3 py-1.5 text-[0.72rem] font-medium text-white opacity-0 shadow-lg backdrop-blur-sm transition-opacity duration-200 group-hover:opacity-100"
+          className="pointer-events-none flex items-center gap-2.5 rounded-full bg-bg-card/95 backdrop-blur-md border border-gold-soft/60 pl-4 pr-1 py-1 shadow-[0_8px_24px_rgba(31,26,46,0.12)] opacity-0 -translate-x-2 transition-all duration-500 ease-out group-hover:opacity-100 group-hover:translate-x-0"
           role="tooltip"
         >
-          Conciergerie IA · Etincel
+          <span className="font-display-italic text-[0.85rem] tracking-tight text-text-deep whitespace-nowrap">
+            Demander à
+          </span>
+          <span className="font-display text-[0.95rem] text-gold-deep whitespace-nowrap">
+            Etincel
+          </span>
+          <span className="h-7 w-px bg-gold-soft/60 mx-1" />
+          <span className="text-[0.62rem] uppercase tracking-[0.24em] text-text-soft pr-3">
+            IA
+          </span>
         </span>
-      </motion.button>
+
+        <motion.button
+          onClick={() => setOpen(true)}
+          whileHover={{ scale: 1.06 }}
+          whileTap={{ scale: 0.94 }}
+          className="relative flex h-14 w-14 items-center justify-center rounded-full"
+          aria-label="Ouvrir la conciergerie Etincel"
+        >
+          {/* Halo extérieur doré flouté qui respire */}
+          <span
+            aria-hidden
+            className="absolute inset-[-12px] rounded-full bg-gold/35 blur-2xl opacity-60 animate-[halo_4s_ease-in-out_infinite] group-hover:opacity-90 transition-opacity duration-500"
+          />
+          {/* Anneau doré fin */}
+          <span
+            aria-hidden
+            className="absolute inset-0 rounded-full ring-1 ring-gold/40 ring-offset-2 ring-offset-bg-base/0 group-hover:ring-gold/70 transition-colors duration-500"
+          />
+          {/* Disque principal — gradient améthyste profond */}
+          <span
+            aria-hidden
+            className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_30%_30%,#9a7ec0_0%,#6b4f8a_38%,#4a3463_100%)] shadow-[0_10px_28px_rgba(74,52,99,0.45),inset_0_1px_0_rgba(255,255,255,0.18)]"
+          />
+          {/* Étincelle qui tourne lentement, scintille au survol */}
+          <span className="relative z-10 text-gold drop-shadow-[0_1px_4px_rgba(201,168,106,0.6)] animate-[slowSpin_28s_linear_infinite] group-hover:animate-[slowSpin_8s_linear_infinite] transition-all">
+            <Etincelle size={20} />
+          </span>
+          {/* Petits points scintillants — visibles au survol */}
+          <span
+            aria-hidden
+            className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+          >
+            <span className="absolute top-2 right-3 h-1 w-1 rounded-full bg-gold animate-[twinkle_1.8s_ease-in-out_infinite]" />
+            <span className="absolute bottom-3 left-2 h-0.5 w-0.5 rounded-full bg-gold-soft animate-[twinkle_2.4s_ease-in-out_0.6s_infinite]" />
+            <span className="absolute top-1/2 left-1 h-0.5 w-0.5 rounded-full bg-gold animate-[twinkle_2s_ease-in-out_1.2s_infinite]" />
+          </span>
+        </motion.button>
+      </div>
 
       <AnimatePresence>
         {open && (
