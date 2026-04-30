@@ -151,42 +151,45 @@
   position: absolute;
   border-radius: inherit;
   pointer-events: none;
-  animation: orbit-spin 6s linear infinite;
+  animation: orbit-spin 5s linear infinite;
 }
 
-/* Halo flouté — donne le glow visible de loin */
+/* Halo doré flouté — rayonne autour du bouton, toujours présent
+ * pour qu'on voie clairement que le bouton est mis en valeur */
 .orbit-shine::before {
-  inset: -3px;
-  padding: 3px;
+  inset: -5px;
+  padding: 5px;
   background: conic-gradient(
     from var(--orbit-angle),
-    transparent 0deg,
-    transparent 200deg,
-    rgba(201, 168, 106, 0.55) 280deg,
-    rgba(245, 222, 179, 0.95) 350deg,
-    rgba(201, 168, 106, 0.55) 360deg,
-    transparent 360deg
+    rgba(201, 168, 106, 0.45) 0deg,
+    rgba(232, 213, 173, 0.7) 30deg,
+    rgba(255, 240, 200, 1) 60deg,
+    rgba(232, 213, 173, 0.7) 90deg,
+    rgba(201, 168, 106, 0.45) 120deg,
+    rgba(201, 168, 106, 0.3) 240deg,
+    rgba(201, 168, 106, 0.45) 360deg
   );
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
-  filter: blur(4px);
-  opacity: 0.85;
+  filter: blur(6px);
 }
 
-/* Trait net — dessine précisément le contour lumineux */
+/* Trait net — dessine la bordure lumineuse, présente sur tout le tour
+ * avec un pic d'éclat qui orbite. Le contour est toujours visible. */
 .orbit-shine::after {
   inset: -1px;
-  padding: 1.5px;
+  padding: 2px;
   background: conic-gradient(
     from var(--orbit-angle),
-    transparent 0deg,
-    transparent 230deg,
-    rgba(201, 168, 106, 0.6) 290deg,
-    rgba(255, 240, 200, 1) 350deg,
-    rgba(201, 168, 106, 0.6) 360deg,
-    transparent 360deg
+    rgba(201, 168, 106, 0.7) 0deg,
+    rgba(255, 240, 200, 1) 30deg,
+    rgba(255, 255, 240, 1) 60deg,
+    rgba(255, 240, 200, 1) 90deg,
+    rgba(201, 168, 106, 0.7) 120deg,
+    rgba(201, 168, 106, 0.5) 240deg,
+    rgba(201, 168, 106, 0.7) 360deg
   );
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
@@ -194,29 +197,27 @@
   mask-composite: exclude;
 }
 
-.orbit-shine:hover::before { opacity: 1; }
+.orbit-shine:hover::before { filter: blur(8px); }
 
 /* Variante améthyste — pour blocs sombres ou décor onirique */
 .orbit-shine-amethyst::before {
   background: conic-gradient(
     from var(--orbit-angle),
-    transparent 0deg,
-    transparent 200deg,
-    rgba(154, 126, 192, 0.65) 280deg,
-    rgba(201, 168, 106, 1) 350deg,
-    rgba(154, 126, 192, 0.65) 360deg,
-    transparent 360deg
+    rgba(154, 126, 192, 0.45) 0deg,
+    rgba(201, 168, 106, 0.9) 60deg,
+    rgba(154, 126, 192, 0.45) 120deg,
+    rgba(154, 126, 192, 0.3) 240deg,
+    rgba(154, 126, 192, 0.45) 360deg
   );
 }
 .orbit-shine-amethyst::after {
   background: conic-gradient(
     from var(--orbit-angle),
-    transparent 0deg,
-    transparent 230deg,
-    rgba(201, 168, 106, 0.7) 290deg,
-    rgba(255, 240, 200, 1) 350deg,
-    rgba(201, 168, 106, 0.7) 360deg,
-    transparent 360deg
+    rgba(154, 126, 192, 0.7) 0deg,
+    rgba(255, 240, 200, 1) 60deg,
+    rgba(154, 126, 192, 0.7) 120deg,
+    rgba(154, 126, 192, 0.5) 240deg,
+    rgba(154, 126, 192, 0.7) 360deg
   );
 }
 
