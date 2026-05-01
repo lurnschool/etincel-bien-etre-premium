@@ -20,10 +20,10 @@ const actionIcons: Record<string, LucideIcon> = {
 };
 
 /**
- * Header éditorial compact — 68px desktop / 60px mobile.
- * Toujours opaque pour rester lisible sur toutes les pages
- * (y compris hero variant="deep"). Nav allégée : 5 items principaux
- * + 3 actions secondaires (Bilan en CTA primaire).
+ * Header éditorial compact — 60-68px.
+ * Sprint A "refuge" : nav allégée à 5 items principaux + 1 CTA doux
+ * (« Écrire à Céline ») au lieu de l'ancien « Faire mon bilan ».
+ * Tarifs/Offrir restent accessibles via le drawer mobile et le footer.
  */
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -120,12 +120,19 @@ export function Header() {
             </nav>
             <div className="p-5 border-t border-border-soft space-y-2.5 shrink-0">
               <Link
-                href="/diagnostic"
+                href="/contact"
                 onClick={() => setMobileOpen(false)}
                 className="btn-primary w-full"
               >
-                <Compass className="h-4 w-4" />
-                Faire mon bilan
+                <MessageSquare className="h-4 w-4" />
+                Écrire à Céline
+              </Link>
+              <Link
+                href="/diagnostic"
+                onClick={() => setMobileOpen(false)}
+                className="block text-center text-sm text-text-medium py-2 hover:text-accent transition-colors"
+              >
+                Pas sûre par où commencer ?
               </Link>
               <a
                 href={contact.phoneLink}
@@ -188,34 +195,28 @@ export function Header() {
           ))}
         </nav>
 
-        {/* Actions secondaires (droite) — texte lisible plutôt qu'icônes */}
+        {/* Actions secondaires (droite) — Sprint A : Tarifs/Offrir restent
+            accessibles dans le drawer mobile et le footer, mais sortent
+            du header desktop pour respirer. */}
         <div className="flex items-center gap-1 md:gap-1.5 shrink-0">
-          <div className="hidden md:flex items-center gap-1">
-            {navigationActions.map((action) => {
-              const Icon = actionIcons[action.label] ?? Compass;
-              return (
-                <Link
-                  key={action.href}
-                  href={action.href}
-                  className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[0.8rem] font-medium text-text-deep hover:text-accent hover:bg-bg-soft transition-colors"
-                >
-                  <Icon className="h-3.5 w-3.5 opacity-70" />
-                  {action.label}
-                </Link>
-              );
-            })}
-          </div>
+          {/* Petit accès "Pas sûre ?" en lien texte discret */}
+          <Link
+            href="/diagnostic"
+            className="hidden md:inline-flex items-center text-[0.8rem] font-medium text-text-soft hover:text-accent transition-colors mr-3"
+          >
+            Pas sûre par où commencer&nbsp;?
+          </Link>
 
           {/* Panier */}
           <CartButton className="ml-1" />
 
-          {/* CTA primaire : Bilan */}
+          {/* CTA primaire doux : Écrire à Céline */}
           <Link
-            href="/diagnostic"
-            className="orbit-shine hidden md:inline-flex items-center gap-1.5 rounded-full bg-accent-deep px-4 py-2 text-[0.78rem] font-medium tracking-wide text-text-on-dark hover:bg-accent transition-colors ml-2"
+            href="/contact"
+            className="soft-glow hidden md:inline-flex items-center gap-1.5 rounded-full bg-accent-deep px-4 py-2 text-[0.78rem] font-medium tracking-wide text-text-on-dark hover:bg-accent transition-colors ml-2"
           >
-            <Compass className="h-3.5 w-3.5" />
-            Faire mon bilan
+            <MessageSquare className="h-3.5 w-3.5" />
+            Écrire à Céline
           </Link>
 
           {/* Burger mobile */}

@@ -69,7 +69,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
+    // Hydratation client uniquement — localStorage n'existe pas côté serveur,
+    // d'où l'initialisation à [] puis ce setItems après mount.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setItems(loadFromStorage());
+     
     setIsReady(true);
   }, []);
 

@@ -1,46 +1,49 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import {
-  Phone,
-  Mail,
-  MapPin,
   ArrowRight,
   Heart,
   Users,
   Gift,
   Mountain,
-  HelpCircle,
   Sparkles,
+  MessageCircle,
 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Etincelle } from "@/components/ui/Etincelle";
-import { SmartImage } from "@/components/ui/SmartImage";
-import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
 import { GoogleReviewsTeaser } from "@/components/home/GoogleReviewsTeaser";
-import { ContactRapide } from "@/components/home/ContactRapide";
-import { SacredBackdrop } from "@/components/ornaments/SacredBackdrop";
+import { EcrivezMoi } from "@/components/home/EcrivezMoi";
 import { contact } from "@/lib/data";
-import { whatsappMessages } from "@/lib/whatsapp";
-import { pageVisuals } from "@/lib/visualAssetMap";
+import { whatsappLink, whatsappMessages } from "@/lib/whatsapp";
 import { InstagramIcon, FacebookIcon } from "@/components/ui/SocialIcons";
 
 export const metadata: Metadata = {
-  title: "Contact — Échanger avec Céline",
+  title: "Écrire à Céline",
   description:
-    "Échangez avec Céline Dusseval — un message simple, une réponse personnelle. WhatsApp, téléphone, email, deux lieux d'accueil en Gironde.",
+    "Un mot simple, une réponse personnelle de Céline Dusseval. WhatsApp, téléphone, email, et deux lieux d'accueil en Gironde.",
 };
 
 const quickLinks = [
   { icon: Sparkles, label: "Rituel cacao", href: "/cacao" },
-  { icon: Heart, label: "Lecture numérologie · 110 €", href: "/accompagnements/numerologie" },
+  { icon: Heart, label: "Lecture numérologique · 110 €", href: "/accompagnements/numerologie" },
   { icon: Users, label: "Constellations · 95 €", href: "/constellations" },
-  { icon: Gift, label: "Carte cadeau", href: "/cartes-cadeaux" },
-  { icon: Mountain, label: "Retraites", href: "/retraites" },
-  { icon: HelpCircle, label: "Bilan d'orientation", href: "/diagnostic" },
+  { icon: Gift, label: "Offrir un moment", href: "/cartes-cadeaux" },
+  { icon: Mountain, label: "Retraites & immersions", href: "/retraites" },
 ];
 
+/**
+ * Page /contact — Sprint A "refuge connecté".
+ *
+ * Sortie du PageHeader dramatique + duplication des cartes de contact
+ * (l'ancienne version dupliquait coordonnées + formulaire). Ici :
+ *  - PageHeader doux (SEO + entrée éditoriale).
+ *  - Bloc "Pas sûre par où commencer ?" non agressif.
+ *  - Liens rapides utiles + réseaux sociaux.
+ *  - GoogleReviewsTeaser (honnête tant que l'URL Google n'est pas posée).
+ *  - EcrivezMoi en bas — formulaire Resend + photo + coordonnées complètes.
+ */
 export default function ContactPage() {
   return (
     <>
@@ -52,81 +55,78 @@ export default function ContactPage() {
             <span className="font-display-italic text-gold-deep">Céline</span>
           </>
         }
-        description="Un message simple, une réponse personnelle de Céline. Aucun téléphone surtaxé, aucune réponse automatique."
+        description="Un mot simple, une réponse personnelle. Aucun automatisme — Céline lit et répond elle-même."
       />
 
-      <section className="relative section overflow-hidden">
-        <SacredBackdrop variant="subtle" />
+      <section className="relative bg-bg-base py-16 md:py-20">
         <Container>
-          <div className="grid gap-10 lg:grid-cols-[1fr_1.2fr]">
-            {/* Colonne gauche : photo + coordonnées + réseaux */}
-            <Reveal>
-              <div className="space-y-8 lg:sticky lg:top-28">
-                <SmartImage
-                  {...pageVisuals.contact[0]}
-                  ratio="portrait"
-                  className="max-w-sm"
-                />
-                <div className="space-y-5 max-w-md">
-                  <p className="font-display text-2xl text-text-deep leading-snug">
-                    « Chaque message reçoit une réponse de ma part — jamais d&apos;automatisme. »
-                  </p>
-                  <p className="text-sm text-text-soft italic">
-                    Céline Dusseval
-                  </p>
+          <div className="grid gap-10 lg:grid-cols-12">
+            {/* Bloc orientation douce */}
+            <Reveal className="lg:col-span-7 lg:order-1 order-2">
+              <div className="rounded-[1.5rem] paper-sand border border-border-soft p-7 md:p-9 space-y-5">
+                <div className="inline-flex items-center gap-3 text-[0.65rem] uppercase tracking-[0.32em] text-text-soft">
+                  <span className="text-gold-deep">
+                    <Etincelle size={11} />
+                  </span>
+                  <span>Si vous hésitez</span>
                 </div>
-
-                {/* WhatsApp prioritaire */}
-                <WhatsAppButton message={whatsappMessages.generic} className="w-full justify-center">
-                  Échanger sur WhatsApp
-                </WhatsAppButton>
-
-                <div className="space-y-3">
-                  <a
-                    href={contact.phoneLink}
-                    className="flex items-center gap-4 rounded-2xl border border-border-soft bg-bg-card p-5 hover:border-gold-soft transition-colors"
+                <h2 className="font-display text-2xl md:text-3xl text-text-deep leading-tight">
+                  Pas sûre par où commencer&nbsp;?
+                </h2>
+                <p className="text-text-medium leading-relaxed">
+                  Vous pouvez répondre à quelques questions douces pour vous
+                  orienter, ou m&apos;écrire directement — je vous répondrai
+                  personnellement.
+                </p>
+                <div className="flex flex-wrap gap-3 pt-1">
+                  <Link
+                    href="/diagnostic"
+                    className="soft-glow inline-flex items-center gap-2 rounded-full bg-accent-deep px-5 py-2.5 text-sm font-medium text-text-on-dark hover:bg-accent transition-colors"
                   >
-                    <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gold-soft/40 text-gold-deep">
-                      <Phone className="h-4 w-4" />
-                    </span>
-                    <div>
-                      <p className="text-xs uppercase tracking-[0.24em] text-text-soft">Téléphone</p>
-                      <p className="font-display text-xl text-text-deep">{contact.phone}</p>
-                    </div>
-                  </a>
+                    Me laisser guider
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
                   <a
-                    href={contact.emailLink}
-                    className="flex items-center gap-4 rounded-2xl border border-border-soft bg-bg-card p-5 hover:border-gold-soft transition-colors"
+                    href={whatsappLink(whatsappMessages.generic)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-full border border-text-deep/15 bg-bg-card px-5 py-2.5 text-sm text-text-deep hover:border-accent hover:text-accent transition-colors"
                   >
-                    <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gold-soft/40 text-gold-deep">
-                      <Mail className="h-4 w-4" />
-                    </span>
-                    <div>
-                      <p className="text-xs uppercase tracking-[0.24em] text-text-soft">Email</p>
-                      <p className="font-display text-xl text-text-deep break-all">{contact.email}</p>
-                    </div>
+                    <MessageCircle className="h-4 w-4" />
+                    Écrire sur WhatsApp
                   </a>
-                  <div className="rounded-2xl border border-border-soft bg-bg-card p-5 flex items-start gap-4">
-                    <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gold-soft/40 text-gold-deep shrink-0">
-                      <MapPin className="h-4 w-4" />
-                    </span>
-                    <div className="text-sm text-text-medium leading-relaxed flex-1">
-                      <p className="font-display text-base text-text-deep">{contact.addressMain.label}</p>
-                      <p>{contact.addressMain.street}</p>
-                      <p>{contact.addressMain.city}</p>
-                      <div className="mt-3 pt-3 border-t border-border-soft/60">
-                        <p className="font-display text-sm text-text-deep">
-                          {contact.addressSecondary.label}
-                        </p>
-                        <p className="text-xs text-text-soft italic mt-0.5">
-                          {contact.addressSecondary.note}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
                 </div>
+              </div>
 
-                {/* Réseaux sociaux */}
+              <div className="mt-8">
+                <p className="text-[0.65rem] uppercase tracking-[0.28em] text-text-soft mb-3 px-1">
+                  Accès rapides
+                </p>
+                <ul className="grid gap-2 sm:grid-cols-2">
+                  {quickLinks.map((q) => (
+                    <li key={q.label}>
+                      <Link
+                        href={q.href}
+                        className="group flex items-center gap-3 rounded-2xl border border-border-soft bg-bg-card px-4 py-3 hover:border-gold-soft transition-colors"
+                      >
+                        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-bg-soft text-gold-deep">
+                          <q.icon className="h-3.5 w-3.5" />
+                        </span>
+                        <span className="text-sm text-text-deep flex-1">{q.label}</span>
+                        <ArrowRight className="h-3.5 w-3.5 text-text-soft group-hover:text-accent group-hover:translate-x-0.5 transition-all" />
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </Reveal>
+
+            {/* Réseaux + GoogleReviews */}
+            <Reveal delay={0.1} className="lg:col-span-5 lg:order-2 order-1 space-y-5">
+              <div className="rounded-2xl bg-bg-card border border-border-soft p-6 space-y-4">
+                <p className="text-[0.65rem] uppercase tracking-[0.28em] text-text-soft">
+                  Réseaux
+                </p>
                 <div className="flex items-center gap-3">
                   <a
                     href={contact.social.instagram.url}
@@ -146,64 +146,19 @@ export default function ContactPage() {
                   >
                     <FacebookIcon size={16} />
                   </a>
-                  <span className="text-xs text-text-soft ml-2">
+                  <span className="text-xs text-text-soft ml-1">
                     {contact.social.instagram.label}
                   </span>
                 </div>
               </div>
-            </Reveal>
-
-            {/* Colonne droite : "vous hésitez ?" + liens rapides */}
-            <Reveal delay={0.1}>
-              <div className="space-y-8">
-                <div className="rounded-3xl border border-gold-soft/40 bg-gradient-to-br from-gold-soft/30 via-bg-card to-bg-card p-7 md:p-8">
-                  <div className="flex items-center gap-3 text-xs uppercase tracking-[0.32em] text-gold-deep mb-3">
-                    <Etincelle size={12} />
-                    <span>Vous hésitez ?</span>
-                  </div>
-                  <p className="font-display text-2xl md:text-3xl text-text-deep leading-tight mb-3">
-                    Vous ne savez pas quoi choisir ?
-                  </p>
-                  <p className="text-text-medium leading-relaxed mb-5">
-                    Faites d&apos;abord le bilan d&apos;orientation — quelques questions douces pour identifier la pratique la plus juste.
-                  </p>
-                  <Link href="/diagnostic" className="btn-primary">
-                    Faire le bilan d&apos;orientation
-                    <ArrowRight className="h-4 w-4" />
-                  </Link>
-                </div>
-
-                <div>
-                  <p className="text-xs uppercase tracking-[0.24em] text-text-soft mb-3">
-                    Accès rapides
-                  </p>
-                  <ul className="grid gap-2 sm:grid-cols-2">
-                    {quickLinks.map((q) => (
-                      <li key={q.label}>
-                        <Link
-                          href={q.href}
-                          className="group flex items-center gap-3 rounded-2xl border border-border-soft bg-bg-card px-4 py-3 hover:border-gold-soft transition-colors"
-                        >
-                          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-bg-soft text-gold-deep">
-                            <q.icon className="h-3.5 w-3.5" />
-                          </span>
-                          <span className="text-sm text-text-deep flex-1">{q.label}</span>
-                          <ArrowRight className="h-3.5 w-3.5 text-text-soft group-hover:text-accent group-hover:translate-x-0.5 transition-all" />
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <GoogleReviewsTeaser />
-              </div>
+              <GoogleReviewsTeaser />
             </Reveal>
           </div>
         </Container>
       </section>
 
       <div id="message">
-        <ContactRapide />
+        <EcrivezMoi />
       </div>
     </>
   );

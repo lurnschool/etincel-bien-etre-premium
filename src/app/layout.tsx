@@ -5,7 +5,6 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { FloatingWhatsApp } from "@/components/layout/FloatingWhatsApp";
 import { FloatingAssistant } from "@/components/ai/FloatingAssistant";
-import { SmartPopup } from "@/components/popups/SmartPopup";
 import { CartProvider } from "@/lib/cart";
 import { CartDrawer } from "@/components/cart/CartDrawer";
 import { seoDefaults, brand } from "@/lib/data";
@@ -89,7 +88,6 @@ export default function RootLayout({
           <Footer />
           <FloatingWhatsApp />
           <FloatingAssistant />
-          <SmartPopup />
           <CartDrawer />
         </CartProvider>
       </body>

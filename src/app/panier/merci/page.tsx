@@ -25,9 +25,12 @@ export default function PanierMerciPage() {
   const [sessionId, setSessionId] = useState<string | null>(null);
 
   useEffect(() => {
+    // Lecture des params d'URL Stripe Checkout — uniquement côté client après mount.
     const params = new URLSearchParams(window.location.search);
     const sid = params.get("session_id");
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setSessionId(sid && sid !== "{CHECKOUT_SESSION_ID}" ? sid : null);
+     
     setOrderRef(sid && sid !== "{CHECKOUT_SESSION_ID}" ? sid.slice(-12).toUpperCase() : generateRef());
     clear();
   }, [clear]);

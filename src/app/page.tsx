@@ -1,59 +1,54 @@
-import { CinematicHeroSlider } from "@/components/home/CinematicHeroSlider";
-import { CorePathwaysShowcase } from "@/components/home/CorePathwaysShowcase";
-import { WhatToDeposit } from "@/components/home/WhatToDeposit";
-import { MeetCeline } from "@/components/home/MeetCeline";
-import { ToolsMobilized } from "@/components/home/ToolsMobilized";
-import { QuoteScene } from "@/components/home/QuoteScene";
-import { Temoignages } from "@/components/home/Temoignages";
-import { GiftCardStudioTeaser } from "@/components/home/GiftCardStudioTeaser";
-import { DiagnosticTeaser } from "@/components/home/DiagnosticTeaser";
-import { ContactRapide } from "@/components/home/ContactRapide";
+import { HeroRefuge } from "@/components/home/HeroRefuge";
+import { BienvenueEspace } from "@/components/home/BienvenueEspace";
+import { CeQueVousVenezDeposer } from "@/components/home/CeQueVousVenezDeposer";
+import { LesCheminsQuiSouvrent } from "@/components/home/LesCheminsQuiSouvrent";
+import { LesOutilsQueJeMobilise } from "@/components/home/LesOutilsQueJeMobilise";
+import { MonUnivers } from "@/components/home/MonUnivers";
+import { OffrirUnMoment } from "@/components/home/OffrirUnMoment";
+import { CerclesEtRetraites } from "@/components/home/CerclesEtRetraites";
+import { GuidanceTeaser } from "@/components/home/GuidanceTeaser";
+import { RetoursDexperience } from "@/components/home/RetoursDexperience";
+import { EcrivezMoi } from "@/components/home/EcrivezMoi";
 
 /**
- * Home Etincel — refondue autour des 3 axes (Mémoires & constellations,
- * Féminin & cacao, Corps & intégration). Ordre stratégique :
+ * HOME — Sprint A "refuge connecté".
  *
- * 1. Hero cinématographique avec Céline en premier
- * 2. Trois chemins pour revenir à soi (3 axes)
- * 3. Ce que vous venez déposer (signaux émotionnels)
- * 4. Rencontrer Céline (posture, pas catalogue)
- * 5. Les outils qu'elle peut mobiliser (présentés comme moyens)
- * 6. Retraites / immersions (parallax)
- * 7. Bilan d'orientation
- * 8. Avis & retours d'expérience (témoignages réels)
- * 9. Cartes cadeaux
- * 10. Contact / WhatsApp / réseaux
+ * Phrase directrice (à respecter pour tout ajout futur) :
+ * "Le site doit être un refuge qui sait guider, pas une vitrine qui
+ *  expose, ni un tunnel qui force."
+ *
+ * Structure 11 sections :
+ *  1. HeroRefuge          — photo Céline + phrase d'accueil + 2 CTA doux
+ *  2. BienvenueEspace     — texte en "je", ton humain, sans jargon
+ *  3. CeQueVousVenezDeposer — prose, pas de grille numérotée
+ *  4. LesCheminsQuiSouvrent — 3 récits courts, sans "Axe 1/2/3"
+ *  5. LesOutilsQueJeMobilise — mention en prose + ligne de liens texte
+ *  6. MonUnivers          — SoftCarousel 6 fragments du refuge
+ *  7. OffrirUnMoment      — carte cadeau adoucie, CTA Stripe-ready
+ *  8. CerclesEtRetraites  — 3 cartes douces (cercles, cacao, retraites)
+ *  9. GuidanceTeaser      — "Pas sûre par où commencer ?" (orientation douce)
+ * 10. RetoursDexperience  — 3 témoignages réels en cartes-souvenirs
+ * 11. EcrivezMoi          — formulaire Resend + WhatsApp + coordonnées
+ *
+ * Conversion conservée — chaque section a au moins une porte de sortie
+ * (lien vers axe, demande de contact, carte cadeau, liste d'intérêt).
+ * IA flottante "Besoin d'être guidée ?" + WhatsApp flottant rendus dans
+ * le layout global, présents partout.
  */
 export default function HomePage() {
   return (
     <>
-      <CinematicHeroSlider />
-
-      <CorePathwaysShowcase />
-
-      <WhatToDeposit />
-
-      <MeetCeline />
-
-      <ToolsMobilized />
-
-      <QuoteScene
-        image="/images/celine/portrait-celine.png"
-        alt="Céline avec son tambour chamanique"
-        eyebrow="Retraites · immersions"
-        quote="Une retraite n'est pas une fuite. C'est un retour."
-        body="Quelques jours pour ralentir, respirer, partager — souffle, innerdance, cercles, cacao, féminin sacré, nature. 6 à 12 personnes maximum, séance individuelle intégrée, écrins choisis."
-        cta={{ label: "Découvrir les retraites", href: "/retraites" }}
-        imagePosition="object-[center_15%]"
-      />
-
-      <DiagnosticTeaser />
-
-      <Temoignages />
-
-      <GiftCardStudioTeaser />
-
-      <ContactRapide />
+      <HeroRefuge />
+      <BienvenueEspace />
+      <CeQueVousVenezDeposer />
+      <LesCheminsQuiSouvrent />
+      <LesOutilsQueJeMobilise />
+      <MonUnivers />
+      <OffrirUnMoment />
+      <CerclesEtRetraites />
+      <GuidanceTeaser />
+      <RetoursDexperience />
+      <EcrivezMoi />
     </>
   );
 }

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" preserveAspectRatio="xMidYMid slice" role="img" aria-hidden="true">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="80%">
+      <stop offset="0%" stop-color="#fbf3e3"/>
+      <stop offset="55%" stop-color="#f0e2c5"/>
+      <stop offset="100%" stop-color="#e0caa0"/>
+    </radialGradient>
+    <radialGradient id="circle" cx="50%" cy="50%" r="42%">
+      <stop offset="0%" stop-color="#ead7af" stop-opacity="0.85"/>
+      <stop offset="60%" stop-color="#d2b078" stop-opacity="0.45"/>
+      <stop offset="90%" stop-color="#ad8e4a" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#ad8e4a" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="blur">
+      <feGaussianBlur stdDeviation="22"/>
+    </filter>
+    <filter id="noise">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="14"/>
+      <feColorMatrix values="0 0 0 0 0.60 0 0 0 0 0.50 0 0 0 0 0.35 0 0 0 0.05 0"/>
+    </filter>
+  </defs>
+  <rect width="800" height="1000" fill="url(#bg)"/>
+  <ellipse cx="400" cy="500" rx="280" ry="280" fill="url(#circle)" filter="url(#blur)"/>
+  <rect width="800" height="1000" filter="url(#noise)"/>
+</svg>

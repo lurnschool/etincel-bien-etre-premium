@@ -446,13 +446,19 @@ export const disclaimers = {
     "L'assistant ne remplace pas un échange direct avec Céline et ne fournit pas de conseil médical. En cas de douleur, trouble psychologique ou urgence, consultez un professionnel de santé.",
 } as const;
 
+/**
+ * Sprint A "refuge" — vocabulaire CTA adouci.
+ * Plus de "Faire mon bilan" / "Découvrir" / "Créer" / "Démarrer".
+ * À la place : invitations en "je" / "vous" en doux.
+ */
 export const cta = {
-  primary: { label: "Faire mon bilan", href: "/diagnostic" },
-  secondary: { label: "Prendre contact", href: "/contact" },
-  discoverPractices: { label: "Découvrir les pratiques", href: "/#atlas" },
-  giftCard: { label: "Créer une carte cadeau", href: "/cartes-cadeaux" },
-  retreats: { label: "Rejoindre la liste d'intérêt", href: "/retraites#interet" },
-  cercles: { label: "Être informée du prochain cercle", href: "/cercles-de-femmes#inscription" },
+  primary: { label: "Me laisser guider", href: "/diagnostic" },
+  secondary: { label: "Écrire à Céline", href: "/contact" },
+  discoverPractices: { label: "Voir les pratiques", href: "/accompagnements" },
+  giftCard: { label: "Préparer une attention", href: "/cartes-cadeaux" },
+  retreats: { label: "Recevoir les prochaines dates", href: "/retraites#interet" },
+  cercles: { label: "Être prévenue du prochain cercle", href: "/cercles-de-femmes#inscription" },
+  whatsapp: { label: "Poser une question", href: "https://wa.me/33627438104" },
 } as const;
 
 /**
@@ -593,6 +599,180 @@ export const corePathways = [
 /** Alias temporaire pour compatibilité avec l'ancien composant CorePillars.
  *  À supprimer quand le composant aura été remplacé par CorePathwaysShowcase. */
 export const corePillars = corePathways;
+
+/* -------------------------------------------------------------------------- */
+/*  SPRINT A — VOIX CÉLINE (refuge connecté)                                  */
+/*                                                                            */
+/*  Textes éditoriaux en "je", à valider avec Céline en Sprint B.             */
+/*  Pour l'instant : transposition fidèle de sa voix issue du site original   */
+/*  + brief direct du chef de projet (« certaines personnes viennent me       */
+/*  voir parce qu'elles sentent qu'elles portent une histoire qui ne leur     */
+/*  appartient pas totalement »).                                             */
+/* -------------------------------------------------------------------------- */
+
+/** Une phrase d'accueil simple posée en hero. À reformuler avec Céline. */
+export const heroRefuge = {
+  eyebrow: "Etincel · Céline Dusseval",
+  greeting: "Bienvenue.",
+  title: "Ici, vous pouvez vous poser un instant.",
+  body: "Je m'appelle Céline. J'ouvre un espace sensible — pour vous écouter, pour vous accompagner, pour revenir à vous.",
+  primaryCta: { label: "Me laisser guider", href: "/diagnostic" },
+  secondaryCta: { label: "Écrire à Céline", href: "/contact" },
+} as const;
+
+/** Section « Bienvenue dans mon espace » — première personne, ton humain. */
+export const bienvenueEspace = {
+  eyebrow: "Bienvenue dans mon espace",
+  paragraphs: [
+    "Je reçois à Bordeaux, en Gironde, mais aussi parfois ailleurs — en cercle, en cérémonie, en retraite. Ce que je propose n'est pas un protocole. C'est un espace.",
+    "Un espace pour déposer ce qui pèse, écouter ce qui demande à être entendu, et retrouver ce qui vous appartient déjà.",
+  ],
+} as const;
+
+/**
+ * Section "Ce que vous pouvez venir déposer" — refondue en prose,
+ * pas en grille numérotée. Une seule respiration douce.
+ */
+export const ceQueVousVenezDeposer = {
+  eyebrow: "Ce que vous pouvez venir déposer",
+  title: "Tout ce qui demande à être accueilli sans être expliqué.",
+  paragraphs: [
+    "Une fatigue émotionnelle qui dure. Un blocage qui se répète. Une transition de vie inconfortable. Un appel à revenir au corps. Un appel du féminin.",
+    "Un trop-plein qui demande l'écoute. Un schéma familial qui pèse. Une envie simple de ralentir, de respirer.",
+    "Quelle que soit votre porte d'entrée, il y a un espace possible. Vous n'avez pas besoin de savoir précisément, ni d'avoir les bons mots.",
+  ],
+  cta: { label: "Me laisser guider", href: "/diagnostic" },
+} as const;
+
+/**
+ * Les 3 chemins, racontés en "je", sans numérotation, sans étiquette
+ * "Axe", sans card produit. Trois récits courts qui présentent les axes
+ * comme des manières d'arriver, pas comme une architecture.
+ */
+export const cheminsRefuge = [
+  {
+    id: "memoires",
+    eyebrow: "Mémoires & constellations",
+    title: "Une histoire qui n'est pas tout à fait la vôtre.",
+    body: "Certaines personnes viennent me voir parce qu'elles sentent qu'elles portent une histoire qui ne leur appartient pas totalement. Loyautés invisibles, répétitions, mémoires familiales qui pèsent sans qu'on sache d'où elles viennent. Là, je travaille avec les constellations, l'hypnose, le transgénérationnel.",
+    href: "/memoires-constellations",
+    linkLabel: "En savoir plus",
+    visualId: "home-chemin-memoires",
+  },
+  {
+    id: "feminin",
+    eyebrow: "Féminin & cacao",
+    title: "Revenir à votre corps, votre cœur, votre espace intérieur.",
+    body: "D'autres femmes arrivent avec le besoin de revenir à elles. À leur corps, à leur cœur, à leur intuition. C'est là que j'ouvre les cercles, les cérémonies cacao, les accompagnements féminins. Un espace doux, sensible, où chacune retrouve sa place.",
+    href: "/feminin-cacao",
+    linkLabel: "En savoir plus",
+    visualId: "home-chemin-feminin",
+  },
+  {
+    id: "corps",
+    eyebrow: "Corps & intégration",
+    title: "Ce qui a été compris doit parfois être traversé par le corps.",
+    body: "Parfois, on a déjà compris beaucoup avec la tête. Ce qui manque, c'est de laisser le corps intégrer. Le souffle, le mouvement, l'innerdance, les retraites — pour ancrer ce qui demande à être ancré.",
+    href: "/corps-integration",
+    linkLabel: "En savoir plus",
+    visualId: "home-chemin-corps",
+  },
+] as const;
+
+/**
+ * Mention douce des outils, en prose — plus de grille de cards.
+ * Les outils sont au service des chemins, pas au centre.
+ */
+export const outilsMention = {
+  eyebrow: "Les outils que j'utilise parfois",
+  title: "Au service de ce qui se présente, pas l'inverse.",
+  body: "Selon ce qui arrive et ce qui résonne pour vous, je peux mobiliser différentes pratiques que j'ai apprises au fil des années. Aucune n'est centrale — elles sont au service du chemin que vous traversez.",
+  tools: [
+    { label: "Hypnose", href: "/accompagnements/hypnose" },
+    { label: "CellRelease®", href: "/accompagnements/cellrelease" },
+    { label: "Massage Libération Reconnexion", href: "/accompagnements/massage-liberation-reconnexion" },
+    { label: "Massage énergétique", href: "/accompagnements/massage-energetique" },
+    { label: "Réflexologie amérindienne", href: "/accompagnements/reflexologie" },
+    { label: "Breathwork chamanique", href: "/accompagnements/breathwork" },
+    { label: "Innerdance", href: "/innerdance" },
+    { label: "Numérologie symbolique", href: "/accompagnements/numerologie" },
+  ],
+} as const;
+
+/** Carrousel "L'univers de Céline" / "Le refuge". */
+export const monUniversCarousel = {
+  eyebrow: "Mon univers",
+  title: "Quelques fragments du refuge.",
+  body: "Le lieu, les objets, les cercles, les rituels. Un aperçu de ce qui m'entoure quand je vous accueille.",
+  caption: "Photos issues du site et de moments partagés — d'autres viendront s'ajouter.",
+  assetIds: [
+    "home-univers-1",
+    "home-univers-4",
+    "home-univers-3",
+    "home-univers-5",
+    "home-univers-2",
+    "home-univers-6",
+  ],
+} as const;
+
+/** Section "Offrir un moment" — vocabulaire adouci pour la carte cadeau. */
+export const offrirUnMoment = {
+  eyebrow: "Offrir un moment",
+  title: "Une attention douce pour quelqu'un que vous aimez.",
+  body: "Une carte préparée à la main, pour offrir une séance, un cercle, une retraite, ou simplement un moment de pause. C'est un geste discret qui dit beaucoup.",
+  primaryCta: { label: "Préparer une attention", href: "/cartes-cadeaux" },
+  secondaryCta: { label: "Poser une question", href: "https://wa.me/33627438104" },
+} as const;
+
+/** Section "Cercles, cacao & retraites" — invitation douce. */
+export const cerclesEtRetraites = {
+  eyebrow: "Cercles, cacao, retraites",
+  title: "Vivre un moment ensemble.",
+  body: "De temps en temps, j'ouvre des cercles, des cérémonies cacao, des retraites. Des espaces collectifs, en petit comité, pour traverser quelque chose en présence d'autres.",
+  cards: [
+    {
+      id: "cercles",
+      title: "Cercles de femmes",
+      body: "Un rendez-vous mensuel pour déposer, partager, revenir à soi en sororité.",
+      cta: { label: "Être prévenue", href: "/cercles-de-femmes" },
+    },
+    {
+      id: "cacao",
+      title: "Cérémonies cacao",
+      body: "Un rituel sensoriel et symbolique pour ralentir et ouvrir le cœur — en cercle ou en duo.",
+      cta: { label: "Découvrir le rituel", href: "/cacao" },
+    },
+    {
+      id: "retraites",
+      title: "Retraites & immersions",
+      body: "Quelques jours en petit groupe pour respirer, ralentir, traverser. 6 à 12 personnes maximum.",
+      cta: { label: "Recevoir les prochaines dates", href: "/retraites#interet" },
+    },
+  ],
+} as const;
+
+/** Section "Pas sûre par où commencer ?" — remplace le DiagnosticTeaser. */
+export const guidanceDouce = {
+  eyebrow: "Si vous hésitez",
+  title: "Pas sûre par où commencer ?",
+  body: "Vous pouvez répondre à quelques questions simples pour vous orienter, ou m'écrire directement — je vous répondrai personnellement.",
+  primaryCta: { label: "Me laisser guider", href: "/diagnostic" },
+  secondaryCta: { label: "Écrire à Céline", href: "https://wa.me/33627438104" },
+} as const;
+
+/** Section "Retours d'expérience" — réécriture douce du titre Témoignages. */
+export const retoursDexperience = {
+  eyebrow: "Retours d'expérience",
+  title: "Quelques mots de personnes qui sont passées par ici.",
+  body: "Trois témoignages réels, conservés tels qu'ils ont été écrits. D'autres viendront avec le temps.",
+} as const;
+
+/** Section "Écrivez-moi" — remplace ContactRapide. */
+export const ecrivezMoi = {
+  eyebrow: "Premier contact",
+  title: "Écrivez-moi un mot.",
+  body: "Une question, un doute, une envie de prendre rendez-vous. Choisissez le canal qui vous convient — je réponds personnellement.",
+} as const;
 
 /**
  * Pratiques secondaires regroupées par intention — alimentent

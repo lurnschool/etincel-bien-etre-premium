@@ -28,11 +28,11 @@ type ChatMessage = {
 type ChatStatus = "idle" | "sending" | "fallback" | "error";
 
 const suggestions = [
-  { id: "bilan", label: "Quelle pratique me correspond ?" },
+  { id: "bilan", label: "Par où commencer ?" },
   { id: "cacao", label: "Comment se passe un rituel cacao ?" },
-  { id: "constellations", label: "Constellation familiale, c'est quoi ?" },
+  { id: "constellations", label: "Une constellation familiale, c'est quoi ?" },
   { id: "numerologie", label: "Comment se passe une lecture numérologique ?" },
-  { id: "cadeau", label: "Comment offrir une carte cadeau ?" },
+  { id: "cadeau", label: "Offrir un moment à quelqu'un ?" },
   { id: "retraite", label: "Y a-t-il une prochaine retraite ?" },
 ];
 
@@ -48,31 +48,31 @@ type QuickAction = {
 const quickActions: QuickAction[] = [
   {
     id: "bilan",
-    label: "Faire mon bilan d'orientation",
-    description: "8 questions · 4 minutes · gratuit",
+    label: "Me laisser guider",
+    description: "Quelques questions douces pour trouver votre porte d'entrée",
     icon: Compass,
     href: "/diagnostic",
   },
   {
     id: "numerologie",
     label: "Découvrir la numérologie",
-    description: "Animation symbolique de votre date",
+    description: "Une lecture symbolique de votre date",
     icon: Sparkles,
     href: "/accompagnements/numerologie",
   },
   {
     id: "rdv",
-    label: "Prendre rendez-vous",
-    description: "Voir les pratiques et réserver",
+    label: "Prendre un moment avec Céline",
+    description: "Écrire à Céline ou voir les formats",
     icon: Calendar,
-    href: "/tarifs",
+    href: "/contact",
   },
 ];
 
 const intro: ChatMessage = {
   role: "assistant",
   content:
-    "Bonjour, je suis l'assistante d'Etincel. Posez-moi votre question, ou commencez par le bilan d'orientation gratuit pour identifier l'axe le plus juste — mémoires, féminin ou corps. Vous pouvez aussi essayer l'animation numérologie symbolique en attendant un échange réel avec Céline.",
+    "Bonjour. Si vous hésitez, je peux vous aider à trouver ce qui résonne pour vous — ou simplement répondre à une question. Si vous préférez parler directement à Céline, son WhatsApp est juste là.",
 };
 
 /**
@@ -130,7 +130,10 @@ export function FloatingAssistant() {
   // Si on ouvre le chat, la bulle disparaît silencieusement (le clic vaut
   // déjà confirmation que l'utilisateur a vu et compris l'invitation).
   useEffect(() => {
+    // Lorsqu'un utilisateur ouvre le chat alors que la bulle d'invitation
+    // est visible, on la masque proprement (effet de coordination UX).
     if (open && bubbleVisible) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setBubbleVisible(false);
       try {
         window.sessionStorage.setItem(BUBBLE_DISMISS_KEY, "1");
@@ -262,12 +265,12 @@ export function FloatingAssistant() {
 
   const statusLabel =
     status === "fallback"
-      ? "Mode aperçu · à activer sur Vercel"
+      ? "Aperçu · activation prochaine"
       : status === "error"
-      ? "Service IA indisponible"
+      ? "Indisponible un instant"
       : status === "sending"
-      ? "L'assistant rédige…"
-      : "Conciergerie IA · prête";
+      ? "Je vous réponds…"
+      : "Je vous écoute.";
 
   const statusDot =
     status === "fallback" || status === "error"
@@ -299,28 +302,27 @@ export function FloatingAssistant() {
               </button>
 
               <div className="flex items-center gap-2 mb-3">
-                <span className="text-gold drop-shadow-[0_1px_3px_rgba(201,168,106,0.5)]">
+                <span className="text-gold-deep">
                   <Etincelle size={11} />
                 </span>
-                <span className="text-[0.6rem] uppercase tracking-[0.28em] text-gold-deep">
-                  Etincel · IA
+                <span className="text-[0.6rem] uppercase tracking-[0.28em] text-text-soft">
+                  Besoin d&apos;être guidée&nbsp;?
                 </span>
               </div>
 
               <p className="font-display text-[1.05rem] leading-snug text-text-deep mb-1">
-                Bonjour, je suis l&apos;assistante d&apos;Etincel.
+                Bonjour. Si vous hésitez, je peux vous orienter.
               </p>
               <p className="text-[0.82rem] leading-relaxed text-text-medium mb-4">
-                Je peux vous orienter vers ce qui résonne pour vous —{" "}
-                <span className="text-text-deep">mémoires, féminin ou corps</span>.
-                Une question sur les pratiques de Céline&nbsp;?
+                Posez votre question simplement, ou laissez-vous guider vers ce
+                qui résonne pour vous.
               </p>
 
               <button
                 onClick={() => setOpen(true)}
-                className="orbit-shine group/cta inline-flex items-center gap-1.5 rounded-full bg-accent-deep px-4 py-2 text-[0.78rem] font-medium text-text-on-dark hover:bg-accent transition-colors"
+                className="soft-glow group/cta inline-flex items-center gap-1.5 rounded-full bg-accent-deep px-4 py-2 text-[0.78rem] font-medium text-text-on-dark hover:bg-accent transition-colors"
               >
-                Discuter avec Etincel
+                Me laisser guider
                 <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover/cta:translate-x-0.5" />
               </button>
             </div>
@@ -335,58 +337,42 @@ export function FloatingAssistant() {
       >
         <span
           className={cn(
-            "pointer-events-none flex items-center gap-2.5 rounded-full bg-bg-card/95 backdrop-blur-md border border-gold-soft/60 pl-4 pr-1 py-1 shadow-[0_8px_24px_rgba(31,26,46,0.12)] -translate-x-2 transition-all duration-500 ease-out group-hover:translate-x-0",
+            "pointer-events-none flex items-center gap-2 rounded-full bg-bg-card/95 backdrop-blur-md border border-border-soft pl-4 pr-3 py-1.5 shadow-[0_6px_20px_rgba(31,26,46,0.10)] -translate-x-2 transition-all duration-500 ease-out group-hover:translate-x-0",
             // Le tooltip se masque tant que la bulle d'invitation est affichée
             bubbleVisible ? "opacity-0" : "opacity-0 group-hover:opacity-100",
           )}
           role="tooltip"
         >
           <span className="font-display-italic text-[0.85rem] tracking-tight text-text-deep whitespace-nowrap">
-            Demander à
-          </span>
-          <span className="font-display text-[0.95rem] text-gold-deep whitespace-nowrap">
-            Etincel
-          </span>
-          <span className="h-7 w-px bg-gold-soft/60 mx-1" />
-          <span className="text-[0.62rem] uppercase tracking-[0.24em] text-text-soft pr-3">
-            IA
+            Besoin d&apos;être guidée&nbsp;?
           </span>
         </span>
 
         <motion.button
           onClick={() => setOpen(true)}
-          whileHover={{ scale: 1.06 }}
-          whileTap={{ scale: 0.94 }}
-          className="relative flex h-14 w-14 items-center justify-center rounded-full"
-          aria-label="Ouvrir la conciergerie Etincel"
+          whileHover={{ scale: 1.04 }}
+          whileTap={{ scale: 0.96 }}
+          className="relative flex h-12 w-12 items-center justify-center rounded-full"
+          aria-label="Ouvrir l'assistance Etincel"
         >
-          {/* Halo extérieur doré flouté qui respire */}
+          {/* Halo extérieur doré très doux */}
           <span
             aria-hidden
-            className="absolute inset-[-12px] rounded-full bg-gold/35 blur-2xl opacity-60 animate-[halo_4s_ease-in-out_infinite] group-hover:opacity-90 transition-opacity duration-500"
+            className="absolute inset-[-6px] rounded-full bg-gold-soft/40 blur-xl opacity-60 group-hover:opacity-90 transition-opacity duration-500"
           />
           {/* Anneau doré fin */}
           <span
             aria-hidden
-            className="absolute inset-0 rounded-full ring-1 ring-gold/40 ring-offset-2 ring-offset-bg-base/0 group-hover:ring-gold/70 transition-colors duration-500"
+            className="absolute inset-0 rounded-full ring-1 ring-gold-soft/60 group-hover:ring-gold/80 transition-colors duration-500"
           />
-          {/* Disque principal — gradient améthyste profond */}
+          {/* Disque principal — fond crème chaud */}
           <span
             aria-hidden
-            className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_30%_30%,#9a7ec0_0%,#6b4f8a_38%,#4a3463_100%)] shadow-[0_10px_28px_rgba(74,52,99,0.45),inset_0_1px_0_rgba(255,255,255,0.18)]"
+            className="absolute inset-0 rounded-full bg-gradient-to-br from-bg-card via-bg-soft to-rose-soft/60 shadow-[0_6px_18px_rgba(31,26,46,0.12),inset_0_1px_0_rgba(255,255,255,0.6)]"
           />
-          {/* Étincelle qui tourne lentement, scintille au survol */}
-          <span className="relative z-10 text-gold drop-shadow-[0_1px_4px_rgba(201,168,106,0.6)] animate-[slowSpin_28s_linear_infinite] group-hover:animate-[slowSpin_8s_linear_infinite] transition-all">
-            <Etincelle size={20} />
-          </span>
-          {/* Petits points scintillants — visibles au survol */}
-          <span
-            aria-hidden
-            className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
-          >
-            <span className="absolute top-2 right-3 h-1 w-1 rounded-full bg-gold animate-[twinkle_1.8s_ease-in-out_infinite]" />
-            <span className="absolute bottom-3 left-2 h-0.5 w-0.5 rounded-full bg-gold-soft animate-[twinkle_2.4s_ease-in-out_0.6s_infinite]" />
-            <span className="absolute top-1/2 left-1 h-0.5 w-0.5 rounded-full bg-gold animate-[twinkle_2s_ease-in-out_1.2s_infinite]" />
+          {/* Étincelle dorée discrète, sans rotation */}
+          <span className="relative z-10 text-gold-deep transition-transform duration-500 group-hover:scale-110">
+            <Etincelle size={16} />
           </span>
         </motion.button>
       </div>
@@ -404,7 +390,7 @@ export function FloatingAssistant() {
             <motion.aside
               ref={panelRef}
               role="dialog"
-              aria-label="Conciergerie IA Etincel"
+              aria-label="Espace d'orientation Etincel"
               initial={{ opacity: 0, y: 24, scale: 0.96 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 24, scale: 0.96 }}
@@ -424,7 +410,7 @@ export function FloatingAssistant() {
                   </div>
                   <div>
                     <p className="font-display text-lg leading-none text-text-deep">
-                      Etincel · IA
+                      Besoin d&apos;être guidée&nbsp;?
                     </p>
                     <p className="text-[0.68rem] text-text-soft mt-1.5 flex items-center gap-1.5">
                       <span className={cn("h-1.5 w-1.5 rounded-full", statusDot)} />
@@ -448,12 +434,12 @@ export function FloatingAssistant() {
                     <div>
                       <p className="font-medium">
                         {status === "fallback"
-                          ? "Chat IA pas encore activé sur cet hébergement"
-                          : "Service IA momentanément indisponible"}
+                          ? "L'orientation automatique sera activée prochainement"
+                          : "Petite pause technique"}
                       </p>
                       <p className="text-text-medium mt-0.5">
                         {status === "fallback"
-                          ? "GitHub Pages ne peut pas exécuter l'API. Cette interface sera fonctionnelle dès le passage sur Vercel."
+                          ? "Pour échanger maintenant, le mieux est d'écrire directement à Céline sur WhatsApp — elle vous répondra personnellement."
                           : "Réessayez dans un instant ou écrivez à Céline sur WhatsApp."}
                       </p>
                       {errorDetail && (
