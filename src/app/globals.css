@@ -616,7 +616,13 @@ body {
   will-change: filter, background-position;
 }
 
-.golden-welcome::after {
+/* Variante "still" — gradient + breathe seulement, sans le sweep gauche→droite. */
+.golden-welcome--still::after {
+  content: none;
+}
+
+/* Le sweep n'est rendu que sur la variante par défaut (sans modificateur still). */
+.golden-welcome:not(.golden-welcome--still)::after {
   content: "";
   position: absolute;
   inset: -14% -22%;
@@ -677,7 +683,7 @@ body {
     background-position: 50% 50%;
     filter: drop-shadow(0 0 14px rgba(200, 155, 69, 0.18));
   }
-  .golden-welcome::after {
+  .golden-welcome:not(.golden-welcome--still)::after {
     animation: none;
     opacity: 0;
   }

@@ -3,7 +3,7 @@ import { ArrowRight, MessageSquare, MapPin } from "lucide-react";
 import { Etincelle } from "@/components/ui/Etincelle";
 import { VisualAsset } from "@/components/ui/VisualAsset";
 import { EtincelleHandwritten } from "@/components/ui/EtincelleHandwritten";
-import { EtincelleAccent } from "@/components/ui/EtincelleAccent";
+import { GoldenWelcomeText } from "@/components/ui/GoldenWelcomeText";
 import { PracticesMarquee } from "@/components/ui/PracticesMarquee";
 import { heroRefuge, practicesMarquee } from "@/lib/data";
 
@@ -55,11 +55,13 @@ export function HeroRefuge() {
               </EtincelleHandwritten>
               <h1
                 id="hero-refuge-title"
-                className="font-display text-balance text-[2.4rem] sm:text-5xl lg:text-[3.6rem] leading-[1.05] tracking-tight text-text-deep mt-2"
+                className="font-display text-balance text-[2.4rem] sm:text-5xl lg:text-[3.6rem] leading-[1.05] tracking-tight mt-2"
               >
-                Ici, vous pouvez vous{" "}
-                <EtincelleAccent variant="glow">poser</EtincelleAccent>{" "}
-                un instant.
+                {/* Sprint G — phrase entière en or champagne respirant,
+                    sans sweep (lecture posée, lumière douce). */}
+                <GoldenWelcomeText size={false} sweep={false}>
+                  Ici, vous pouvez vous poser un instant.
+                </GoldenWelcomeText>
               </h1>
             </div>
 
