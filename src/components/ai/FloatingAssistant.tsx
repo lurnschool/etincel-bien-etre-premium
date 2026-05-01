@@ -116,6 +116,14 @@ export function FloatingAssistant() {
     };
   }, [open]);
 
+  // Sprint H — permet à n'importe quel CTA dans la page d'ouvrir le panel
+  // via un event custom (utilisé par /tarifs « Demander à la conciergerie »).
+  useEffect(() => {
+    const handler = () => setOpen(true);
+    window.addEventListener("etincel:open-assistant", handler);
+    return () => window.removeEventListener("etincel:open-assistant", handler);
+  }, []);
+
   // Bulle d'invitation : apparaît après BUBBLE_DELAY_MS si jamais fermée
   // dans la session courante. Une fois fermée par l'utilisateur, ne
   // réapparaît pas avant la prochaine visite.
