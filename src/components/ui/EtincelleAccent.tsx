@@ -2,11 +2,11 @@ import { cn } from "@/lib/utils";
 import { Etincelle } from "./Etincelle";
 
 type Variant =
-  | "letter"        // mot doré chaud avec bloom lumineux au mount
-  | "glow"          // texte doré + bloom au mount + scintillement permanent
+  | "letter"        // mot doré chaud avec tracé lumineux animé au mount
+  | "glow"          // texte doré + scintillement permanent + flash au mount
   | "signature"     // signature manuscrite "Étincel" + sparkle 4 branches
   | "handwritten"   // mot manuscrit cuivré chaud, sobre, sans anim
-  | "lighttrace";   // alias de letter (sémantique)
+  | "lighttrace";   // texte tracé par lumière dorée — version forte (Cormorant ou autre)
 
 type Props = {
   /** Le mot ou la lettre à mettre en valeur. */
@@ -17,21 +17,21 @@ type Props = {
   className?: string;
   /** Afficher une étincelle juste avant le mot. Défaut false sauf en "signature". */
   withSparkle?: boolean;
-  /** Délai de l'animation au mount (ms). Défaut 400. */
+  /** Délai de l'animation au mount (ms). Défaut 400 (après le hero text). */
   delay?: number;
 };
 
 /**
- * EtincelleAccent v3 — accent doré qui apparaît comme une étincelle.
+ * EtincelleAccent — accentue un mot ou une lettre avec l'identité dorée
+ * de Céline (basée sur ses stories Insta `etincel_debienetre`).
  *
- * Sprint D v3 : remplacement du clip-path linéaire par un bloom
- * de lumière (le mot émerge comme une étincelle qui jaillit du centre).
- *
- *  - letter      — gradient doré chaud + bloom au mount
- *  - glow        — text-shadow doré + bloom au mount + scintillement permanent
- *  - signature   — Caveat doré + bloom + étincelle 4 branches qui flash
- *  - handwritten — Caveat cuivré chaud, sobre, sans anim
- *  - lighttrace  — alias de letter
+ * Sprint C → D :
+ *  - letter      — gradient doré chaud + ANIMATION DE TRACÉ LUMINEUX au mount
+ *                  (clip-path + tête de lumière qui se déplace + flash final)
+ *  - glow        — ombre dorée + scintillement permanent + flash de glow au mount
+ *  - signature   — script Caveat doré + étincelle 4 branches qui flash
+ *  - handwritten — script Caveat cuivré chaud, sobre, sans anim
+ *  - lighttrace  — variante forte du letter, pour titres importants
  *
  * À utiliser ponctuellement (1-2 mots par titre max) pour rester précieux.
  */
@@ -50,14 +50,14 @@ export function EtincelleAccent({
         {showSparkle && (
           <span
             aria-hidden
-            className="text-[#c9924a] -translate-y-1 inline-flex motion-safe:animate-[etincelle-flash_1s_cubic-bezier(0.22,1,0.36,1)_forwards] opacity-0"
-            style={{ animationDelay: `${delay + 800}ms` }}
+            className="text-[#c9924a] -translate-y-1 inline-flex motion-safe:animate-[etincelle-flash_0.9s_cubic-bezier(0.22,1,0.36,1)_forwards] opacity-0"
+            style={{ animationDelay: `${delay + 600}ms` }}
           >
             <SparkleSmall />
           </span>
         )}
         <span
-          className="font-handwritten text-[#b88a3d] inline-block motion-safe:opacity-0 motion-safe:animate-[etincelle-bloom_1.5s_cubic-bezier(0.22,1,0.36,1)_forwards]"
+          className="font-handwritten text-[#b88a3d] inline-block motion-safe:[clip-path:inset(-30%_100%_-30%_0)] motion-safe:animate-[etincelle-trace_1.4s_cubic-bezier(0.22,1,0.36,1)_forwards]"
           style={{ animationDelay: `${delay}ms` }}
         >
           {children}
@@ -75,28 +75,48 @@ export function EtincelleAccent({
   }
 
   if (variant === "letter" || variant === "lighttrace") {
+    // Variant "letter" / "lighttrace" — mot doré tracé par lumière au mount
     return (
       <span
         className={cn(
-          "inline-block bg-clip-text text-transparent",
-          "bg-[linear-gradient(135deg,#a06b2a_0%,#b88a3d_30%,#d2b078_60%,#ead7af_90%)]",
-          "motion-safe:opacity-0 motion-safe:animate-[etincelle-bloom_1.5s_cubic-bezier(0.22,1,0.36,1)_forwards]",
+          "relative inline-block whitespace-nowrap",
           className,
         )}
-        style={{ animationDelay: `${delay}ms` }}
       >
-        {children}
+        <span
+          className={cn(
+            "inline-block bg-clip-text text-transparent",
+            "bg-[linear-gradient(135deg,#a06b2a_0%,#b88a3d_30%,#d2b078_60%,#ead7af_90%)]",
+            "motion-safe:[clip-path:inset(-30%_100%_-30%_0)]",
+            "motion-safe:animate-[etincelle-trace_1.5s_cubic-bezier(0.22,1,0.36,1)_forwards]",
+          )}
+          style={{ animationDelay: `${delay}ms` }}
+        >
+          {children}
+        </span>
+        {/* Tête de lumière qui se déplace en synchro */}
+        <span
+          aria-hidden
+          className="motion-safe:absolute pointer-events-none top-[-25%] bottom-[-25%] w-[14%] rounded-full opacity-0 motion-safe:animate-[etincelle-light-head_1.5s_cubic-bezier(0.22,1,0.36,1)_forwards]"
+          style={{
+            animationDelay: `${delay}ms`,
+            background:
+              "radial-gradient(circle, rgba(255,235,180,0.9) 0%, rgba(255,215,130,0.5) 35%, transparent 75%)",
+            filter: "blur(8px)",
+            mixBlendMode: "screen",
+          }}
+        />
       </span>
     );
   }
 
-  // glow (défaut) — bloom au mount + scintillement permanent en boucle
+  // glow (défaut) — flash doré au mount + scintillement permanent
   return (
     <span
       className={cn(
-        "inline-block text-[#b88a3d]",
-        "motion-safe:opacity-0",
-        "motion-safe:animate-[etincelle-bloom_1.4s_cubic-bezier(0.22,1,0.36,1)_forwards,etincelle-scintille_4s_ease-in-out_infinite]",
+        "relative inline-block text-[#b88a3d]",
+        "motion-safe:[clip-path:inset(-30%_100%_-30%_0)]",
+        "motion-safe:animate-[etincelle-trace_1.4s_cubic-bezier(0.22,1,0.36,1)_forwards,etincelle-scintille_4s_ease-in-out_infinite]",
         "[text-shadow:0_0_18px_rgba(184,138,61,0.45),_0_0_32px_rgba(184,138,61,0.20)]",
         className,
       )}

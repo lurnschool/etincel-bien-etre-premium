@@ -250,87 +250,66 @@ body {
 }
 
 /* ======================================================================== */
-/*  ANIMATIONS ÉTINCELLE — Sprint D v3                                        */
+/*  ANIMATIONS ÉTINCELLE — Sprint D ajustements                              */
 /*                                                                            */
-/*  Effet "naissance d'étincelle" : le mot émerge comme une boule de         */
-/*  lumière dorée qui se condense en texte. Pas de glissement linéaire,      */
-/*  pas de clip-path — un vrai bloom de lumière qui se cristallise.          */
+/*  Effet "lumière qui trace le texte" : un clip-path révèle progressivement */
+/*  le texte de gauche à droite, et une tête de lumière dorée se déplace    */
+/*  en synchro pour donner l'illusion d'une plume lumineuse qui écrit.       */
 /* ======================================================================== */
 
-/* Bloom doré : le texte commence flou + scale + halo lumineux énorme,
-   puis se condense en mot net. Effet "lumière qui se cristallise". */
-@keyframes etincelle-bloom {
-  0% {
-    opacity: 0;
-    filter: blur(24px) brightness(2.2)
-            drop-shadow(0 0 0px rgba(255, 230, 160, 0));
-    transform: scale(1.5);
+/* Le texte est révélé de gauche à droite par un clip-path qui se rétracte */
+@keyframes etincelle-trace {
+  0%   {
+    clip-path: inset(-30% 100% -30% 0);
+    filter: drop-shadow(0 0 14px rgba(255, 215, 130, 0.9))
+            drop-shadow(0 0 6px rgba(184, 138, 61, 0.7));
   }
-  18% {
-    opacity: 1;
-    filter: blur(16px) brightness(2.4)
-            drop-shadow(0 0 50px rgba(255, 230, 160, 1))
-            drop-shadow(0 0 30px rgba(255, 200, 100, 0.95));
-    transform: scale(1.25);
-  }
-  45% {
-    opacity: 1;
-    filter: blur(4px) brightness(1.6)
-            drop-shadow(0 0 35px rgba(255, 215, 130, 0.85))
-            drop-shadow(0 0 16px rgba(184, 138, 61, 0.75));
-    transform: scale(1.05);
-  }
-  75% {
-    opacity: 1;
-    filter: blur(0) brightness(1.15)
-            drop-shadow(0 0 18px rgba(184, 138, 61, 0.55))
-            drop-shadow(0 0 6px rgba(255, 215, 130, 0.4));
-    transform: scale(1);
+  90%  {
+    clip-path: inset(-30% 0% -30% 0);
+    filter: drop-shadow(0 0 16px rgba(255, 215, 130, 0.8))
+            drop-shadow(0 0 8px rgba(184, 138, 61, 0.6));
   }
   100% {
-    opacity: 1;
-    filter: blur(0) brightness(1)
-            drop-shadow(0 0 8px rgba(184, 138, 61, 0.5));
-    transform: scale(1);
+    clip-path: inset(-30% 0% -30% 0);
+    filter: drop-shadow(0 0 6px rgba(184, 138, 61, 0.5));
   }
 }
 
-/* Particule dorée qui jaillit autour du mot au moment du bloom.
-   Chaque particule est positionnée différemment et a son délai propre. */
-@keyframes etincelle-particle {
-  0% {
-    opacity: 0;
-    transform: translate(0, 0) scale(0);
-  }
-  20% {
-    opacity: 1;
-    transform: translate(var(--tx-mid), var(--ty-mid)) scale(1.3);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(var(--tx-end), var(--ty-end)) scale(0.4);
-  }
+/* La "tête de lumière" qui se déplace de gauche à droite,
+   donnant l'illusion d'une plume dorée qui trace le mot. */
+@keyframes etincelle-light-head {
+  0%   { left: -8%; opacity: 0; }
+  8%   { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { left: 102%; opacity: 0; }
 }
 
-/* Étincelle 4 branches qui flash après le bloom du mot */
+/* Étincelle dorée pulsante — apparaît à la fin du tracé */
 @keyframes etincelle-flash {
-  0%   { opacity: 0; transform: scale(0.3) rotate(-45deg); }
-  40%  {
+  0%   { opacity: 0; transform: scale(0.4) rotate(-30deg); }
+  50%  {
     opacity: 1;
-    transform: scale(1.5) rotate(15deg);
-    filter: drop-shadow(0 0 22px rgba(255, 230, 160, 1))
-            drop-shadow(0 0 10px rgba(184, 138, 61, 0.9));
+    transform: scale(1.3) rotate(8deg);
+    filter: drop-shadow(0 0 18px rgba(255, 215, 130, 1))
+            drop-shadow(0 0 8px rgba(184, 138, 61, 0.8));
   }
-  70%  {
+  75%  {
     opacity: 1;
     transform: scale(1) rotate(0deg);
-    filter: drop-shadow(0 0 14px rgba(184, 138, 61, 0.7));
+    filter: drop-shadow(0 0 12px rgba(184, 138, 61, 0.7));
   }
   100% {
     opacity: 1;
     transform: scale(1) rotate(0deg);
     filter: drop-shadow(0 0 6px rgba(184, 138, 61, 0.5));
   }
+}
+
+/* Filet doré qui se dessine sous le mot (signature) */
+@keyframes etincelle-underline {
+  0%   { transform: scaleX(0); transform-origin: left center; opacity: 0; }
+  20%  { opacity: 1; }
+  100% { transform: scaleX(1); transform-origin: left center; opacity: 0.7; }
 }
 
 /* Scintillement permanent post-animation pour les EtincelleAccent glow */

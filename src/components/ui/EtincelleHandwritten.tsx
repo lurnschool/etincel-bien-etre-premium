@@ -11,10 +11,8 @@ type Props = {
   delay?: number;
   /** Position de la petite étincelle dorée. Défaut "right-top". */
   sparklePosition?: "right-top" | "right-bottom" | "left-top" | "none";
-  /** Forcer la police : "handwritten" (Caveat cursive) ou "display" (Cormorant). */
+  /** Forcer la police : "handwritten" (Caveat cursive) ou "display" (Cormorant). Défaut handwritten. */
   font?: "handwritten" | "display";
-  /** Nombre de particules dorées qui jaillissent autour. Défaut 6. */
-  particleCount?: number;
   className?: string;
 };
 
@@ -25,18 +23,23 @@ const SIZE: Record<NonNullable<Props["size"]>, string> = {
 };
 
 /**
- * EtincelleHandwritten v3 — naissance d'étincelle.
+ * EtincelleHandwritten v2 — texte révélé par une **tête de lumière dorée**
+ * qui se déplace de gauche à droite, comme une plume lumineuse qui trace
+ * le mot. Inspiré directement des stories Insta de Céline.
  *
- * Le mot émerge comme une boule de lumière dorée :
- *  1. Texte commence très flou + scale 1.5 + halo doré énorme (brightness 2.4)
- *  2. Se condense progressivement en mot net (1.6s, cubic-bezier doux)
- *  3. Particules dorées jaillissent autour pendant le bloom
- *  4. Étincelle 4 branches flash après que le texte soit cristallisé
+ * Sprint D ajustement (l'effet précédent était juste un fade-up sans tracé).
  *
- * Aucun mouvement linéaire — le mot apparaît au centre comme une
- * étincelle qui jaillit. Inspiré des stories Insta de Céline (etincel_debienetre).
+ * Composition :
+ *  1. Le texte cursif doré est masqué par un clip-path qui se rétracte
+ *     de gauche à droite (animation 1.6s).
+ *  2. Une tête de lumière dorée flouée se déplace en synchro, donnant
+ *     l'illusion d'une plume qui écrit.
+ *  3. Une étincelle 4 branches flash à la fin du tracé.
+ *  4. Un filet doré se dessine sous le mot après le tracé.
+ *  5. Le mot reste affiché avec un glow doré statique.
  *
- * Animations CSS pures, respect prefers-reduced-motion.
+ * Animations CSS pures (pas Framer). Respect prefers-reduced-motion :
+ * en mode reduce, le texte apparaît directement sans animation.
  */
 export function EtincelleHandwritten({
   children,
@@ -44,57 +47,75 @@ export function EtincelleHandwritten({
   delay = 200,
   sparklePosition = "right-top",
   font = "handwritten",
-  particleCount = 6,
   className,
 }: Props) {
-  const bloomDuration = 1600;
-  const sparkleDelay = delay + bloomDuration - 600;
+  const traceDuration = 1600; // ms — durée du tracé lumineux
+  const sparkleDelay = delay + traceDuration - 200;
+  const underlineDelay = delay + traceDuration - 400;
 
   const fontClass = font === "handwritten" ? "font-handwritten" : "font-display";
 
-  // Génère des trajectoires de particules autour du mot
-  const particles = generateParticles(particleCount);
-
   return (
-    <span className={cn("relative inline-flex items-baseline", className)}>
+    <span className={cn("relative inline-flex items-baseline whitespace-nowrap", className)}>
       <span className="relative inline-block leading-[0.95]">
-        {/* Le texte qui bloom — naissance de l'étincelle */}
+        {/* Le texte doré, révélé par clip-path animé */}
         <span
           className={cn(
             fontClass,
             SIZE[size],
             "inline-block text-[#b88a3d]",
-            "motion-safe:opacity-0 motion-safe:animate-[etincelle-bloom_1.6s_cubic-bezier(0.22,1,0.36,1)_forwards]",
+            "motion-safe:[clip-path:inset(-30%_100%_-30%_0)]",
+            "motion-safe:animate-[etincelle-trace_1.6s_cubic-bezier(0.22,1,0.36,1)_forwards]",
           )}
           style={{ animationDelay: `${delay}ms` }}
         >
           {children}
         </span>
 
-        {/* Particules dorées qui jaillissent autour pendant le bloom */}
-        {particles.map((p, i) => (
-          <span
-            key={i}
-            aria-hidden
-            className="motion-safe:absolute pointer-events-none top-1/2 left-1/2 h-1.5 w-1.5 rounded-full opacity-0 motion-safe:animate-[etincelle-particle_1.4s_cubic-bezier(0.16,1,0.3,1)_forwards]"
-            style={{
-              animationDelay: `${delay + 100 + i * 40}ms`,
-              background:
-                "radial-gradient(circle, rgba(255,235,180,1) 0%, rgba(255,200,110,0.8) 50%, transparent 80%)",
-              boxShadow: "0 0 8px rgba(255,215,130,0.9), 0 0 4px rgba(184,138,61,0.7)",
-              ["--tx-mid" as string]: `${p.midX}px`,
-              ["--ty-mid" as string]: `${p.midY}px`,
-              ["--tx-end" as string]: `${p.endX}px`,
-              ["--ty-end" as string]: `${p.endY}px`,
-            }}
-          />
-        ))}
+        {/* Tête de lumière dorée qui se déplace en synchro avec le tracé.
+            Mix-blend-mode screen pour fondre la lumière au texte. */}
+        <span
+          aria-hidden
+          className="motion-safe:absolute pointer-events-none top-[-30%] bottom-[-30%] w-[16%] rounded-full opacity-0 motion-safe:animate-[etincelle-light-head_1.6s_cubic-bezier(0.22,1,0.36,1)_forwards]"
+          style={{
+            animationDelay: `${delay}ms`,
+            background:
+              "radial-gradient(circle, rgba(255,235,180,0.95) 0%, rgba(255,215,130,0.55) 35%, rgba(184,138,61,0.18) 65%, transparent 80%)",
+            filter: "blur(6px)",
+            mixBlendMode: "screen",
+          }}
+        />
+
+        {/* Filet doré effilé sous le mot (style trait de plume) */}
+        <span
+          aria-hidden
+          className="pointer-events-none absolute left-0 right-0 -bottom-1 h-[3px] motion-safe:scale-x-0 motion-safe:animate-[etincelle-underline_1.2s_cubic-bezier(0.22,1,0.36,1)_forwards] origin-left"
+          style={{ animationDelay: `${underlineDelay}ms` }}
+        >
+          <svg viewBox="0 0 200 3" preserveAspectRatio="none" className="w-full h-full">
+            <defs>
+              <linearGradient id="underline-grad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stopColor="#b88a3d" stopOpacity="0" />
+                <stop offset="20%" stopColor="#b88a3d" stopOpacity="0.85" />
+                <stop offset="80%" stopColor="#d2b078" stopOpacity="0.85" />
+                <stop offset="100%" stopColor="#ead7af" stopOpacity="0" />
+              </linearGradient>
+            </defs>
+            <path
+              d="M 2 1.5 Q 50 0.5 100 1.5 T 198 1.5"
+              stroke="url(#underline-grad)"
+              strokeWidth="1.6"
+              strokeLinecap="round"
+              fill="none"
+            />
+          </svg>
+        </span>
       </span>
 
       {sparklePosition !== "none" && (
         <SparkleIcon
           className={cn(
-            "absolute opacity-0 motion-safe:animate-[etincelle-flash_1s_cubic-bezier(0.22,1,0.36,1)_forwards] text-[#c9924a]",
+            "absolute opacity-0 motion-safe:animate-[etincelle-flash_0.9s_cubic-bezier(0.22,1,0.36,1)_forwards] text-[#c9924a]",
             sparklePosition === "right-top" && "right-[-1.6rem] top-[-0.4rem] h-7 w-7",
             sparklePosition === "right-bottom" && "right-[-1.2rem] bottom-[-0.6rem] h-6 w-6",
             sparklePosition === "left-top" && "left-[-1.6rem] top-[-0.4rem] h-7 w-7",
@@ -107,28 +128,8 @@ export function EtincelleHandwritten({
 }
 
 /**
- * Génère N trajectoires de particules autour du centre.
- * Chaque particule a un point intermédiaire (au pic du bloom)
- * et un point final (où elle s'estompe).
- */
-function generateParticles(count: number) {
-  const particles = [];
-  for (let i = 0; i < count; i++) {
-    const angle = (i / count) * Math.PI * 2 + (Math.random() - 0.5) * 0.4;
-    const midDistance = 30 + Math.random() * 20;
-    const endDistance = 60 + Math.random() * 40;
-    particles.push({
-      midX: Math.round(Math.cos(angle) * midDistance),
-      midY: Math.round(Math.sin(angle) * midDistance),
-      endX: Math.round(Math.cos(angle) * endDistance),
-      endY: Math.round(Math.sin(angle) * endDistance),
-    });
-  }
-  return particles;
-}
-
-/**
- * Étincelle 4 branches (style Insta de Céline).
+ * Étincelle 4 branches (style Insta de Céline) — étoile à 4 pointes effilées
+ * avec un petit centre brillant.
  */
 function SparkleIcon({ className, style }: { className?: string; style?: React.CSSProperties }) {
   return (
