@@ -581,3 +581,104 @@ body {
   opacity: 1;
   animation: gift-shine-sweep 1.6s ease-out forwards;
 }
+
+/* ----------------------------------------------------------------
+ * GoldenWelcomeText — inscription dorée vivante (Sprint G)
+ *
+ * Référence visuelle : effets lumineux Lurn School, adaptés à un mot.
+ * Décision technique du chef de projet : gradient or + light-sweep CSS,
+ * pas de Lottie ni SVG path — performance et compatibilité static export.
+ *
+ * Effet : lettres en or champagne (gradient) + lueur respirante ("breathe")
+ * + reflet lumineux qui traverse le mot lentement de gauche à droite.
+ * ---------------------------------------------------------------- */
+.golden-welcome {
+  position: relative;
+  display: inline-block;
+  color: transparent;
+  background:
+    linear-gradient(
+      110deg,
+      #8f6b2f 0%,
+      #c89b45 22%,
+      #fff1bd 42%,
+      #b88935 58%,
+      #7a5526 100%
+    );
+  background-size: 200% 100%;
+  background-position: 0% 50%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  filter:
+    drop-shadow(0 0 18px rgba(200, 155, 69, 0.18))
+    drop-shadow(0 0 42px rgba(255, 218, 150, 0.10));
+  animation: gold-breathe 7s ease-in-out infinite;
+  will-change: filter, background-position;
+}
+
+.golden-welcome::after {
+  content: "";
+  position: absolute;
+  inset: -14% -22%;
+  background: linear-gradient(
+    115deg,
+    transparent 36%,
+    rgba(255, 244, 190, 0.18) 44%,
+    rgba(255, 255, 255, 0.78) 50%,
+    rgba(255, 218, 135, 0.28) 56%,
+    transparent 64%
+  );
+  transform: translateX(-130%);
+  mix-blend-mode: screen;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(#000, #000);
+  mask-image: linear-gradient(#000, #000);
+  animation: golden-welcome-sweep 6.4s cubic-bezier(0.55, 0.05, 0.35, 1) infinite;
+  animation-delay: 1.6s;
+  will-change: transform, opacity;
+}
+
+@keyframes gold-breathe {
+  0%, 100% {
+    background-position: 0% 50%;
+    filter:
+      drop-shadow(0 0 16px rgba(200, 155, 69, 0.16))
+      drop-shadow(0 0 38px rgba(255, 218, 150, 0.08));
+  }
+  50% {
+    background-position: 100% 50%;
+    filter:
+      drop-shadow(0 0 24px rgba(255, 214, 130, 0.30))
+      drop-shadow(0 0 60px rgba(255, 218, 150, 0.18));
+  }
+}
+
+@keyframes golden-welcome-sweep {
+  0%, 14% {
+    transform: translateX(-130%);
+    opacity: 0;
+  }
+  22% {
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(130%);
+    opacity: 1;
+  }
+  62%, 100% {
+    transform: translateX(130%);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .golden-welcome {
+    animation: none;
+    background-position: 50% 50%;
+    filter: drop-shadow(0 0 14px rgba(200, 155, 69, 0.18));
+  }
+  .golden-welcome::after {
+    animation: none;
+    opacity: 0;
+  }
+}

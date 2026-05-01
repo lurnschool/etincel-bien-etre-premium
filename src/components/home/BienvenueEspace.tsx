@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { Etincelle } from "@/components/ui/Etincelle";
+import { GoldenWelcomeText } from "@/components/ui/GoldenWelcomeText";
 import { asset } from "@/lib/assets";
 import { bienvenueEspace } from "@/lib/data";
 
@@ -44,11 +45,24 @@ export function BienvenueEspace() {
 
           {/* Texte + eyebrow */}
           <div className="space-y-6 text-left">
+            {/* Sprint G — inscription dorée vivante "Bienvenue" */}
+            <motion.h2
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.4 }}
+              transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+              className="block"
+            >
+              <GoldenWelcomeText size="lg" ariaLabel="Bienvenue dans mon espace">
+                Bienvenue
+              </GoldenWelcomeText>
+            </motion.h2>
+
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.5 }}
-              transition={{ duration: 0.9 }}
+              transition={{ duration: 0.9, delay: 0.35 }}
               className="inline-flex items-center gap-3 text-[0.7rem] uppercase tracking-[0.32em] text-text-soft"
             >
               <span className="text-gold-deep">
@@ -61,7 +75,7 @@ export function BienvenueEspace() {
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.4 }}
-              transition={{ duration: 0.95, delay: 0.1 }}
+              transition={{ duration: 0.95, delay: 0.5 }}
               className="space-y-5"
             >
               {bienvenueEspace.paragraphs.map((p, i) => (

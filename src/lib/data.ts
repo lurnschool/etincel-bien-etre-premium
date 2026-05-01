@@ -620,9 +620,12 @@ export const heroRefuge = {
   secondaryCta: { label: "Écrire à Céline", href: "/contact" },
 } as const;
 
-/** Section « Bienvenue dans mon espace » — première personne, ton humain. */
+/** Section « Bienvenue dans mon espace » — première personne, ton humain.
+ *  Sprint G : "Bienvenue" est désormais affiché en grand au-dessus
+ *  via GoldenWelcomeText. L'eyebrow ne porte plus que "dans mon espace"
+ *  pour éviter la redondance. */
 export const bienvenueEspace = {
-  eyebrow: "Bienvenue dans mon espace",
+  eyebrow: "dans mon espace",
   paragraphs: [
     "Je reçois à Bordeaux, en Gironde, mais aussi parfois ailleurs — en cercle, en cérémonie, en retraite. Ce que je propose n'est pas un protocole. C'est un espace.",
     "Un espace pour déposer ce qui pèse, écouter ce qui demande à être entendu, et retrouver ce qui vous appartient déjà.",
