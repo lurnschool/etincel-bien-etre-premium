@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, MessageCircle } from "lucide-react";
 import { Etincelle } from "@/components/ui/Etincelle";
 import { EtincelleAccent } from "@/components/ui/EtincelleAccent";
+import { ButtonHalo } from "@/components/ui/ButtonHalo";
 import { PremiumGiftCard } from "@/components/giftcard/PremiumGiftCard";
 import { cn } from "@/lib/utils";
 
@@ -173,13 +174,15 @@ export function OffrirUnMoment() {
             </ul>
 
             <div className="flex flex-wrap gap-3 pt-3">
-              <Link
-                href="/cartes-cadeaux"
-                className="soft-glow group inline-flex items-center gap-2 rounded-full bg-accent-deep px-7 py-3.5 text-sm font-medium text-text-on-dark hover:bg-accent transition-colors"
-              >
-                Préparer une attention
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-              </Link>
+              <ButtonHalo tone="mixed">
+                <Link
+                  href="/cartes-cadeaux"
+                  className="group inline-flex items-center gap-2 rounded-full bg-accent-deep px-7 py-3.5 text-sm font-medium text-text-on-dark hover:bg-accent transition-colors"
+                >
+                  Préparer une attention
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                </Link>
+              </ButtonHalo>
               <a
                 href="https://wa.me/33627438104"
                 target="_blank"

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { PageRefugeHero } from "@/components/page/PageRefugeHero";
 import { GuidanceFooter } from "@/components/page/GuidanceFooter";
+import { OfferStrip } from "@/components/page/OfferStrip";
 import {
   PillarPourQuiSection,
   PillarFormatsSection,
@@ -92,6 +93,11 @@ export default function FemininCacaoPage() {
       <PillarFaqSection items={femininRefuge.faq} background="bg-base" />
 
       <PillarDisclaimer text={femininRefuge.disclaimer} />
+
+      <OfferStrip
+        intro="Vous pensez à quelqu'un qui aurait besoin d'une cérémonie cacao ou d'un cercle féminin ? Une carte préparée avec soin peut être offerte."
+        ctaLabel="Offrir une cérémonie"
+      />
 
       <GuidanceFooter variant="contact" />
     </>

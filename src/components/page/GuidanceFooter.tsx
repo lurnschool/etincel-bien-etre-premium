@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight, MessageCircle, Gift } from "lucide-react";
 import { Etincelle } from "@/components/ui/Etincelle";
+import { ButtonHalo } from "@/components/ui/ButtonHalo";
 import { whatsappLink, whatsappMessages } from "@/lib/whatsapp";
 
 type Variant =
@@ -70,14 +71,16 @@ export function GuidanceFooter({
             {config.body}
           </p>
           <div className="flex flex-wrap gap-3 justify-center pt-2">
-            <Link
-              href={config.primary.href}
-              className="soft-glow group inline-flex items-center gap-2 rounded-full bg-accent-deep px-6 py-3 text-sm font-medium text-text-on-dark hover:bg-accent transition-colors"
-            >
-              {config.primary.icon && <config.primary.icon className="h-4 w-4" />}
-              {config.primary.label}
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-            </Link>
+            <ButtonHalo tone="mixed">
+              <Link
+                href={config.primary.href}
+                className="group inline-flex items-center gap-2 rounded-full bg-accent-deep px-6 py-3 text-sm font-medium text-text-on-dark hover:bg-accent transition-colors"
+              >
+                {config.primary.icon && <config.primary.icon className="h-4 w-4" />}
+                {config.primary.label}
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              </Link>
+            </ButtonHalo>
             <a
               href={config.secondary.href}
               target={config.secondary.external ? "_blank" : undefined}

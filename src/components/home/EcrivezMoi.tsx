@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Phone, Mail, MapPin, Send, CheckCircle2, Loader2, MessageCircle } from "lucide-react";
 import { Etincelle } from "@/components/ui/Etincelle";
+import { ButtonHalo } from "@/components/ui/ButtonHalo";
 import { VisualAsset } from "@/components/ui/VisualAsset";
 import { contact, ecrivezMoi } from "@/lib/data";
 import { whatsappMessages, whatsappLink } from "@/lib/whatsapp";
@@ -314,23 +315,25 @@ export function EcrivezMoi() {
                   </span>
                 </label>
                 <div className="flex flex-wrap gap-3 items-center pt-2">
-                  <button
-                    type="submit"
-                    disabled={sending}
-                    className="soft-glow inline-flex items-center gap-2 rounded-full bg-accent-deep px-6 py-3 text-sm font-medium text-text-on-dark hover:bg-accent transition-colors disabled:opacity-60"
-                  >
-                    {sending ? (
-                      <>
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                        En route…
-                      </>
-                    ) : (
-                      <>
-                        <Send className="h-4 w-4" />
-                        Envoyer le mot
-                      </>
-                    )}
-                  </button>
+                  <ButtonHalo tone="mixed" active={!sending}>
+                    <button
+                      type="submit"
+                      disabled={sending}
+                      className="inline-flex items-center gap-2 rounded-full bg-accent-deep px-6 py-3 text-sm font-medium text-text-on-dark hover:bg-accent transition-colors disabled:opacity-60"
+                    >
+                      {sending ? (
+                        <>
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          En route…
+                        </>
+                      ) : (
+                        <>
+                          <Send className="h-4 w-4" />
+                          Envoyer le mot
+                        </>
+                      )}
+                    </button>
+                  </ButtonHalo>
                   <a
                     href={whatsappLink(whatsappMessages.generic)}
                     target="_blank"

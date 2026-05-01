@@ -4,6 +4,7 @@ import { Etincelle } from "@/components/ui/Etincelle";
 import { VisualAsset } from "@/components/ui/VisualAsset";
 import { EtincelleHandwritten } from "@/components/ui/EtincelleHandwritten";
 import { GoldenWelcomeText } from "@/components/ui/GoldenWelcomeText";
+import { ButtonHalo } from "@/components/ui/ButtonHalo";
 import { PracticesMarquee } from "@/components/ui/PracticesMarquee";
 import { heroRefuge, practicesMarquee } from "@/lib/data";
 
@@ -72,13 +73,15 @@ export function HeroRefuge() {
             {/* CTA + mini-tags de spécialités — densifie sans surcharger */}
             <div className="space-y-5">
               <div className="flex flex-wrap gap-3 pt-1">
-                <Link
-                  href={heroRefuge.primaryCta.href}
-                  className="soft-glow group inline-flex items-center gap-2 rounded-full bg-accent-deep px-7 py-3.5 text-sm font-medium text-text-on-dark hover:bg-accent transition-colors"
-                >
-                  {heroRefuge.primaryCta.label}
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                </Link>
+                <ButtonHalo tone="mixed">
+                  <Link
+                    href={heroRefuge.primaryCta.href}
+                    className="group inline-flex items-center gap-2 rounded-full bg-accent-deep px-7 py-3.5 text-sm font-medium text-text-on-dark hover:bg-accent transition-colors"
+                  >
+                    {heroRefuge.primaryCta.label}
+                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                  </Link>
+                </ButtonHalo>
                 <Link
                   href={heroRefuge.secondaryCta.href}
                   className="inline-flex items-center gap-2 rounded-full border border-text-deep/15 px-7 py-3.5 text-sm font-medium text-text-deep hover:border-accent hover:text-accent transition-colors"

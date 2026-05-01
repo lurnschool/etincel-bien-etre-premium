@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight, MessageCircle } from "lucide-react";
 import { Etincelle } from "@/components/ui/Etincelle";
+import { ButtonHalo } from "@/components/ui/ButtonHalo";
 import { guidanceDouce } from "@/lib/data";
 
 /**
@@ -40,13 +41,15 @@ export function GuidanceTeaser() {
             {guidanceDouce.body}
           </p>
           <div className="flex flex-wrap gap-3 justify-center pt-2">
-            <Link
-              href={guidanceDouce.primaryCta.href}
-              className="soft-glow group inline-flex items-center gap-2 rounded-full bg-accent-deep px-6 py-3 text-sm font-medium text-text-on-dark hover:bg-accent transition-colors"
-            >
-              {guidanceDouce.primaryCta.label}
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-            </Link>
+            <ButtonHalo tone="mixed">
+              <Link
+                href={guidanceDouce.primaryCta.href}
+                className="group inline-flex items-center gap-2 rounded-full bg-accent-deep px-6 py-3 text-sm font-medium text-text-on-dark hover:bg-accent transition-colors"
+              >
+                {guidanceDouce.primaryCta.label}
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              </Link>
+            </ButtonHalo>
             <a
               href={guidanceDouce.secondaryCta.href}
               target="_blank"
