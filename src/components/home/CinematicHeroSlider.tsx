@@ -130,12 +130,13 @@ export function CinematicHeroSlider() {
                   )}
                 />
                 {/* Overlay pour lisibilité — renforcé pour garantir
-                    le contraste du texte sur n'importe quelle image. */}
+                    le contraste du texte sur n'importe quelle image
+                    (y compris les photos très lumineuses comme la plage). */}
                 {isDark ? (
                   <>
-                    <div className="absolute inset-0 bg-bg-deep/55" />
-                    <div className="absolute inset-0 bg-gradient-to-r from-bg-deep/95 via-bg-deep/70 to-bg-deep/30 md:from-bg-deep/90 md:via-bg-deep/55" />
-                    <div className="absolute inset-0 bg-gradient-to-b from-bg-deep/40 via-transparent to-bg-deep/85" />
+                    <div className="absolute inset-0 bg-bg-deep/70" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-bg-deep via-bg-deep/85 to-bg-deep/40 md:from-bg-deep md:via-bg-deep/75 md:to-bg-deep/30" />
+                    <div className="absolute inset-0 bg-gradient-to-b from-bg-deep/60 via-bg-deep/30 to-bg-deep/90" />
                   </>
                 ) : (
                   <>
