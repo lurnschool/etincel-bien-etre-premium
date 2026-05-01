@@ -1506,10 +1506,22 @@ export const practiceFamilies: PracticeFamily[] = [
  * Si elle est mauvaise, WhatsApp/Facebook/etc. ne trouvent pas l'image.
  */
 function resolveSiteUrl(): string {
+  // 1. Override explicite (poser NEXT_PUBLIC_SITE_URL sur Vercel pour
+  //    forcer un domaine spécifique, ex: le domaine final post-migration).
   if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL;
+  // 2. GitHub Pages — basePath spécifique au repo.
   if (process.env.GITHUB_PAGES === "true") {
     return "https://lurnschool.github.io/etincel-bien-etre-premium";
   }
+  // 3. Vercel — alias prod stable injecté automatiquement par la plateforme
+  //    (ex: "etincel-bien-etre-premium.vercel.app"). Tant que le domaine
+  //    final n'est pas migré, c'est cette URL qui est utilisée pour les
+  //    meta og:image / twitter:image — donc le partage de lien Vercel
+  //    affiche l'image OG SERVIE PAR Vercel (pas l'ancien GitHub Pages).
+  if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
+    return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
+  }
+  // 4. Fallback dev/SSR : domaine officiel (à utiliser une fois migré).
   return "https://etinceldebienetre.fr";
 }
 
