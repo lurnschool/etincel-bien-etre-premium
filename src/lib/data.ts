@@ -77,6 +77,7 @@ export const navigation = [
   { label: "Corps", href: "/corps-integration" },
   { label: "Retraites", href: "/retraites" },
   { label: "Céline", href: "/a-propos" },
+  { label: "Tarifs", href: "/tarifs" },
   { label: "Contact", href: "/contact" },
 ] as const;
 

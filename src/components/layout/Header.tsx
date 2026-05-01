@@ -9,6 +9,7 @@ import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { brand, contact, navigation, navigationActions, navigationOffers } from "@/lib/data";
 import { Etincelle } from "@/components/ui/Etincelle";
+import { ButtonHalo } from "@/components/ui/ButtonHalo";
 import { CartButton } from "@/components/cart/CartButton";
 
 const actionIcons: Record<string, LucideIcon> = {
@@ -21,9 +22,9 @@ const actionIcons: Record<string, LucideIcon> = {
 
 /**
  * Header éditorial compact — 60-68px.
- * Sprint A "refuge" : nav allégée à 5 items principaux + 1 CTA doux
- * (« Écrire à Céline ») au lieu de l'ancien « Faire mon bilan ».
- * Tarifs/Offrir restent accessibles via le drawer mobile et le footer.
+ * Sprint H : ajoute « Tarifs » dans la navigation principale (7 items)
+ * et expose « Offrir » comme CTA secondaire à droite (avant « Écrire à
+ * Céline »). Les deux CTA principaux portent un ButtonHalo lumineux.
  */
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -182,27 +183,28 @@ export function Header() {
           </span>
         </Link>
 
-        {/* Nav principale (centre) — 7 items, plus de sous-menu */}
-        <nav className="hidden lg:flex items-center gap-1 mx-auto">
+        {/* Nav principale (centre) — 7 items, paddings serrés pour faire
+            tenir « Tarifs » sans casser sur lg. */}
+        <nav className="hidden lg:flex items-center gap-0.5 xl:gap-1 mx-auto">
           {navigation.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="flex items-center gap-1 px-3 py-2 text-[0.82rem] font-medium text-text-deep hover:text-accent transition-colors"
+              className="flex items-center px-2 xl:px-2.5 py-2 text-[0.78rem] xl:text-[0.82rem] font-medium text-text-deep hover:text-accent transition-colors whitespace-nowrap"
             >
               {item.label}
             </Link>
           ))}
         </nav>
 
-        {/* Actions secondaires (droite) — Sprint A : Tarifs/Offrir restent
-            accessibles dans le drawer mobile et le footer, mais sortent
-            du header desktop pour respirer. */}
+        {/* Actions secondaires (droite) — Sprint H : Offrir + Écrire à Céline
+            sont les 2 CTA principaux, tous deux halo-lumineux. « Pas sûre ? »
+            ne s'affiche qu'à partir de xl pour éviter la surcharge sur lg. */}
         <div className="flex items-center gap-1 md:gap-1.5 shrink-0">
-          {/* Petit accès "Pas sûre ?" en lien texte discret */}
+          {/* Lien diagnostic discret — masqué sous xl pour laisser respirer */}
           <Link
             href="/diagnostic"
-            className="hidden md:inline-flex items-center text-[0.8rem] font-medium text-text-soft hover:text-accent transition-colors mr-3"
+            className="hidden xl:inline-flex items-center text-[0.78rem] font-medium text-text-soft hover:text-accent transition-colors mr-2"
           >
             Pas sûre par où commencer&nbsp;?
           </Link>
@@ -210,14 +212,27 @@ export function Header() {
           {/* Panier */}
           <CartButton className="ml-1" />
 
-          {/* CTA primaire doux : Écrire à Céline */}
-          <Link
-            href="/contact"
-            className="soft-glow hidden md:inline-flex items-center gap-1.5 rounded-full bg-accent-deep px-4 py-2 text-[0.78rem] font-medium tracking-wide text-text-on-dark hover:bg-accent transition-colors ml-2"
-          >
-            <MessageSquare className="h-3.5 w-3.5" />
-            Écrire à Céline
-          </Link>
+          {/* CTA secondaire : Offrir une carte cadeau */}
+          <ButtonHalo tone="gold" className="hidden md:inline-block ml-2">
+            <Link
+              href="/cartes-cadeaux"
+              className="inline-flex items-center gap-1.5 rounded-full bg-bg-card border border-gold/40 px-3.5 py-2 text-[0.78rem] font-medium tracking-wide text-text-deep hover:border-gold hover:text-gold-deep transition-colors"
+            >
+              <Gift className="h-3.5 w-3.5 text-gold-deep" />
+              Offrir
+            </Link>
+          </ButtonHalo>
+
+          {/* CTA primaire : Écrire à Céline */}
+          <ButtonHalo tone="mixed" className="hidden md:inline-block ml-1.5">
+            <Link
+              href="/contact"
+              className="inline-flex items-center gap-1.5 rounded-full bg-accent-deep px-4 py-2 text-[0.78rem] font-medium tracking-wide text-text-on-dark hover:bg-accent transition-colors"
+            >
+              <MessageSquare className="h-3.5 w-3.5" />
+              Écrire à Céline
+            </Link>
+          </ButtonHalo>
 
           {/* Burger mobile */}
           <button
