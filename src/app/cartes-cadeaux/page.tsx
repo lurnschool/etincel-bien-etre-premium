@@ -50,7 +50,7 @@ const giftTypes: GiftType[] = [
     id: "constellation",
     icon: Calendar,
     label: "Constellation familiale",
-    description: "Axe Mémoires & constellations. Familiale ou Rebirth de naissance.",
+    description: "Constellation familiale ou Rebirth de naissance.",
     price: "95 €",
     defaultStyle: "feminin",
     cardLabel: "Une constellation",
@@ -60,7 +60,7 @@ const giftTypes: GiftType[] = [
     id: "cacao",
     icon: Sparkles,
     label: "Cérémonie cacao",
-    description: "Axe Féminin & cacao. Cérémonie sensorielle et symbolique.",
+    description: "Cérémonie cacao sensorielle et symbolique.",
     price: "Tarif selon événement ou format",
     defaultStyle: "cacao",
     cardLabel: "Une cérémonie cacao",
@@ -70,7 +70,7 @@ const giftTypes: GiftType[] = [
     id: "feminin",
     icon: Heart,
     label: "Accompagnement féminin",
-    description: "Axe Féminin & cacao. Cercle ou accompagnement individuel autour du féminin sacré.",
+    description: "Cercle ou accompagnement individuel autour du féminin sacré.",
     price: "Sur demande",
     defaultStyle: "feminin",
     cardLabel: "Un accompagnement féminin",
@@ -80,7 +80,7 @@ const giftTypes: GiftType[] = [
     id: "corps",
     icon: Mountain,
     label: "Expérience corporelle",
-    description: "Axe Corps & intégration. Innerdance, breathwork ou pratiques de souffle.",
+    description: "Innerdance, breathwork ou pratiques de souffle.",
     price: "À partir de 90 €",
     defaultStyle: "retraite",
     cardLabel: "Une expérience corporelle",
@@ -297,15 +297,14 @@ export default function CartesCadeauxPage() {
     <>
       <PageHeader
         variant="warm"
-        eyebrow="Cartes cadeaux"
+        eyebrow="Offrir un moment"
         title={
           <>
-            Offrir une{" "}
-            <span className="font-display-italic text-gold-deep">parenthèse</span>{" "}
-            de reconnexion.
+            Une attention douce pour quelqu&apos;un que vous{" "}
+            <span className="font-display-italic text-gold-deep">aimez</span>.
           </>
         }
-        description="Une carte cadeau personnalisée pour offrir un moment sensible — séance, rituel, cercle ou montant libre."
+        description="Une carte préparée avec soin, pour offrir une séance, un cercle, ou simplement un moment de pause."
       />
 
       <section className="bg-bg-soft border-y border-border-soft">

@@ -114,10 +114,10 @@ export default function PanierMerciPage() {
                 href={whatsappLink(whatsappBody)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full bg-[#25D366] px-5 py-2.5 text-sm font-medium text-white hover:bg-[#1ebe5a] transition-colors"
+                className="inline-flex items-center gap-2 rounded-full bg-gradient-to-br from-[#7ea892] to-[#5a8474] px-5 py-2.5 text-sm font-medium text-bg-base hover:from-[#8fbba3] hover:to-[#6b9a86] transition-colors"
               >
                 <Phone className="h-4 w-4" />
-                Continuer sur WhatsApp
+                Écrire à Céline sur WhatsApp
               </a>
               <Link href="/le-cercle" className="btn-secondary">
                 <Sparkles className="h-4 w-4" />

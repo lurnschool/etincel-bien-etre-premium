@@ -825,6 +825,133 @@ const toolsAssets: VisualAssetEntry[] = [
 ];
 
 /* -------------------------------------------------------------------------- */
+/*  CARROUSELS SECONDAIRES — Sprint B                                         */
+/*                                                                            */
+/*  Carrousels prêts dès maintenant avec mix images du site original +        */
+/*  placeholders. Quand Céline livre des photos, on les substitue dans les    */
+/*  bonnes entrées (currentFile + sourceKind + status).                       */
+/* -------------------------------------------------------------------------- */
+
+const carrouselDetailsRefuge: VisualAssetEntry[] = [
+  {
+    id: "carousel-refuge-1",
+    page: "shared",
+    section: "carousel-details",
+    usage: "Détails du refuge — bougie",
+    expectedFileName: "refuge-bougie.jpg",
+    currentFile: PLACEHOLDERS.cream,
+    sourceKind: "placeholder",
+    status: "waiting-shooting",
+    ratio: "4:5",
+    altText: "Bougie posée sur un tissu",
+    priority: "bonus",
+    replacementInstructions: "Mini-shooting bougie + tissu, lumière chaude.",
+  },
+  {
+    id: "carousel-refuge-2",
+    page: "shared",
+    section: "carousel-details",
+    usage: "Détails du refuge — carnet ouvert",
+    expectedFileName: "refuge-carnet.jpg",
+    currentFile: PLACEHOLDERS.sand,
+    sourceKind: "placeholder",
+    status: "waiting-shooting",
+    ratio: "4:5",
+    altText: "Carnet de notes ouvert avec un stylo",
+    priority: "bonus",
+    replacementInstructions: "Carnet ouvert + plume/stylo, papier kraft.",
+  },
+  {
+    id: "carousel-refuge-3",
+    page: "shared",
+    section: "carousel-details",
+    usage: "Détails du refuge — fleur posée",
+    expectedFileName: "refuge-fleur.jpg",
+    currentFile: PLACEHOLDERS.rose,
+    sourceKind: "placeholder",
+    status: "waiting-shooting",
+    ratio: "4:5",
+    altText: "Fleur séchée posée sur le bord d'une fenêtre",
+    priority: "bonus",
+    replacementInstructions: "Fleur séchée, lumière naturelle, fond doux.",
+  },
+  {
+    id: "carousel-refuge-4",
+    page: "shared",
+    section: "carousel-details",
+    usage: "Détails du refuge — cristal / objet rituel",
+    expectedFileName: "refuge-cristal.jpg",
+    currentFile: PLACEHOLDERS.clay,
+    sourceKind: "placeholder",
+    status: "waiting-shooting",
+    ratio: "4:5",
+    altText: "Cristal et objet rituel posés sur un tissu",
+    priority: "bonus",
+    replacementInstructions: "Cristal/améthyste + tissu noir ou crème.",
+  },
+];
+
+const carrouselCerclesCacao: VisualAssetEntry[] = [
+  {
+    id: "carousel-cercles-1",
+    page: "shared",
+    section: "carousel-cercles",
+    usage: "Cercle de femmes — vue d'ensemble douce",
+    expectedFileName: "cercles-vue-ensemble.jpg",
+    currentFile: `${SITE_ORIGINAL}/ambiance-groupe.png`,
+    sourceKind: "site-original",
+    status: "waiting-client-photo",
+    ratio: "4:5",
+    altText: "Cercle de partage en présence",
+    priority: "important",
+    replacementInstructions:
+      "Photo cercle réel : silhouettes, mains, dos. Visages selon autorisations.",
+  },
+  {
+    id: "carousel-cercles-2",
+    page: "shared",
+    section: "carousel-cercles",
+    usage: "Cacao versé — détail",
+    expectedFileName: "cercles-cacao-verse.jpg",
+    currentFile: PLACEHOLDERS.clay,
+    sourceKind: "placeholder",
+    status: "waiting-instagram-auth",
+    ratio: "4:5",
+    altText: "Cacao versé dans une tasse",
+    priority: "important",
+    replacementInstructions: "Photo Instagram cacao versé, autorisation à confirmer.",
+  },
+  {
+    id: "carousel-cercles-3",
+    page: "shared",
+    section: "carousel-cercles",
+    usage: "Bougies en cercle",
+    expectedFileName: "cercles-bougies.jpg",
+    currentFile: PLACEHOLDERS.cream,
+    sourceKind: "placeholder",
+    status: "waiting-shooting",
+    ratio: "4:5",
+    altText: "Bougies disposées en cercle",
+    priority: "important",
+    replacementInstructions: "Vue plongeante bougies en cercle, sol bois ou tissu.",
+  },
+  {
+    id: "carousel-cercles-4",
+    page: "shared",
+    section: "carousel-cercles",
+    usage: "Mains réunies",
+    expectedFileName: "cercles-mains.jpg",
+    currentFile: PLACEHOLDERS.rose,
+    sourceKind: "placeholder",
+    status: "waiting-client-photo",
+    ratio: "4:5",
+    altText: "Mains réunies au centre d'un cercle",
+    priority: "bonus",
+    replacementInstructions: "Mains posées au centre, vue plongeante.",
+  },
+];
+
+/* -------------------------------------------------------------------------- */
 /*  Index global + helpers                                                    */
 /* -------------------------------------------------------------------------- */
 
@@ -839,6 +966,8 @@ export const visualAssetMap: VisualAssetEntry[] = [
   ...cartesCadeauxAssets,
   ...contactAssets,
   ...toolsAssets,
+  ...carrouselDetailsRefuge,
+  ...carrouselCerclesCacao,
 ];
 
 const indexById = new Map(visualAssetMap.map((a) => [a.id, a]));

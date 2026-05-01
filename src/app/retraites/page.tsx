@@ -1,562 +1,139 @@
-import Link from "next/link";
 import type { Metadata } from "next";
-import {
-  ArrowRight,
-  Clock,
-  Compass,
-  Flame,
-  Gift,
-  Leaf,
-  Mountain,
-  Quote,
-  Shield,
-  Sparkles,
-  Users,
-} from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
-import { PageHeader } from "@/components/ui/PageHeader";
 import { Etincelle } from "@/components/ui/Etincelle";
-import { WhisperLine } from "@/components/ui/WhisperLine";
-import { ImageMosaic } from "@/components/ui/ImageMosaic";
-import { SmartImage } from "@/components/ui/SmartImage";
-import { SacredBackdrop } from "@/components/ornaments/SacredBackdrop";
-import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
+import { PageRefugeHero } from "@/components/page/PageRefugeHero";
+import { GuidanceFooter } from "@/components/page/GuidanceFooter";
+import {
+  PillarPourQuiSection,
+  PillarFaqSection,
+} from "@/components/page/PillarSections";
+import { SoftCarousel } from "@/components/ui/SoftCarousel";
 import { RetreatInterestForm } from "@/components/retraites/RetreatInterestForm";
-import { BilanGiftBanner } from "@/components/layout/BilanGiftBanner";
-import { temoignages, whisperLines } from "@/lib/data";
-import { whatsappMessages } from "@/lib/whatsapp";
-import { pageVisuals } from "@/lib/visualAssetMap";
+import { temoignages, carouselsRefuge } from "@/lib/data";
 
 export const metadata: Metadata = {
-  title: "Retraites bien-être · Gironde & Sud-Ouest",
+  title: "Retraites & immersions",
   description:
-    "Des retraites premium en petits groupes : souffle, cacao, féminin sacré, innerdance, cercles, nature. 6 à 12 personnes, accompagnement individuel intégré, écrin choisi avec soin. Liste d'intérêt sur inscription.",
+    "Quelques jours en petit groupe pour ralentir, respirer, traverser. 6 à 12 personnes, accompagnement individuel intégré, écrin choisi avec soin. Liste d'intérêt sur inscription.",
 };
 
-const cinqPiliers = [
-  {
-    icon: Mountain,
-    title: "Un écrin choisi",
-    description:
-      "Domaines en pleine nature, retraites au bord de l'océan ou en moyenne montagne. Lieux sélectionnés un par un, jamais d'usine à séminaires.",
-  },
-  {
-    icon: Users,
-    title: "Petit groupe (6 à 12)",
-    description:
-      "Pas de session de masse. Chaque participante est connue par Céline avant l'arrivée — la qualité du cercle fait la profondeur du travail.",
-  },
-  {
-    icon: Flame,
-    title: "Pratiques tenues",
-    description:
-      "Souffle, cacao, féminin sacré, innerdance, cercles, marche silencieuse, rituel symbolique. Composées comme une partition, jamais empilées.",
-  },
-  {
-    icon: Compass,
-    title: "Accompagnement individuel",
-    description:
-      "Une séance individuelle avec Céline est intégrée dans le déroulé : vous repartez avec un fil personnel, pas seulement une expérience de groupe.",
-  },
-  {
-    icon: Shield,
-    title: "Cadre sécure",
-    description:
-      "Confidentialité totale du cercle, alimentation végétarienne soignée, hébergement individuel ou en duo selon préférence. Zéro injonction spirituelle.",
-  },
-];
+const retraitesHero = {
+  eyebrow: "Retraites & immersions",
+  greeting: "Sortir vraiment.",
+  title: "Quelques jours pour ralentir, respirer, traverser.",
+  body: "6 à 12 personnes, lieu choisi avec soin, séance individuelle intégrée. Souffle, innerdance, cercles, cacao, féminin sacré, nature. Pensé comme un retour, pas comme un séjour.",
+  primaryCta: { label: "Recevoir les prochaines dates", href: "#interet" },
+  secondaryCta: { label: "Écrire à Céline", href: "/contact" },
+};
 
-const programmeType = [
-  {
-    moment: "07h00",
-    title: "Réveil doux",
-    description: "Tisane, étirements doux, écoute du paysage.",
-  },
-  {
-    moment: "08h30",
-    title: "Cercle d'ouverture",
-    description: "Pose de l'intention du jour, météo intérieure.",
-  },
-  {
-    moment: "09h30",
-    title: "Pratique de souffle",
-    description: "Breathwork chamanique ou innerdance — le matin pour mobiliser.",
-  },
-  {
-    moment: "12h30",
-    title: "Repas végétarien",
-    description: "Préparé sur place, alimentation pensée pour soutenir l'écoute.",
-  },
-  {
-    moment: "14h30",
-    title: "Temps libre / nature",
-    description: "Marche, sieste, écriture, rien — selon ce qui appelle.",
-  },
-  {
-    moment: "16h00",
-    title: "Travail individuel",
-    description: "Séance individuelle avec Céline (constellation, numérologie, soin selon votre fil).",
-  },
-  {
-    moment: "19h00",
-    title: "Cérémonie cacao",
-    description: "Cercle confidentiel, parole tenue, ouverture du cœur en sororité.",
-  },
-  {
-    moment: "21h00",
-    title: "Clôture & repos",
-    description: "Silence honoré jusqu'au lendemain matin.",
-  },
-];
+const retraitesPourQui = {
+  eyebrow: "Quand une retraite prend tout son sens",
+  title: "Quand le quotidien ne suffit plus.",
+  paragraphs: [
+    "Quand vous sentez qu'il faut un temps long, pas une heure entre deux. Quand l'envie est de couper vraiment, de ralentir, de poser plusieurs jours hors du quotidien.",
+    "Quand vous traversez une transition de vie qui demande de la place. Quand vous voulez approfondir un travail commencé en séance individuelle. Quand l'appel est de vivre quelque chose de fort, en cercle, en présence d'autres.",
+    "Aucune connaissance préalable nécessaire. Aucune performance attendue. Juste l'envie de vous déposer pleinement.",
+  ],
+};
 
-const pourQui = [
-  "Femmes en transition (rupture, parentalité, virage pro, deuil)",
-  "Personnes qui sentent qu'une séance individuelle ne suffit plus",
-  "Praticiennes du bien-être qui veulent recevoir, pas tenir l'espace",
-  "Curieuses prêtes à s'engager pleinement (pas juste \"essayer\")",
-  "Femmes qui cherchent un cercle de qualité, en sécurité",
-];
-
-const pourQuiPas = [
-  "Recherche d'un séjour spa ou \"bien-être\" léger sans implication",
-  "Refus du travail collectif (les cercles sont au cœur du dispositif)",
-  "Conditions médicales non stabilisées (cardiaque, psychiatrique, grossesse à risque)",
-  "Attente d'une promesse de guérison ou de résultat thérapeutique",
-];
-
-const lesFormats = [
+const retraitesFaq = [
   {
-    label: "Journée immersive",
-    duration: "1 jour",
-    investment: "180 € à 280 €",
-    description:
-      "Un format porte d'entrée — souffle, cacao, cercle. Idéal pour découvrir l'univers Etincel sans s'engager dans un séjour long.",
+    q: "Quel est le format type ?",
+    a: "Trois à cinq jours en pension complète, dans un lieu sélectionné avec soin (domaine en pleine nature, en bord d'océan ou en moyenne montagne). Petit groupe de 6 à 12 personnes maximum.",
   },
   {
-    label: "Week-end reconnexion",
-    duration: "2 à 3 jours",
-    investment: "490 € à 780 €",
-    description:
-      "Vendredi soir au dimanche après-midi. Le format le plus demandé — le travail se déploie vraiment, sans déraciner trop longtemps du quotidien.",
+    q: "Faut-il avoir une expérience préalable ?",
+    a: "Non. Aucune connaissance des pratiques (souffle, cacao, innerdance) n'est requise. Céline tient l'espace pour que chacun·e puisse découvrir à son rythme.",
   },
   {
-    label: "Retraite longue",
-    duration: "5 à 7 jours",
-    investment: "1 290 € à 1 890 €",
-    description:
-      "Le format pour les transformations profondes. Hébergement complet, journées rythmées, séances individuelles intégrées, immersion totale.",
-  },
-];
-
-const faq = [
-  {
-    q: "Quand sont les prochaines dates ?",
-    a: "Les retraites Etincel sont annoncées en avant-première à la liste d'intérêt, entre 6 et 10 semaines avant la date — pour permettre la préparation. Les dates publiques sortent ensuite si des places restent disponibles.",
-  },
-  {
-    q: "Qu'est-ce qui distingue une retraite Etincel d'un autre séjour ?",
-    a: "Trois choses : la taille du groupe (6 à 12 personnes maximum), une séance individuelle avec Céline intégrée dans le déroulé, et un cadre éthique strict (zéro injonction spirituelle, alimentation soignée, confidentialité totale).",
-  },
-  {
-    q: "Faut-il un niveau de pratique particulier ?",
-    a: "Non. Les retraites accueillent débutantes et expérimentées. Céline ajuste l'intensité au groupe et propose des modulations individuelles pour chaque pratique.",
-  },
-  {
-    q: "Comment se passe l'hébergement ?",
-    a: "Selon le lieu retenu : chambre individuelle, en duo (avec une amie ou en partage), ou plus rarement en dortoir féminin de qualité. Précisé pour chaque retraite avant l'inscription définitive.",
-  },
-  {
-    q: "Y a-t-il des contre-indications ?",
-    a: "Oui. Le breathwork et le cacao demandent un échange préalable systématique. Antécédents cardiaques, traitements antidépresseurs (IMAO/ISRS), troubles psychiatriques actifs, grossesse à risque : un point individuel est obligatoire avant toute inscription.",
+    q: "Quel est le tarif ?",
+    a: "Variable selon le format, le lieu et la durée. Une fourchette indicative est partagée à l'inscription à la liste d'intérêt — le détail arrive avec chaque ouverture de retraite.",
   },
   {
     q: "Comment se passe l'inscription ?",
-    a: "1. Inscription à la liste d'intérêt. 2. Annonce du programme par email. 3. Échange préalable avec Céline (téléphone, 20 min). 4. Confirmation et acompte. Aucune retraite n'est ouverte sans cet échange.",
+    a: "Vous rejoignez la liste d'intérêt en bas de cette page. Quand une retraite ouvre, vous recevez un email avec les détails complets. L'inscription définitive se fait après un échange préalable avec Céline.",
   },
   {
-    q: "Tout ce qui se vit reste-t-il confidentiel ?",
-    a: "Oui. La confidentialité du groupe est un cadre fondamental, posé dès l'ouverture. Ce qui est partagé reste strictement à l'intérieur du cercle — c'est ce qui rend le travail possible.",
+    q: "Y a-t-il des contre-indications médicales ?",
+    a: "Selon les pratiques mobilisées (notamment le breathwork chamanique), des précautions s'appliquent. L'échange préalable permet de vérifier que la retraite vous convient.",
   },
   {
-    q: "Que se passe-t-il en cas d'annulation ?",
-    a: "Acompte de 30 % conservé en cas d'annulation à plus de 30 jours, 50 % entre 30 et 14 jours. Annulation tardive : possibilité de céder votre place à une personne validée par Céline.",
-  },
-  {
-    q: "Peut-on offrir une retraite ?",
-    a: "Oui — par carte cadeau personnalisée. Le bénéficiaire échange ensuite avec Céline pour valider la date qui lui convient.",
+    q: "L'hébergement est-il individuel ?",
+    a: "Selon le lieu et la disponibilité : individuel ou en duo (chambre partagée). Précisé pour chaque retraite dans le détail envoyé.",
   },
 ];
 
+/**
+ * Page /retraites — Sprint B "refuge connecté".
+ *
+ * Sortie de :
+ *  - L'ancien stats-block (6-12 / 1+1+1 / 100% / 0)
+ *  - "Cinq piliers non négociables" cards 3×
+ *  - Programme type 8 étapes timeline
+ *  - "Trois formats" cards avec fourchettes tarifaires
+ *  - "Pour qui / pas pour qui" colonnes asymétriques
+ *  - SacredBackdrop "retraite", WhisperLine
+ *  - BilanGiftBanner final
+ *
+ * À la place :
+ *  - PageRefugeHero refuge avec photo retraite
+ *  - PillarPourQuiSection en prose
+ *  - SoftCarousel "Retraites & immersions"
+ *  - Bandeau "Ce qu'on tient" (5 piliers en prose unifiée)
+ *  - Témoignage cartes-souvenirs
+ *  - RetreatInterestForm CONSERVÉ (Resend branché)
+ *  - PillarFaqSection 6 questions
+ *  - GuidanceFooter variant gift (offrir une retraite)
+ */
 export default function RetraitesPage() {
   return (
     <>
-      <PageHeader
-        variant="deep"
-        eyebrow="Immersions premium · 2026"
-        title={
-          <>
-            Sortir vraiment.{" "}
-            <span className="font-display-italic text-gold-gradient">
-              Pas juste partir.
-            </span>
-          </>
-        }
-        description="Des retraites en petits groupes (6 à 12 personnes) au cœur du Sud-Ouest. Souffle, cacao, féminin sacré, innerdance, cercles. Une séance individuelle avec Céline intégrée. Une expérience pensée comme une transformation, pas comme un séjour."
+      <PageRefugeHero
+        eyebrow={retraitesHero.eyebrow}
+        greeting={retraitesHero.greeting}
+        title={retraitesHero.title}
+        body={retraitesHero.body}
+        primaryCta={retraitesHero.primaryCta}
+        secondaryCta={retraitesHero.secondaryCta}
+        visualId="retraites-hero"
+        background="paper-warm"
       />
 
-      <section className="bg-bg-deep text-text-on-dark py-10 border-y border-white/10 relative overflow-hidden">
-        <SacredBackdrop variant="retraite" intensity="soft" />
-        <Container className="relative">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
-            {[
-              { value: "6 à 12", label: "personnes par retraite" },
-              { value: "1+1+1", label: "groupe · individuel · nature" },
-              { value: "100%", label: "confidentialité du cercle" },
-              { value: "0", label: "injonction spirituelle" },
-            ].map((s) => (
-              <div key={s.label} className="space-y-1">
-                <p className="font-display text-3xl md:text-4xl text-gold">{s.value}</p>
-                <p className="text-[0.72rem] uppercase tracking-[0.24em] text-text-on-dark-soft">
-                  {s.label}
-                </p>
-              </div>
-            ))}
-          </div>
-        </Container>
-      </section>
+      <PillarPourQuiSection
+        eyebrow={retraitesPourQui.eyebrow}
+        title={retraitesPourQui.title}
+        paragraphs={retraitesPourQui.paragraphs}
+        background="bg-base"
+      />
 
-      <section className="relative section overflow-hidden">
-        <SacredBackdrop variant="retraite" />
-        <WhisperLine text={whisperLines[17]} position="left" tone="gold" />
-        <Container>
-          <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-            <Reveal className="lg:col-span-5">
-              <div className="space-y-5 lg:sticky lg:top-28">
-                <span className="text-[0.7rem] uppercase tracking-[0.36em] text-gold-deep flex items-center gap-3">
-                  <Flame className="h-3.5 w-3.5" />
-                  Pourquoi maintenant
-                </span>
-                <h2 className="font-display text-3xl md:text-5xl leading-[1.05] text-text-deep">
-                  Le soin individuel{" "}
-                  <span className="font-display-italic text-gold-deep">ne suffit plus</span> à beaucoup.
-                </h2>
-                <p className="text-text-medium leading-relaxed">
-                  En 2026, la majorité des femmes qui poussent la porte d&apos;Etincel ont déjà essayé. Yoga, méditation, sophrologie, peut-être une thérapie. Et pourtant, quelque chose résiste.
-                </p>
-                <p className="text-text-medium leading-relaxed">
-                  L&apos;immersion fait quelque chose qu&apos;une séance d&apos;une heure ne fera jamais : sortir du quotidien, suspendre les rôles, déposer ce qu&apos;on porte sans le savoir. C&apos;est pour cette raison précise que le format retraite explose en France — et c&apos;est pour cette raison que Céline en propose désormais quatre par an, en petits groupes choisis.
-                </p>
-              </div>
-            </Reveal>
+      <CeQuonTientSection />
 
-            <div className="lg:col-span-7 space-y-4">
-              {[
-                {
-                  title: "Sortir des rôles",
-                  body: "Mère, conjointe, professionnelle, fille — le quotidien empile les rôles. La retraite suspend tout ça pendant quelques jours. C'est là que ce qui était enfoui remonte.",
-                },
-                {
-                  title: "Habiter un cadre tenu",
-                  body: "Un groupe choisi, une praticienne formée, des pratiques séquencées avec rigueur. Pas d'animation, pas de spectacle — un espace ferme qui rend la traversée possible.",
-                },
-                {
-                  title: "Recevoir, vraiment",
-                  body: "Vous arrivez, vous déposez vos affaires. Tout est pensé : repas, rythme, transitions, lieu. Aucune décision à prendre. Pour beaucoup, c'est le premier vrai relâchement depuis des années.",
-                },
-                {
-                  title: "Repartir avec un fil",
-                  body: "La séance individuelle intégrée fait la différence : Céline prend ce qui s'est levé pendant le séjour et vous aide à en faire un fil concret pour la suite. Vous ne repartez pas avec une expérience floue.",
-                },
-              ].map((b, i) => (
-                <Reveal key={b.title} delay={i * 0.05}>
-                  <article className="rounded-3xl border border-border-soft bg-bg-card p-6 md:p-7">
-                    <h3 className="font-display text-2xl text-text-deep leading-tight mb-2">
-                      {b.title}
-                    </h3>
-                    <p className="text-text-medium leading-relaxed">{b.body}</p>
-                  </article>
-                </Reveal>
-              ))}
-            </div>
-          </div>
-        </Container>
-      </section>
+      <RetraitesCarrousel />
 
-      <section className="section bg-bg-soft relative overflow-hidden">
-        <Container>
-          <Reveal>
-            <div className="max-w-3xl space-y-4 mb-14">
-              <span className="text-[0.7rem] uppercase tracking-[0.36em] text-gold-deep flex items-center gap-3">
-                <Etincelle size={11} />
-                Une retraite Etincel, c&apos;est
-              </span>
-              <h2 className="font-display text-3xl md:text-5xl leading-[1.05] text-text-deep">
-                Cinq piliers non négociables.
-              </h2>
-              <p className="text-text-medium leading-relaxed text-base md:text-lg">
-                C&apos;est ce qui sépare une vraie retraite d&apos;un week-end « bien-être » dilué. Aucun de ces cinq points n&apos;est sacrifié, jamais.
-              </p>
-            </div>
-          </Reveal>
-
-          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {cinqPiliers.map((p, i) => (
-              <Reveal key={p.title} delay={i * 0.05}>
-                <article className="h-full rounded-3xl border border-border-soft bg-bg-card p-7">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-full bg-gold-soft/40 text-gold-deep mb-5">
-                    <p.icon className="h-5 w-5" />
-                  </div>
-                  <h3 className="font-display text-2xl text-text-deep leading-tight mb-3">
-                    {p.title}
-                  </h3>
-                  <p className="text-text-medium leading-relaxed">{p.description}</p>
-                </article>
-              </Reveal>
-            ))}
-          </div>
-        </Container>
-      </section>
-
-      <section className="section">
-        <Container>
-          <Reveal>
-            <ImageMosaic items={pageVisuals.retraites.slice(1, 4)} layout="trio" />
-            <p className="mt-6 text-xs uppercase tracking-[0.22em] text-text-soft text-center">
-              Visuels d&apos;ambiance — chaque retraite communique ses photos officielles avant l&apos;inscription
-            </p>
-          </Reveal>
-        </Container>
-      </section>
-
-      <section id="programme" className="relative section bg-bg-deep text-text-on-dark overflow-hidden">
-        <SacredBackdrop variant="retraite" intensity="medium" />
-        <Container className="relative">
-          <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-            <Reveal className="lg:col-span-4">
-              <div className="space-y-5 lg:sticky lg:top-28">
-                <span className="text-[0.7rem] uppercase tracking-[0.36em] text-gold-soft flex items-center gap-3">
-                  <Clock className="h-3.5 w-3.5" />
-                  Programme type · une journée
-                </span>
-                <h2 className="font-display text-3xl md:text-4xl lg:text-5xl leading-[1.05] text-text-on-dark">
-                  Un rythme tenu, pas chargé.
-                </h2>
-                <p className="text-text-on-dark-soft leading-relaxed">
-                  Chaque journée alterne pratique soutenue, repos intégré et temps libre. Le silence est honoré entre 21h et 8h pour permettre à ce qui s&apos;est levé de se déposer.
-                </p>
-                <p className="text-text-on-dark-soft leading-relaxed text-sm">
-                  Ce programme est indicatif — il s&apos;adapte au lieu, à la saison et au groupe. Aucune retraite n&apos;est identique.
-                </p>
-              </div>
-            </Reveal>
-
-            <ol className="lg:col-span-8 relative space-y-3">
-              <span className="absolute left-[3.6rem] top-2 bottom-2 w-px bg-gold/20 hidden md:block" aria-hidden />
-              {programmeType.map((s, i) => (
-                <Reveal key={s.moment} delay={i * 0.04}>
-                  <li className="flex items-start gap-5 md:gap-7 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-5">
-                    <span className="font-display-italic text-gold tabular-nums text-base md:text-lg shrink-0 w-12 text-right">
-                      {s.moment}
-                    </span>
-                    <div className="flex-1 min-w-0">
-                      <p className="font-display text-xl text-text-on-dark leading-tight">{s.title}</p>
-                      <p className="text-sm text-text-on-dark-soft mt-1.5 leading-relaxed">
-                        {s.description}
-                      </p>
-                    </div>
-                  </li>
-                </Reveal>
-              ))}
-            </ol>
-          </div>
-        </Container>
-      </section>
-
-      <section id="formats" className="section bg-bg-soft">
-        <Container>
-          <Reveal>
-            <div className="max-w-3xl space-y-4 mb-14">
-              <span className="text-[0.7rem] uppercase tracking-[0.36em] text-gold-deep flex items-center gap-3">
-                <Sparkles className="h-3.5 w-3.5" />
-                Trois formats, trois investissements
-              </span>
-              <h2 className="font-display text-3xl md:text-5xl leading-[1.05] text-text-deep">
-                Choisir le format qui vous convient.
-              </h2>
-              <p className="text-text-medium leading-relaxed">
-                Les fourchettes ci-dessous incluent la pension complète (hébergement, repas végétariens, transferts locaux), les pratiques, la séance individuelle et le suivi post-retraite. Le tarif définitif de chaque session est confirmé lors de l&apos;ouverture des inscriptions.
-              </p>
-            </div>
-          </Reveal>
-
-          <div className="grid gap-5 md:grid-cols-3">
-            {lesFormats.map((f, i) => (
-              <Reveal key={f.label} delay={i * 0.06}>
-                <article className="h-full flex flex-col rounded-3xl border border-border-soft bg-bg-card p-7 md:p-8">
-                  <p className="text-[0.7rem] uppercase tracking-[0.28em] text-gold-deep mb-3">
-                    {f.duration}
-                  </p>
-                  <h3 className="font-display text-2xl text-text-deep leading-tight mb-3">
-                    {f.label}
-                  </h3>
-                  <p className="text-text-medium leading-relaxed flex-1">{f.description}</p>
-                  <div className="mt-6 pt-5 border-t border-border-soft">
-                    <p className="text-[0.65rem] uppercase tracking-[0.22em] text-text-soft mb-1">
-                      Investissement
-                    </p>
-                    <p className="font-display text-2xl text-gold-deep">{f.investment}</p>
-                  </div>
-                </article>
-              </Reveal>
-            ))}
-          </div>
-
-          <Reveal>
-            <p className="mt-10 max-w-3xl mx-auto text-sm text-text-soft leading-relaxed text-center">
-              Paiement en 3× sans frais possible · facilités d&apos;échelonnement étudiées au cas par cas · acompte de 30 % à l&apos;inscription · solde à 30 jours.
-            </p>
-          </Reveal>
-        </Container>
-      </section>
-
-      <section className="section">
-        <Container>
-          <div className="grid lg:grid-cols-2 gap-10 lg:gap-12">
-            <Reveal>
-              <article className="rounded-3xl border-2 border-gold-soft/40 bg-gradient-to-br from-gold-soft/15 via-bg-card to-bg-card p-7 md:p-9 h-full space-y-5">
-                <div className="flex items-center gap-3 text-[0.7rem] uppercase tracking-[0.32em] text-gold-deep">
-                  <Leaf className="h-3.5 w-3.5" />
-                  <span>Pour qui</span>
-                </div>
-                <h3 className="font-display text-3xl text-text-deep leading-tight">
-                  Cette retraite est pour vous si…
-                </h3>
-                <ul className="space-y-2.5">
-                  {pourQui.map((item) => (
-                    <li key={item} className="flex items-start gap-3 text-text-medium leading-relaxed">
-                      <span className="mt-2 h-1.5 w-1.5 rounded-full bg-gold shrink-0" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </article>
-            </Reveal>
-
-            <Reveal delay={0.08}>
-              <article className="rounded-3xl border border-border-soft bg-bg-soft p-7 md:p-9 h-full space-y-5">
-                <div className="flex items-center gap-3 text-[0.7rem] uppercase tracking-[0.32em] text-text-soft">
-                  <Shield className="h-3.5 w-3.5" />
-                  <span>Pour qui pas</span>
-                </div>
-                <h3 className="font-display text-3xl text-text-deep leading-tight">
-                  Et si elle ne l&apos;est pas, soyons clair.
-                </h3>
-                <ul className="space-y-2.5">
-                  {pourQuiPas.map((item) => (
-                    <li key={item} className="flex items-start gap-3 text-text-medium leading-relaxed">
-                      <span className="mt-2 h-1.5 w-1.5 rounded-full bg-text-soft shrink-0" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-                <p className="text-xs text-text-soft italic pt-3 border-t border-border-soft">
-                  Mieux vaut une retraite reportée qu&apos;une retraite vécue à contretemps.
-                </p>
-              </article>
-            </Reveal>
-          </div>
-        </Container>
-      </section>
-
-      <section className="section bg-bg-deep text-text-on-dark relative overflow-hidden">
-        <SacredBackdrop variant="retraite" intensity="medium" />
-        <Container className="relative">
-          <Reveal>
-            <div className="max-w-3xl mx-auto text-center space-y-6">
-              <Quote className="h-8 w-8 text-gold mx-auto" />
-              <p className="font-display-italic text-2xl md:text-4xl leading-[1.2] text-text-on-dark">
-                « {temoignages[0].quote} »
-              </p>
-              <p className="text-gold-soft font-display-italic">— {temoignages[0].name}, après une retraite Etincel</p>
-            </div>
-          </Reveal>
-        </Container>
-      </section>
-
-      <section className="section">
-        <Container>
-          <div className="grid lg:grid-cols-[1.1fr_1fr] gap-12 items-start">
-            <Reveal>
-              <div className="space-y-5 lg:sticky lg:top-28">
-                <span className="text-[0.7rem] uppercase tracking-[0.36em] text-gold-deep flex items-center gap-3">
-                  <Mountain className="h-3.5 w-3.5" />
-                  Céline · votre passeuse
-                </span>
-                <h2 className="font-display text-3xl md:text-5xl leading-[1.05] text-text-deep">
-                  Une praticienne, pas une influenceuse.
-                </h2>
-                <p className="text-text-medium leading-relaxed">
-                  Céline accompagne depuis plus de dix ans, en cabinet et en groupe. Numérologue, praticienne en hypnose, formée au breathwork chamanique, aux constellations familiales et au cacao sacré. Elle ne vend pas un univers — elle tient un cadre.
-                </p>
-                <p className="text-text-medium leading-relaxed">
-                  Sur retraite, elle est <strong>seule animatrice</strong>. Pas de cohorte de coachs externes, pas d&apos;équipe d&apos;animation. Vous savez qui vous accueille, qui vous accompagne dans les pratiques, qui vous reçoit en individuel.
-                </p>
-                <div className="flex flex-wrap gap-3 pt-2">
-                  <Link href="/a-propos" className="btn-secondary">
-                    Découvrir le parcours de Céline
-                    <ArrowRight className="h-4 w-4" />
-                  </Link>
-                  <WhatsAppButton message={whatsappMessages.retraite} variant="outline" size="sm">
-                    Lui poser une question
-                  </WhatsAppButton>
-                </div>
-              </div>
-            </Reveal>
-            <Reveal delay={0.1}>
-              <SmartImage
-                fallback="portrait"
-                alt="Céline Dusseval — praticienne et hôte des retraites Etincel"
-                ratio="portrait"
-              />
-            </Reveal>
-          </div>
-        </Container>
-      </section>
+      <TemoignageSection />
 
       <section
         id="interet"
-        className="relative section bg-bg-deep text-text-on-dark overflow-hidden"
+        className="relative paper-sand py-24 md:py-32 overflow-hidden"
       >
-        <SacredBackdrop variant="retraite" intensity="medium" />
-        <Container className="relative">
-          <div className="grid lg:grid-cols-[1fr_1fr] gap-12 items-center">
+        <Container>
+          <div className="max-w-3xl mx-auto">
             <Reveal>
-              <div className="space-y-5">
-                <div className="inline-flex items-center gap-3 text-xs uppercase tracking-[0.32em] text-gold-soft">
-                  <Etincelle size={12} />
-                  <span>Inscription liste d&apos;intérêt 2026</span>
+              <div className="text-center mb-12 space-y-5">
+                <div className="inline-flex items-center gap-3 text-[0.7rem] uppercase tracking-[0.32em] text-text-soft">
+                  <span className="text-gold-deep">
+                    <Etincelle size={11} />
+                  </span>
+                  <span>Liste d&apos;intérêt</span>
                 </div>
-                <h2 className="font-display text-4xl md:text-5xl leading-tight text-text-on-dark">
-                  Quatre retraites cette année. Places limitées.
+                <h2 className="font-display text-balance text-3xl md:text-4xl lg:text-[2.6rem] leading-[1.15] tracking-tight text-text-deep">
+                  Recevoir les prochaines dates.
                 </h2>
-                <p className="text-text-on-dark-soft leading-relaxed text-base md:text-lg max-w-xl">
-                  Les retraites Etincel ouvrent en avant-première à la liste d&apos;intérêt. Inscrivez-vous pour recevoir le programme complet 6 à 10 semaines avant la date — assez tôt pour vous organiser, pas trop pour préserver l&apos;exclusivité du groupe.
+                <p className="text-base md:text-lg leading-relaxed text-text-medium">
+                  Les retraites sont annoncées en priorité aux personnes inscrites
+                  sur la liste d&apos;intérêt. Pas de spam, juste les ouvertures.
                 </p>
-                <ul className="space-y-2 text-sm text-text-on-dark-soft">
-                  <li className="flex items-start gap-3">
-                    <Etincelle size={10} />
-                    Programme détaillé envoyé par email avant publication publique
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <Etincelle size={10} />
-                    Échange préalable avec Céline avant toute confirmation
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <Etincelle size={10} />
-                    Aucune inscription définitive ici — vous restez libre
-                  </li>
-                </ul>
               </div>
             </Reveal>
             <Reveal delay={0.1}>
@@ -566,70 +143,140 @@ export default function RetraitesPage() {
         </Container>
       </section>
 
-      <section className="section">
-        <Container size="narrow">
+      <PillarFaqSection items={retraitesFaq} background="bg-base" />
+
+      <GuidanceFooter
+        variant="gift"
+        title="Offrir une retraite ?"
+        body="Vous pouvez préparer une carte cadeau pour une personne que vous aimez — montant libre ou retraite spécifique."
+      />
+    </>
+  );
+}
+
+/** Section "Ce qu'on tient" — 5 piliers refondus en prose unifiée. */
+function CeQuonTientSection() {
+  return (
+    <section className="relative paper-sand py-20 md:py-28">
+      <Container>
+        <div className="max-w-3xl mx-auto space-y-7 text-center">
           <Reveal>
-            <div className="space-y-4 mb-10">
-              <div className="inline-flex items-center gap-3 text-xs uppercase tracking-[0.32em] text-gold-deep">
-                <Etincelle size={12} />
-                <span>Questions fréquentes</span>
+            <div className="space-y-5">
+              <div className="inline-flex items-center gap-3 text-[0.7rem] uppercase tracking-[0.32em] text-text-soft">
+                <span className="text-gold-deep">
+                  <Etincelle size={11} />
+                </span>
+                <span>Ce qu&apos;on tient</span>
               </div>
-              <h2 className="font-display text-3xl md:text-4xl leading-tight text-text-deep">
-                Avant de vous inscrire.
+              <h2 className="font-display text-balance text-2xl md:text-3xl lg:text-[2.2rem] leading-[1.2] text-text-deep">
+                Un cadre simple, posé, sans fioriture.
               </h2>
             </div>
-            <div className="space-y-3">
-              {faq.map((item) => (
-                <details
-                  key={item.q}
-                  className="group rounded-2xl border border-border-soft bg-bg-card p-5 [&_summary::-webkit-details-marker]:hidden"
-                >
-                  <summary className="cursor-pointer flex items-center justify-between gap-4 list-none">
-                    <span className="font-display text-lg text-text-deep">{item.q}</span>
-                    <span className="text-text-soft group-open:rotate-45 transition-transform">+</span>
-                  </summary>
-                  <p className="mt-3 text-sm text-text-medium leading-relaxed">{item.a}</p>
-                </details>
-              ))}
-            </div>
           </Reveal>
-        </Container>
-      </section>
 
-      <section className="section bg-bg-soft">
-        <Container>
+          <div className="space-y-5 max-w-2xl mx-auto pt-4 text-left">
+            <Reveal delay={0.05}>
+              <p className="text-base md:text-[1.05rem] leading-relaxed text-text-medium">
+                <strong className="text-text-deep">Un écrin choisi.</strong>{" "}
+                Domaines en pleine nature, lieux d&apos;accueil sélectionnés un par
+                un. Pas d&apos;usine à séminaires.
+              </p>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <p className="text-base md:text-[1.05rem] leading-relaxed text-text-medium">
+                <strong className="text-text-deep">Un petit groupe.</strong> 6 à 12
+                personnes maximum. Chaque participante est connue par Céline avant
+                l&apos;arrivée — la qualité du cercle fait la profondeur du travail.
+              </p>
+            </Reveal>
+            <Reveal delay={0.15}>
+              <p className="text-base md:text-[1.05rem] leading-relaxed text-text-medium">
+                <strong className="text-text-deep">Des pratiques tenues.</strong>{" "}
+                Souffle, cacao, féminin sacré, innerdance, cercles, marche
+                silencieuse. Composées comme une partition, jamais empilées.
+              </p>
+            </Reveal>
+            <Reveal delay={0.2}>
+              <p className="text-base md:text-[1.05rem] leading-relaxed text-text-medium">
+                <strong className="text-text-deep">Un fil personnel.</strong> Une
+                séance individuelle avec Céline est intégrée dans le déroulé. Vous
+                repartez avec quelque chose qui n&apos;appartient qu&apos;à vous.
+              </p>
+            </Reveal>
+            <Reveal delay={0.25}>
+              <p className="text-base md:text-[1.05rem] leading-relaxed text-text-medium">
+                <strong className="text-text-deep">Un cadre sécure.</strong>{" "}
+                Confidentialité totale du cercle, alimentation végétarienne soignée,
+                hébergement individuel ou en duo selon préférence. Aucune injonction.
+              </p>
+            </Reveal>
+          </div>
+        </div>
+      </Container>
+    </section>
+  );
+}
+
+/** SoftCarousel "Retraites & immersions". */
+function RetraitesCarrousel() {
+  const c = carouselsRefuge.retraitesImmersions;
+  return (
+    <section className="relative bg-bg-base py-20 md:py-28 overflow-hidden">
+      <Container>
+        <div className="max-w-2xl mx-auto text-center mb-12 space-y-5">
           <Reveal>
-            <div className="rounded-[2rem] border border-gold-soft/40 bg-gradient-to-br from-gold-soft/30 via-bg-card to-bg-card p-8 md:p-12 grid gap-8 lg:grid-cols-[1.5fr_1fr] items-center">
-              <div className="space-y-4">
-                <div className="inline-flex items-center gap-3 text-xs uppercase tracking-[0.32em] text-gold-deep">
-                  <Gift className="h-3.5 w-3.5" />
-                  <span>Offrir une retraite</span>
-                </div>
-                <h2 className="font-display text-3xl md:text-4xl leading-tight text-text-deep">
-                  Le plus beau cadeau{" "}
-                  <span className="font-display-italic text-gold-deep">
-                    qu&apos;on puisse faire à une amie qui a tout porté.
-                  </span>
-                </h2>
-                <p className="text-text-medium leading-relaxed">
-                  Carte cadeau personnalisée — la bénéficiaire choisit ensuite la retraite qui lui convient avec Céline. Paiement Stripe sécurisé, carte définitive envoyée par email avec sa référence.
-                </p>
-              </div>
-              <div className="flex flex-col gap-3">
-                <Link href="/cartes-cadeaux" className="btn-primary w-full justify-center">
-                  Composer une carte cadeau
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-                <Link href="/diagnostic" className="btn-secondary w-full justify-center">
-                  Faire le bilan d&apos;orientation
-                </Link>
-              </div>
+            <div className="inline-flex items-center gap-3 text-[0.7rem] uppercase tracking-[0.32em] text-text-soft">
+              <span className="text-gold-deep">
+                <Etincelle size={11} />
+              </span>
+              <span>{c.title}</span>
             </div>
           </Reveal>
-        </Container>
-      </section>
+        </div>
+        <Reveal>
+          <div className="max-w-2xl mx-auto">
+            <SoftCarousel
+              assetIds={[...c.assetIds]}
+              ratio="4:5"
+              caption={c.caption}
+            />
+          </div>
+        </Reveal>
+      </Container>
+    </section>
+  );
+}
 
-      <BilanGiftBanner variant="warm" />
-    </>
+/** Témoignage doux — un seul, posé comme un souvenir. */
+function TemoignageSection() {
+  const t = temoignages[0]!;
+  return (
+    <section className="relative paper-warm py-20 md:py-28 overflow-hidden">
+      <Container>
+        <div className="max-w-3xl mx-auto">
+          <Reveal>
+            <article className="rounded-[1.5rem] bg-bg-card border border-border-soft p-8 md:p-12 rotate-[-0.6deg] hover:rotate-0 transition-transform duration-500 shadow-[0_12px_36px_rgba(31,26,46,0.08)]">
+              <span
+                aria-hidden
+                className="font-display-italic text-4xl text-gold-deep/40 leading-none"
+              >
+                &ldquo;
+              </span>
+              <blockquote className="font-display text-xl md:text-2xl leading-[1.4] text-text-deep -mt-2">
+                {t.quote}
+              </blockquote>
+              <figcaption className="mt-6 pt-5 border-t border-border-soft/60 flex items-center gap-2.5">
+                <span className="text-gold-deep">
+                  <Etincelle size={9} />
+                </span>
+                <span className="font-display-italic text-[0.95rem] text-text-deep">
+                  {t.name}
+                </span>
+              </figcaption>
+            </article>
+          </Reveal>
+        </div>
+      </Container>
+    </section>
   );
 }

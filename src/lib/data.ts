@@ -774,6 +774,313 @@ export const ecrivezMoi = {
   body: "Une question, un doute, une envie de prendre rendez-vous. Choisissez le canal qui vous convient — je réponds personnellement.",
 } as const;
 
+/* -------------------------------------------------------------------------- */
+/*  SPRINT B — CONTENUS PAGES INTERNES (refuge)                               */
+/*                                                                            */
+/*  Tous les blocs marqués `waiting-celine-voice` sont à remplacer par les    */
+/*  mots de Céline (vocal + 3 phrases d'accueil + réécriture des chemins).    */
+/*  Les blocs marqués `ok` sont des transpositions fidèles de sa voix issues  */
+/*  du site original ou du brief explicite du chef de projet.                 */
+/* -------------------------------------------------------------------------- */
+
+/** Page /a-propos — récit personnel de Céline (en attente du vocal). */
+export const aProposRefuge = {
+  hero: {
+    eyebrow: "Céline · accompagnatrice bien-être",
+    greeting: "Bienvenue.",
+    title: "Je m'appelle Céline.",
+    body: "Je reçois à Bordeaux, en Gironde. J'accompagne celles et ceux qui ressentent l'envie de revenir à eux-mêmes — sans protocole, sans injonction, à votre rythme.",
+    primaryCta: { label: "Me laisser guider", href: "/diagnostic" },
+    secondaryCta: { label: "Écrire à Céline", href: "/contact" },
+  },
+  // contentStatus: waiting-celine-voice — à réécrire en récit long après le vocal
+  recit: {
+    eyebrow: "Mon chemin",
+    title: "Ce qui m'a amenée ici.",
+    paragraphs: [
+      "Mon chemin n'est pas linéaire. Comme beaucoup, je suis passée par plusieurs vies avant de poser ce que je propose aujourd'hui.",
+      "Au fil des années, j'ai croisé des outils, des personnes, des cérémonies qui ont profondément changé ma manière d'écouter, de toucher, de tenir un espace.",
+      "Aujourd'hui, ce que je transmets, c'est l'addition de ces rencontres — pas une méthode rigide, mais une présence sensible, ajustée à chaque personne qui pousse la porte.",
+    ],
+    captionPhoto: "Quelques fragments de mon univers — d'autres viendront s'ajouter.",
+  },
+  // contentStatus: ok — transposition fidèle du brief
+  posture: {
+    eyebrow: "Ce que je propose",
+    title: "Pas un protocole. Un espace.",
+    paragraphs: [
+      "Je n'ai pas une méthode unique. Selon ce que vous traversez, je peux mobiliser la constellation, le cacao, l'hypnose, le souffle, le toucher, ou simplement l'écoute.",
+      "Les outils sont au service de ce qui se présente, pas l'inverse. C'est en parlant ensemble qu'on identifie la porte d'entrée la plus juste pour vous.",
+    ],
+  },
+  univers: {
+    eyebrow: "Mon univers",
+    title: "Quelques fragments du refuge.",
+    body: "Le lieu, les objets, les cercles. Un aperçu de ce qui m'entoure quand je vous accueille.",
+    assetIds: [
+      "about-portrait-main",
+      "about-portrait-secondaire",
+      "home-univers-3",
+      "home-univers-4",
+      "about-detail-1",
+      "about-detail-2",
+      "about-detail-3",
+    ],
+  },
+  contentStatus: "waiting-celine-voice" as const,
+} as const;
+
+/** Page /memoires-constellations. */
+export const memoiresRefuge = {
+  hero: {
+    eyebrow: "Mémoires & constellations",
+    greeting: "Une histoire que vous portez.",
+    title: "Libérer ce qui ne vous appartient pas tout à fait.",
+    body: "Constellations familiales, transgénérationnel, mémoires portées. Mettre en lumière les loyautés invisibles, les répétitions, les dynamiques qui traversent une histoire — pour retrouver une place plus juste.",
+    primaryCta: { label: "Écrire à Céline", href: "/contact" },
+    secondaryCta: { label: "Me laisser guider", href: "/diagnostic" },
+  },
+  pourQui: {
+    eyebrow: "Ce que vous pouvez venir déposer",
+    title: "Tout ce qui demande à être éclairé sans être expliqué.",
+    paragraphs: [
+      "Une fidélité familiale qui pèse sans qu'on sache d'où elle vient. Un schéma qui se répète. Un événement traversé qui demande à être posé.",
+      "Une lignée à honorer. Une place à retrouver. Une mémoire ancienne qui remonte sans mots.",
+      "Vous n'avez pas besoin d'avoir tout compris. C'est en posant ce qui se présente qu'on commence à voir.",
+    ],
+  },
+  formats: {
+    eyebrow: "Comment ça se passe",
+    title: "Plusieurs manières d'entrer dans ce travail.",
+    body: "Selon ce que vous traversez et ce qui résonne, je peux proposer différents formats. Aucun n'est meilleur — chacun ouvre une porte différente.",
+    cards: [
+      {
+        id: "constellation-individuelle",
+        title: "Constellation familiale individuelle",
+        body: "Une séance dédiée pour explorer une dynamique précise — un lien, un schéma, une mémoire.",
+        meta: "1h30 · 95 €",
+      },
+      {
+        id: "constellation-rebirth",
+        title: "Constellation de naissance — Rebirth",
+        body: "Un voyage symbolique au cœur de votre naissance et des empreintes qu'elle a laissées.",
+        meta: "1h30 · 95 €",
+      },
+      {
+        id: "hypnose-transgenerationnelle",
+        title: "Hypnose transgénérationnelle",
+        body: "Un voyage intérieur pour reconnecter aux mémoires et libérer les loyautés invisibles.",
+        meta: "1h30 · 90 €",
+      },
+      {
+        id: "cellrelease",
+        title: "CellRelease®",
+        body: "Une relaxation profonde qui invite à libérer les mémoires cellulaires accumulées.",
+        meta: "1h30 · 90 €",
+      },
+    ],
+  },
+  faq: [
+    {
+      q: "Faut-il connaître son histoire familiale en détail ?",
+      a: "Non. Souvent, c'est même plus juste de venir avec ce que vous savez (ou ne savez pas) sans chercher à reconstituer un arbre complet. Le travail symbolique met en lumière des dynamiques que la mémoire consciente n'a pas forcément stockées.",
+    },
+    {
+      q: "Est-ce que je dois venir avec une question précise ?",
+      a: "Pas nécessairement. Vous pouvez venir avec une intuition, un malaise, un thème. C'est en parlant ensemble que la porte d'entrée se précise.",
+    },
+    {
+      q: "Combien de séances faut-il prévoir ?",
+      a: "Cela dépend complètement de ce qui se présente. Certaines personnes viennent une fois, d'autres reviennent. On en parle ensemble selon ce qui s'ouvre.",
+    },
+    {
+      q: "Est-ce que c'est compatible avec une psychothérapie ?",
+      a: "Tout à fait. Ce travail s'inscrit dans une démarche de bien-être et de développement personnel. Il ne remplace pas un suivi thérapeutique, et peut très bien s'articuler avec un accompagnement médical ou psychologique en cours.",
+    },
+  ],
+  contentStatus: "waiting-celine-voice" as const,
+} as const;
+
+/** Page /feminin-cacao. */
+export const femininRefuge = {
+  hero: {
+    eyebrow: "Féminin & cacao",
+    greeting: "Revenir à vous.",
+    title: "Un espace pour le corps, le cœur, le féminin.",
+    body: "Cérémonies cacao, cercles de femmes, accompagnement symbolique du féminin et de l'utérus. Un espace doux, sensible, sans injonction — où chacune retrouve sa place.",
+    primaryCta: { label: "Écrire à Céline", href: "/contact" },
+    secondaryCta: { label: "Me laisser guider", href: "/diagnostic" },
+  },
+  pourQui: {
+    eyebrow: "Ce que vous pouvez venir déposer",
+    title: "Le besoin de revenir, simplement.",
+    paragraphs: [
+      "Une fatigue accumulée, un trop-plein, une sensation de s'être éloignée de soi. Un cycle inconfortable, une transition de vie, une perte qui demande à être traversée.",
+      "Une envie de retrouver le contact avec votre corps, votre intuition, votre énergie créatrice. Un appel du féminin, sans savoir précisément ce qui appelle.",
+      "Vous n'avez pas besoin de définir ce qui vous amène. Souvent, c'est en venant qu'on comprend.",
+    ],
+  },
+  formats: {
+    eyebrow: "Comment ça se passe",
+    title: "Quelques formes possibles.",
+    body: "Selon votre rythme et ce qui résonne, vous pouvez entrer par une cérémonie cacao en duo, un cercle de femmes mensuel, un accompagnement individuel, ou une retraite immersive.",
+    cards: [
+      {
+        id: "cercle-femmes",
+        title: "Cercles de femmes mensuels",
+        body: "Un rendez-vous mensuel pour déposer, partager, revenir à soi en sororité. Petit groupe, sans préparation requise.",
+        meta: "Mensuel · prochaine date à venir",
+      },
+      {
+        id: "ceremonie-cacao",
+        title: "Cérémonie cacao",
+        body: "Un rituel sensoriel et symbolique pour ralentir et ouvrir le cœur. Individuel, en duo ou en cercle selon le format.",
+        meta: "Tarif selon format",
+      },
+      {
+        id: "feminin-sacre",
+        title: "Accompagnement féminin sacré",
+        body: "Un espace symbolique pour le corps, les cycles, l'utérus, l'intuition créatrice. En séance individuelle.",
+        meta: "Sur demande",
+      },
+      {
+        id: "massage-feminin",
+        title: "Massage Libération Reconnexion",
+        body: "Un massage en profondeur pensé comme un dialogue entre la main, le souffle et la mémoire du corps.",
+        meta: "1h20 · 90 € · 1h45 · 120 €",
+      },
+    ],
+  },
+  faq: [
+    {
+      q: "Faut-il être femme pour participer aux cercles ?",
+      a: "Les cercles de femmes sont effectivement réservés aux femmes (au sens large — toute personne se reconnaissant dans cette identité). Les cérémonies cacao en individuel ou en duo sont ouvertes à tout le monde.",
+    },
+    {
+      q: "Est-ce qu'il faut avoir déjà fait du cacao pour venir ?",
+      a: "Non, pas du tout. Beaucoup de personnes découvrent lors d'une première cérémonie. Les contre-indications sont rares mais réelles (traitements antidépresseurs, cardiaques, grossesse) — on en parle avant si besoin.",
+    },
+    {
+      q: "Combien de personnes dans un cercle ?",
+      a: "Toujours en petit comité, généralement 6 à 10 personnes maximum. Pour préserver l'intimité et la sécurité du cadre.",
+    },
+    {
+      q: "Est-ce religieux ?",
+      a: "Non. C'est un travail symbolique, sensible, ancré dans le corps. Les références spirituelles éventuelles (cycles, lune, élément féminin) sont des supports symboliques, pas des dogmes.",
+    },
+  ],
+  disclaimer:
+    "Démarche de bien-être et de développement personnel — ne remplace pas un suivi médical, gynécologique ou psychologique.",
+  contentStatus: "waiting-celine-voice" as const,
+} as const;
+
+/** Page /corps-integration. */
+export const corpsRefuge = {
+  hero: {
+    eyebrow: "Corps & intégration",
+    greeting: "Quand le corps a besoin de traverser.",
+    title: "Intégrer par le souffle ce que les mots ne suffisent pas à transformer.",
+    body: "Innerdance, breathwork chamanique, retraites immersives. Le souffle, le mouvement et l'expérience intérieure pour ancrer ce qui demande à être ancré.",
+    primaryCta: { label: "Écrire à Céline", href: "/contact" },
+    secondaryCta: { label: "Voir les retraites", href: "/retraites" },
+  },
+  pourQui: {
+    eyebrow: "Quand ce travail prend tout son sens",
+    title: "Quand la tête a compris mais que le corps n'a pas suivi.",
+    paragraphs: [
+      "Après une période difficile, après un travail thérapeutique, après une bascule de vie. Quand on sent que quelque chose s'est déposé mentalement, mais que le corps n'a pas encore intégré.",
+      "Quand on cherche à ressentir plutôt qu'à comprendre. Quand on veut retrouver un état de présence, écouter ce que le corps a à dire, traverser une émotion bloquée.",
+      "C'est aussi un travail puissant pour ancrer ce qui a été ouvert dans une constellation, une cérémonie, une retraite — pour que la transformation prenne dans le quotidien.",
+    ],
+  },
+  formats: {
+    eyebrow: "Comment ça se passe",
+    title: "Plusieurs voies pour traverser par le corps.",
+    body: "Selon votre disponibilité et ce qui appelle, on peut travailler en individuel, en cercle, ou sur plusieurs jours en retraite immersive.",
+    cards: [
+      {
+        id: "breathwork",
+        title: "Breathwork chamanique",
+        body: "La puissance du souffle pour traverser et transmuter. En individuel ou en cercle. Pratique intense — un échange préalable est nécessaire pour vérifier les contre-indications.",
+        meta: "2h · 90 € individuel · 140 € en duo",
+      },
+      {
+        id: "innerdance",
+        title: "Innerdance",
+        body: "Une expérience sensible mêlant musique, corps et états de présence. Pour écouter ce qui cherche à émerger, ralentir, explorer autrement.",
+        meta: "Sur demande · Individuel ou collectif",
+      },
+      {
+        id: "retraites",
+        title: "Retraites immersives",
+        body: "Quelques jours en petit groupe pour ralentir, respirer, traverser. Souffle, innerdance, cercles, cacao, nature.",
+        meta: "6 à 12 personnes · plusieurs jours",
+      },
+      {
+        id: "massage-energetique",
+        title: "Massage & soin énergétique",
+        body: "Un soin combinant toucher, instruments et vibrations pour réactiver la circulation de l'énergie dans le corps.",
+        meta: "1h · 90 €",
+      },
+    ],
+  },
+  faq: [
+    {
+      q: "Est-ce que c'est physique ?",
+      a: "Le breathwork est une pratique intense — vous êtes allongée, en respiration consciente continue, mais l'expérience peut être très éprouvante émotionnellement et physiquement. L'innerdance est plus doux, plus contemplatif. On en parle avant pour choisir le bon format.",
+    },
+    {
+      q: "Y a-t-il des contre-indications ?",
+      a: "Pour le breathwork : oui (cardiaques, respiratoires, psychiatriques, grossesse). Un échange préalable est obligatoire. Pour l'innerdance : très peu, on en parle au cas par cas.",
+    },
+    {
+      q: "Faut-il avoir déjà fait du yoga ou de la méditation ?",
+      a: "Non. Aucun pré-requis. Vous arrivez comme vous êtes, vous expérimentez à votre rythme. Il n'y a rien à réussir.",
+    },
+    {
+      q: "Comment se préparer ?",
+      a: "Vêtements confortables, repas léger 2-3h avant pour le breathwork, et l'envie de vous déposer. Le reste est posé sur place.",
+    },
+  ],
+  disclaimer:
+    "Le breathwork est une pratique respiratoire intense. Un échange préalable est nécessaire pour vérifier les contre-indications éventuelles (cardiaques, respiratoires, psychiatriques, grossesse).",
+  contentStatus: "waiting-celine-voice" as const,
+} as const;
+
+/** Carrousels secondaires partagés sur les pages internes. */
+export const carouselsRefuge = {
+  cerclesEtCacao: {
+    title: "Cercles & cérémonies cacao",
+    caption: "Quelques fragments de moments partagés en cercle.",
+    assetIds: [
+      "carousel-cercles-1",
+      "carousel-cercles-2",
+      "carousel-cercles-3",
+      "carousel-cercles-4",
+    ],
+  },
+  retraitesImmersions: {
+    title: "Retraites & immersions",
+    caption: "Aperçu des retraites — d'autres photos viendront s'ajouter.",
+    assetIds: [
+      "retraites-carrousel-1",
+      "retraites-carrousel-2",
+      "retraites-carrousel-3",
+      "retraites-carrousel-4",
+    ],
+  },
+  detailsRefuge: {
+    title: "Détails du refuge",
+    caption: "Bougies, carnets, fleurs, objets — l'univers de tous les jours.",
+    assetIds: [
+      "carousel-refuge-1",
+      "carousel-refuge-2",
+      "carousel-refuge-3",
+      "carousel-refuge-4",
+    ],
+  },
+} as const;
+
 /**
  * Pratiques secondaires regroupées par intention — alimentent
  * ComplementaryPracticesExplorer.

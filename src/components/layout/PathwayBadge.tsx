@@ -1,66 +1,73 @@
 import Link from "next/link";
-import { ArrowRight, Compass } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
+import { Etincelle } from "@/components/ui/Etincelle";
 
 type Pathway = "memoires" | "feminin" | "corps" | "transverse";
 
 const pathwayConfig: Record<
   Pathway,
-  { label: string; href: string; description: string; gradient: string }
+  { label: string; href: string; description: string; linkLabel: string }
 > = {
   memoires: {
-    label: "Axe 1 · Mémoires & constellations",
+    label: "Au service du chemin Mémoires & constellations",
     href: "/memoires-constellations",
-    description: "Cet outil est mobilisé au service de l'axe Mémoires & constellations — libérer les mémoires, éclairer les loyautés, retrouver une place plus juste dans la lignée.",
-    gradient: "from-accent/10 via-bg-soft to-bg-soft",
+    description:
+      "Cet outil prend tout son sens dans le travail des mémoires, des loyautés et de la place dans la lignée.",
+    linkLabel: "Voir le chemin complet",
   },
   feminin: {
-    label: "Axe 2 · Féminin & cacao",
+    label: "Au service du chemin Féminin & cacao",
     href: "/feminin-cacao",
-    description: "Cet outil est mobilisé au service de l'axe Féminin & cacao — revenir au corps, au cœur, aux cycles et à l'intuition. Pas une prestation autonome, un passage dans l'accompagnement féminin.",
-    gradient: "from-rose-soft/30 via-bg-soft to-bg-soft",
+    description:
+      "Cet outil prend tout son sens dans l'accompagnement du corps, des cycles et de l'intuition féminine.",
+    linkLabel: "Voir le chemin complet",
   },
   corps: {
-    label: "Axe 3 · Corps & intégration",
+    label: "Au service du chemin Corps & intégration",
     href: "/corps-integration",
-    description: "Cet outil est mobilisé au service de l'axe Corps & intégration — intégrer par le souffle, le mouvement et l'expérience intérieure ce qui demande à se transformer.",
-    gradient: "from-gold-soft/25 via-bg-soft to-bg-soft",
+    description:
+      "Cet outil prend tout son sens dans le travail du souffle, du mouvement et de l'expérience intérieure.",
+    linkLabel: "Voir le chemin complet",
   },
   transverse: {
-    label: "Boussole transverse",
+    label: "Une boussole transverse",
     href: "/diagnostic",
-    description: "Cet outil est une boussole symbolique qui peut s'inscrire dans plusieurs axes selon ce qui appelle. La numérologie comme lecture de cycles, de ressources et de lignée.",
-    gradient: "from-gold-soft/20 via-bg-soft to-bg-soft",
+    description:
+      "Cet outil peut s'inscrire dans plusieurs chemins selon ce qui appelle. Une lecture symbolique des cycles, des ressources et de la lignée.",
+    linkLabel: "Me laisser guider",
   },
 };
 
 /**
- * Bandeau de recontextualisation à placer en tête des pages-outils
- * (hypnose, CellRelease, massage, breathwork, innerdance, etc.).
+ * PathwayBadge — bandeau de recontextualisation en tête de page-outil.
  *
- * Indique clairement que la pratique n'est pas une offre centrale
- * isolée mais un outil mobilisé au service d'un des 3 axes de Céline.
+ * Sprint B "refuge connecté" : refondu pour ne plus afficher
+ * "Axe 1 / Axe 2 / Axe 3". À la place : phrase douce qui rattache
+ * l'outil à son chemin sans architecture visible.
  */
 export function PathwayBadge({ pathway }: { pathway: Pathway }) {
   const config = pathwayConfig[pathway];
   return (
-    <section className={`bg-gradient-to-r ${config.gradient} border-b border-border-soft py-6`}>
+    <section className="bg-bg-soft/50 border-b border-border-soft py-5">
       <Container>
         <div className="flex flex-wrap items-start gap-4 md:items-center md:gap-6">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-bg-card border border-border-medium text-gold-deep shrink-0">
-            <Compass className="h-4 w-4" />
+          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-bg-card border border-border-soft text-gold-deep shrink-0">
+            <Etincelle size={11} />
           </div>
           <div className="flex-1 min-w-[240px]">
-            <p className="text-[0.65rem] uppercase tracking-[0.28em] text-gold-deep mb-1">
+            <p className="text-[0.65rem] uppercase tracking-[0.28em] text-text-soft mb-1">
               {config.label}
             </p>
-            <p className="text-sm text-text-medium leading-relaxed">{config.description}</p>
+            <p className="text-sm text-text-medium leading-relaxed">
+              {config.description}
+            </p>
           </div>
           <Link
             href={config.href}
-            className="inline-flex items-center gap-1.5 rounded-full border border-accent text-accent bg-bg-card px-4 py-2 text-xs font-medium hover:bg-accent hover:text-text-on-dark transition-colors shrink-0"
+            className="inline-flex items-center gap-1.5 rounded-full border border-text-deep/15 bg-bg-card px-4 py-2 text-xs font-medium text-text-deep hover:border-accent hover:text-accent transition-colors shrink-0"
           >
-            Voir l&apos;axe complet
+            {config.linkLabel}
             <ArrowRight className="h-3 w-3" />
           </Link>
         </div>
