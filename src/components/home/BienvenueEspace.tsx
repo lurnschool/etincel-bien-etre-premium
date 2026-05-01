@@ -11,7 +11,7 @@ import { bienvenueEspace } from "@/lib/data";
  */
 export function BienvenueEspace() {
   return (
-    <section className="relative bg-bg-base py-20 md:py-28">
+    <section className="relative bg-gradient-to-b from-bg-base via-rose-soft/20 to-bg-base py-20 md:py-28">
       <div className="mx-auto max-w-3xl px-6 md:px-10 text-center space-y-7">
         <motion.div
           initial={{ opacity: 0, y: 12 }}

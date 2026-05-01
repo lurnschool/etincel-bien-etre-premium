@@ -2,7 +2,10 @@ import Link from "next/link";
 import { ArrowRight, MessageSquare } from "lucide-react";
 import { Etincelle } from "@/components/ui/Etincelle";
 import { VisualAsset } from "@/components/ui/VisualAsset";
-import { heroRefuge } from "@/lib/data";
+import { EtincelleHandwritten } from "@/components/ui/EtincelleHandwritten";
+import { EtincelleAccent } from "@/components/ui/EtincelleAccent";
+import { PracticesMarquee } from "@/components/ui/PracticesMarquee";
+import { heroRefuge, practicesMarquee } from "@/lib/data";
 
 /**
  * Hero refuge — statique, calme, incarné.
@@ -34,15 +37,19 @@ export function HeroRefuge() {
               <span>{heroRefuge.eyebrow}</span>
             </div>
 
-            <div className="space-y-3">
-              <p className="font-display-italic text-2xl md:text-3xl text-gold-deep leading-tight">
-                {heroRefuge.greeting}
-              </p>
+            <div className="space-y-4">
+              {/* Bienvenue manuscrite dorée — animation tracé + flash étincelle
+                  inspirée des stories Insta de Céline (etincel_debienetre) */}
+              <EtincelleHandwritten size="lg" delay={300} sparklePosition="right-top">
+                Bienvenue.
+              </EtincelleHandwritten>
               <h1
                 id="hero-refuge-title"
-                className="font-display text-balance text-[2.4rem] sm:text-5xl lg:text-[3.6rem] leading-[1.05] tracking-tight text-text-deep"
+                className="font-display text-balance text-[2.4rem] sm:text-5xl lg:text-[3.6rem] leading-[1.05] tracking-tight text-text-deep mt-2"
               >
-                {heroRefuge.title}
+                Ici, vous pouvez vous{" "}
+                <EtincelleAccent variant="glow">poser</EtincelleAccent>{" "}
+                un instant.
               </h1>
             </div>
 
@@ -95,6 +102,10 @@ export function HeroRefuge() {
           </div>
         </div>
       </div>
+
+      {/* Bande défilante des pratiques — réintroduite en version douce
+          (Sprint A l'avait virée, Sprint D la remet en variante "soft") */}
+      <PracticesMarquee items={practicesMarquee} tone="soft" durationS={55} />
     </section>
   );
 }

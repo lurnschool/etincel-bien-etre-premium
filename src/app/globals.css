@@ -83,6 +83,7 @@
   /* Typographies */
   --font-sans: var(--font-inter);
   --font-display: var(--font-cormorant);
+  --font-handwritten: var(--font-caveat);
 
   /* Animations sur-mesure */
   --animate-fade-up: fadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
@@ -239,6 +240,39 @@ body {
   font-family: var(--font-cormorant), Georgia, serif;
   font-style: italic;
   font-weight: 400;
+}
+
+/* Sprint D — manuscrite Caveat pour signature dorée style Insta de Céline */
+.font-handwritten {
+  font-family: var(--font-caveat), "Brush Script MT", cursive;
+  font-weight: 500;
+  letter-spacing: 0.005em;
+}
+
+/* Étincelle dorée pulsante — apparaît après l'écriture cursive */
+@keyframes etincelle-flash {
+  0%   { opacity: 0; transform: scale(0.6) rotate(-12deg); }
+  35%  { opacity: 1; transform: scale(1.15) rotate(0deg); filter: drop-shadow(0 0 12px rgba(184,138,61,0.85)); }
+  60%  { opacity: 1; transform: scale(1) rotate(4deg); filter: drop-shadow(0 0 8px rgba(184,138,61,0.6)); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg); filter: drop-shadow(0 0 4px rgba(184,138,61,0.4)); }
+}
+
+/* Tracé cursif progressif pour SVG */
+@keyframes etincelle-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+/* Glow doré qui pulse légèrement après l'écriture */
+@keyframes etincelle-glow {
+  0%   { filter: drop-shadow(0 0 0 rgba(184,138,61,0)); }
+  60%  { filter: drop-shadow(0 0 16px rgba(184,138,61,0.7)) drop-shadow(0 0 4px rgba(255,210,140,0.6)); }
+  100% { filter: drop-shadow(0 0 6px rgba(184,138,61,0.45)); }
+}
+
+/* Scintillement subtil sur les EtincelleAccent variant glow */
+@keyframes etincelle-scintille {
+  0%, 100% { text-shadow: 0 0 14px rgba(184,138,61,0.40), 0 0 28px rgba(184,138,61,0.16); }
+  50%      { text-shadow: 0 0 22px rgba(184,138,61,0.60), 0 0 42px rgba(184,138,61,0.28); }
 }
 
 /* Filet doré décoratif */

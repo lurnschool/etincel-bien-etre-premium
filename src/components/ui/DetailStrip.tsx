@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { VisualAsset } from "./VisualAsset";
 
@@ -12,7 +11,7 @@ type Props = {
   tone?: "warm" | "sand" | "rose" | "sage" | "clay" | "night";
   /** Taille des vignettes. Défaut "md" (h-32). */
   size?: "sm" | "md" | "lg";
-  /** Activer le défilement automatique horizontal lent. Défaut false. */
+  /** Activer le défilement automatique horizontal lent. Défaut true. */
   autoScroll?: boolean;
   /** Légende discrète sous le strip. */
   caption?: string;
@@ -23,17 +22,17 @@ type Props = {
 const TONE_BG: Record<NonNullable<Props["tone"]>, string> = {
   warm: "bg-bg-base",
   sand: "paper-sand",
-  rose: "bg-rose-soft/30",
-  sage: "bg-sage-soft/40",
-  clay: "bg-[#f4d3c2]/40",
+  rose: "bg-rose-soft/40",
+  sage: "bg-sage-soft/45",
+  clay: "bg-[#f4d3c2]/45",
   night: "bg-[#2d2540]",
 };
 
 const TONE_BORDER: Record<NonNullable<Props["tone"]>, string> = {
   warm: "border-border-soft/60",
   sand: "border-border-soft/60",
-  rose: "border-rose/30",
-  sage: "border-sage/40",
+  rose: "border-rose/40",
+  sage: "border-sage/50",
   clay: "border-[#a06548]/30",
   night: "border-white/15",
 };
@@ -58,30 +57,27 @@ const ROTATIONS = [
 /**
  * DetailStrip — strip horizontal de mini-photos posées comme des souvenirs.
  *
- * Sprint C "pages-pièces" : permet d'ajouter de la personnalité visuelle
- * entre 2 sections sans imposer un grand carrousel. Petites vignettes
- * carrées avec rotation aléatoire douce (effet polaroid posé).
+ * Sprint C "pages-pièces" + ajustement Sprint D :
+ *  - autoScroll par DÉFAUT (le brief : "cette bande pourrait défiler")
+ *  - Centré horizontalement quand pas en autoScroll OU sur viewport large
+ *  - Effet polaroid posé : rotations alternées, hover restaure et scale
+ *  - Touch-friendly mobile (swipe natif)
+ *  - Respect prefers-reduced-motion (autoScroll OFF)
+ *  - 6 tons (warm, sand, rose, sage, clay, night)
+ *  - 3 tailles (sm 96px, md 128px, lg 160px)
  *
- * Usage typique :
- *   <DetailStrip assetIds={["a-propos-detail-1", "a-propos-detail-2", ...]} tone="warm" />
- *
- * Caractéristiques :
- *  - Strip scrollable horizontalement (overflow-x-auto avec snap).
- *  - Chaque vignette ~96-160 px, ratio carré, rotation alternée.
- *  - Pas d'animation lourde — juste un fade-in subtil au mount.
- *  - Mode autoScroll optionnel : translateX très lent en boucle CSS.
- *  - Touch-friendly mobile (swipe natif).
+ * Quand autoScroll est actif : on duplique la liste pour boucle infinie
+ * en CSS (transform translateX, pas de JS).
  */
 export function DetailStrip({
   assetIds,
   tone = "warm",
   size = "md",
-  autoScroll = false,
+  autoScroll = true,
   caption,
   className,
 }: Props) {
   const [reducedMotion, setReducedMotion] = useState(false);
-  const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -93,31 +89,36 @@ export function DetailStrip({
 
   if (assetIds.length === 0) return null;
 
-  // En mode autoScroll, on duplique la liste pour effet boucle infinie
-  const items = autoScroll && !reducedMotion ? [...assetIds, ...assetIds] : assetIds;
+  const isAnimating = autoScroll && !reducedMotion;
+
+  // En mode autoScroll on duplique pour boucle CSS
+  const items = isAnimating ? [...assetIds, ...assetIds] : assetIds;
 
   return (
     <section
-      className={cn("relative w-full py-10 md:py-14 border-y", TONE_BG[tone], TONE_BORDER[tone], className)}
+      className={cn(
+        "relative w-full py-10 md:py-14 border-y overflow-hidden",
+        TONE_BG[tone],
+        TONE_BORDER[tone],
+        className,
+      )}
       aria-label={caption ?? "Fragments visuels"}
     >
       <div
-        ref={scrollRef}
         className={cn(
-          "relative flex gap-5 md:gap-6 px-6 md:px-10 overflow-x-auto scroll-smooth snap-x snap-mandatory",
-          autoScroll && !reducedMotion && "animate-[detail-scroll_45s_linear_infinite] [animation-play-state:running] hover:[animation-play-state:paused]",
+          "relative flex gap-5 md:gap-6 px-6 md:px-10",
+          // Sans autoScroll : strip centré dans le viewport
+          !isAnimating && "justify-center flex-wrap md:flex-nowrap overflow-x-auto",
+          // Avec autoScroll : translation continue, pause au hover
+          isAnimating && "animate-[detail-scroll_55s_linear_infinite] hover:[animation-play-state:paused] w-max",
         )}
-        style={{ scrollbarWidth: "none" }}
+        style={!isAnimating ? { scrollbarWidth: "none" } : undefined}
       >
         {items.map((id, i) => (
-          <motion.div
+          <div
             key={`${id}-${i}`}
-            initial={{ opacity: 0, y: 8 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.4 }}
-            transition={{ duration: 0.6, delay: (i % assetIds.length) * 0.05 }}
             className={cn(
-              "shrink-0 snap-start overflow-hidden rounded-[0.9rem] shadow-[0_8px_22px_rgba(31,26,46,0.12)] ring-1",
+              "shrink-0 overflow-hidden rounded-[0.9rem] shadow-[0_8px_22px_rgba(31,26,46,0.12)] ring-1",
               tone === "night" ? "ring-white/10" : "ring-bg-base/40",
               SIZE_HEIGHT[size],
               ROTATIONS[i % ROTATIONS.length],
@@ -129,26 +130,26 @@ export function DetailStrip({
               ratio="1:1"
               sizes={size === "sm" ? "96px" : size === "lg" ? "160px" : "128px"}
             />
-          </motion.div>
+          </div>
         ))}
       </div>
       {caption && (
-        <p className={cn(
-          "mt-5 text-center font-display-italic text-xs md:text-sm",
-          tone === "night" ? "text-text-on-dark-soft" : "text-text-soft",
-        )}>
+        <p
+          className={cn(
+            "mt-5 text-center font-display-italic text-xs md:text-sm",
+            tone === "night" ? "text-text-on-dark-soft" : "text-text-soft",
+          )}
+        >
           {caption}
         </p>
       )}
 
       <style jsx>{`
         @keyframes detail-scroll {
-          0% { transform: translateX(0); }
+          0%   { transform: translateX(0); }
           100% { transform: translateX(-50%); }
         }
-        div::-webkit-scrollbar {
-          display: none;
-        }
+        div::-webkit-scrollbar { display: none; }
       `}</style>
     </section>
   );
