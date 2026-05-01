@@ -257,6 +257,57 @@ body {
 /*  pas de clip-path — un vrai bloom de lumière qui se cristallise.          */
 /* ======================================================================== */
 
+/* ====== ÉCRITURE LUMINEUSE LETTRE PAR LETTRE — Sprint D v4 ============= */
+
+/* Chaque lettre apparaît comme tracée par une plume de lumière dorée :
+   d'abord un point lumineux flou très brillant, qui se condense en
+   lettre dorée nette. Effet "écrit par la lumière". */
+@keyframes letter-light {
+  0% {
+    opacity: 0;
+    transform: scale(1.6) translateY(-2px);
+    filter: blur(10px) brightness(3.5)
+            drop-shadow(0 0 18px rgba(255, 240, 180, 1))
+            drop-shadow(0 0 8px rgba(255, 200, 100, 1));
+  }
+  35% {
+    opacity: 1;
+    transform: scale(1.15) translateY(0);
+    filter: blur(6px) brightness(2.8)
+            drop-shadow(0 0 22px rgba(255, 230, 160, 1))
+            drop-shadow(0 0 10px rgba(255, 200, 100, 0.95));
+  }
+  65% {
+    opacity: 1;
+    transform: scale(1.02) translateY(0);
+    filter: blur(2px) brightness(1.6)
+            drop-shadow(0 0 14px rgba(184, 138, 61, 0.85))
+            drop-shadow(0 0 6px rgba(255, 215, 130, 0.7));
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    filter: blur(0) brightness(1.05)
+            drop-shadow(0 0 6px rgba(184, 138, 61, 0.55));
+  }
+}
+
+/* Halo doré qui tourne autour du mot pendant l'écriture.
+   Conic-gradient masqué en anneau, rotation continue. */
+@keyframes orbit-rotate {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* Le halo entre en scène, atteint son intensité max pendant l'écriture,
+   puis se calme à la fin. */
+@keyframes orbit-fade {
+  0%   { opacity: 0; }
+  15%  { opacity: 0.9; }
+  85%  { opacity: 0.6; }
+  100% { opacity: 0.25; }
+}
+
 /* Bloom doré XL : le texte naît comme une étincelle de lumière intense.
    Plus long (2.8s), plus brillant (brightness 3+), plus visible.
    Phase de pic tenue plus longtemps pour que l'œil ait le temps de voir. */
