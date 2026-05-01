@@ -4,16 +4,14 @@ import { notFound } from "next/navigation";
 import { ArrowRight, ArrowLeft, Heart } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
-import { PageHeader } from "@/components/ui/PageHeader";
+import { PageRefugeHero } from "@/components/page/PageRefugeHero";
 import { Etincelle } from "@/components/ui/Etincelle";
-import { WhisperLine } from "@/components/ui/WhisperLine";
-import { SmartImage } from "@/components/ui/SmartImage";
 import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
-import { SacredBackdrop } from "@/components/ornaments/SacredBackdrop";
+import Image from "next/image";
+import { asset } from "@/lib/assets";
 import { NumerologyInvitation } from "@/components/numerology/NumerologyInvitation";
 import { PathwayBadge } from "@/components/layout/PathwayBadge";
-import { accompagnementsIndividuels, disclaimers, whisperLines } from "@/lib/data";
-import type { SacredFallbackKey } from "@/lib/visualAssetMap";
+import { accompagnementsIndividuels, disclaimers } from "@/lib/data";
 
 const familyLabels: Record<string, string> = {
   comprendre: "Comprendre son chemin",
@@ -48,27 +46,6 @@ const PATHWAY_BY_SLUG: Record<string, "memoires" | "feminin" | "corps" | "transv
   "innerdance-individuel": "corps",
 };
 
-const familyVisuals: Record<string, SacredFallbackKey> = {
-  comprendre: "numerologie",
-  apaiser: "hypnose",
-  corps: "corps",
-  explorer: "souffle",
-  feminin: "feminin",
-  cacao: "cacao",
-};
-
-const familyBackdrops: Record<
-  string,
-  "feminin" | "cacao" | "retraite" | "souffle" | "collectif" | "reconnexion" | "subtle"
-> = {
-  comprendre: "subtle",
-  apaiser: "subtle",
-  corps: "souffle",
-  explorer: "souffle",
-  feminin: "feminin",
-  cacao: "cacao",
-};
-
 type Params = Promise<{ slug: string }>;
 
 export async function generateStaticParams() {
@@ -94,8 +71,8 @@ export default async function AccompagnementDetailPage({ params }: { params: Par
     .filter((a) => a.family === practice.family && a.slug !== practice.slug)
     .slice(0, 4);
 
-  const fallbackVariant = familyVisuals[practice.family] ?? "ambiance";
-  const backdropVariant = familyBackdrops[practice.family] ?? "subtle";
+  // Sprint D : SmartImage / SacredBackdrop retirés — palette refuge
+  // (paper-warm / paper-sand) prend le relais via PageRefugeHero.
 
   // Approche éditoriale par famille
   const venirChercher = chercherFor(practice.family);
@@ -103,10 +80,17 @@ export default async function AccompagnementDetailPage({ params }: { params: Par
 
   return (
     <>
-      <PageHeader
+      <PageRefugeHero
         eyebrow={familyLabels[practice.family]}
         title={practice.name}
-        description={practice.pitch}
+        body={practice.pitch}
+        primaryCta={
+          RESERVABLE_SLUGS.includes(slug)
+            ? { label: "Réserver une séance", href: `/reserver/${slug}` }
+            : { label: "Écrire à Céline", href: `/contact?sujet=${encodeURIComponent(practice.name)}` }
+        }
+        secondaryCta={{ label: "Me laisser guider", href: "/diagnostic" }}
+        variant="contact"
       />
 
       {/* Bandeau de recontextualisation : cet outil sert un des 3 axes */}
@@ -118,13 +102,8 @@ export default async function AccompagnementDetailPage({ params }: { params: Par
           de cette page — la danse des chiffres est l'accroche principale. */}
       {practice.slug === "numerologie" && <NumerologyInvitation />}
 
-      <section className="relative section overflow-hidden">
-        <SacredBackdrop variant={backdropVariant} />
-        <WhisperLine
-          text={whisperLines[(slug.length + 7) % whisperLines.length]}
-          position="left"
-          tone="gold"
-        />
+      <section className="relative section overflow-hidden bg-bg-base">
+        {/* SacredBackdrop + WhisperLine retirés Sprint D */}
         <Container>
           <Link
             href="/accompagnements"
@@ -260,11 +239,15 @@ export default async function AccompagnementDetailPage({ params }: { params: Par
 
             <Reveal delay={0.15}>
               <div className="lg:sticky lg:top-28 space-y-5">
-                <SmartImage
-                  fallback={fallbackVariant}
-                  alt={`Univers visuel — ${practice.name}`}
-                  ratio="portrait"
-                />
+                <div className="relative aspect-[4/5] overflow-hidden rounded-[1.75rem] shadow-[0_14px_40px_rgba(31,26,46,0.10)]">
+                  <Image
+                    src={asset("/images/placeholders/texture-cream-warm.svg")}
+                    alt={`Univers visuel — ${practice.name}`}
+                    fill
+                    sizes="(max-width: 1024px) 80vw, 33vw"
+                    className="object-cover"
+                  />
+                </div>
                 <p className="text-xs uppercase tracking-[0.22em] text-text-soft text-center">
                   Visuel d&apos;ambiance — à remplacer par photo dédiée
                 </p>

@@ -19,8 +19,9 @@ import {
 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
-import { PageHeader } from "@/components/ui/PageHeader";
+import { PageRefugeHero } from "@/components/page/PageRefugeHero";
 import { Etincelle } from "@/components/ui/Etincelle";
+import { EtincelleAccent } from "@/components/ui/EtincelleAccent";
 import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
 import {
   GiftCardPreview,
@@ -295,16 +296,20 @@ export default function CartesCadeauxPage() {
 
   return (
     <>
-      <PageHeader
-        variant="warm"
+      <PageRefugeHero
         eyebrow="Offrir un moment"
+        greeting="Une attention douce."
         title={
           <>
-            Une attention douce pour quelqu&apos;un que vous{" "}
-            <span className="font-display-italic text-gold-deep">aimez</span>.
+            Préparer une carte pour quelqu&apos;un que vous{" "}
+            <EtincelleAccent variant="letter">aimez</EtincelleAccent>.
           </>
         }
-        description="Une carte préparée avec soin, pour offrir une séance, un cercle, ou simplement un moment de pause."
+        body="Une carte préparée avec soin, pour offrir une séance, un cercle, une retraite — ou simplement un montant libre. Imprimable, signée par Céline."
+        primaryCta={{ label: "Commencer", href: "#choisir" }}
+        secondaryCta={{ label: "Poser une question", href: "https://wa.me/33627438104" }}
+        visualId="cartes-hero"
+        variant="gift"
       />
 
       <section className="bg-bg-soft border-y border-border-soft">

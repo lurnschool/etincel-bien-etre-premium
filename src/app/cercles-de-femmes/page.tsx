@@ -1,202 +1,91 @@
-import Link from "next/link";
 import type { Metadata } from "next";
-import { Calendar, ArrowRight, Lock } from "lucide-react";
-import { Container } from "@/components/ui/Container";
-import { Reveal } from "@/components/ui/Reveal";
-import { PageHeader } from "@/components/ui/PageHeader";
-import { Etincelle } from "@/components/ui/Etincelle";
-import { WhisperLine } from "@/components/ui/WhisperLine";
-import { BilanGiftBanner } from "@/components/layout/BilanGiftBanner";
+import { PageRefugeHero } from "@/components/page/PageRefugeHero";
+import { GuidanceFooter } from "@/components/page/GuidanceFooter";
+import { PillarPourQuiSection, PillarFaqSection } from "@/components/page/PillarSections";
+import { RitualStepsSection } from "@/components/page/sections/RitualStepsSection";
+import { DetailStrip } from "@/components/ui/DetailStrip";
 import { PathwayBadge } from "@/components/layout/PathwayBadge";
-import { whisperLines } from "@/lib/data";
+import { EtincelleAccent } from "@/components/ui/EtincelleAccent";
 
 export const metadata: Metadata = {
-  title: "Cercles de femmes — Bordeaux",
+  title: "Cercles de femmes — sororité et présence",
   description:
-    "Un rendez-vous mensuel pour déposer, partager et revenir à soi en sororité. Un cadre tenu, confidentiel, des rituels doux portés par Céline Dusseval.",
+    "Un rendez-vous mensuel pour déposer, partager, revenir à soi en sororité. Petit groupe, cadre confidentiel, sans préparation requise.",
 };
 
-const peutVivre = [
-  "Un espace de parole confidentiel",
-  "Des pratiques corporelles douces",
-  "De la respiration et de l'ancrage",
-  "Des rituels symboliques",
-  "Une sororité sans jugement",
-  "Une reconnexion au féminin",
+const cerclesPourQui = {
+  eyebrow: "Ce que vous pouvez y vivre",
+  title: "Un espace de présence, sans injonction.",
+  paragraphs: [
+    "Un cercle, ce n'est pas un atelier. Pas de programme à suivre, pas de performance à fournir. C'est un temps tenu où chacune peut déposer ce qui pèse, partager ce qui se vit, ou simplement écouter.",
+    "On y trouve une présence d'autres femmes, un cadre sécure, et la possibilité de mettre des mots sur ce qui parfois n'en a pas. Beaucoup repartent allégées sans même savoir précisément de quoi.",
+    "Aucune connaissance préalable n'est nécessaire. Vous pouvez venir avec une intuition, un trop-plein, une transition de vie, ou simplement une envie de pause partagée.",
+  ],
+};
+
+const cerclesSteps = [
+  { label: "I", title: "Arriver.", body: "On s'installe en cercle, autour d'objets symboliques. Un temps de respiration. Chacune est accueillie comme elle est." },
+  { label: "II", title: "Déposer.", body: "Un tour de parole optionnel — vous pouvez parler ou rester en silence. On peut s'appuyer sur un thème, une intention, ou laisser émerger." },
+  { label: "III", title: "Refermer.", body: "Un dernier temps de présence en cercle, pour intégrer. Ce qui se dit dans le cercle reste dans le cercle." },
 ];
 
-const aQuiSadresse = [
-  "Aux femmes qui ont besoin de déposer",
-  "À celles en transition de vie",
-  "À celles qui souhaitent s'écouter dans un cadre tenu",
-  "À celles qui n'ont jamais participé à un cercle",
-  "À celles qui souhaitent se ressourcer en groupe",
+const cerclesFaq = [
+  { q: "Faut-il être en couple, célibataire, mère, etc. ?", a: "Non. Le cercle accueille toutes les femmes (au sens large — toute personne se reconnaissant dans cette identité), à toute étape de vie. C'est précisément la diversité qui fait la richesse du cercle." },
+  { q: "Combien de personnes dans un cercle ?", a: "Toujours en petit comité, généralement 6 à 10 personnes maximum. Pour préserver l'intimité et la sécurité du cadre." },
+  { q: "Faut-il préparer quelque chose ?", a: "Non. Vous arrivez comme vous êtes. Si un thème est annoncé, vous pouvez y réfléchir, mais ce n'est pas obligatoire." },
+  { q: "À quelle fréquence ont lieu les cercles ?", a: "Mensuellement, généralement. Les dates sont annoncées 2 à 3 semaines à l'avance aux personnes inscrites sur la liste d'intérêt." },
+  { q: "Quel est le tarif ?", a: "Le tarif varie selon le lieu et la formule. Il est précisé à chaque ouverture de cercle. Si le tarif est un frein, parlez-en à Céline — on trouve des arrangements." },
 ];
 
-const deroule = [
-  "Accueil dans un espace tenu — bougies, lumière douce, présence",
-  "Pose de l'intention — un mot, une image, ce qui appelle aujourd'hui",
-  "Tour de parole en confiance — sans interruption, sans interprétation",
-  "Pratique corporelle douce, respiration et ancrage",
-  "Rituel symbolique — parfois cacao, parfois objet, parfois silence",
-  "Clôture — intégration, gratitude, retour au quotidien",
-];
-
-const thematiques = [
-  "Cycles intérieurs et saisons du féminin",
-  "Reconnexion au corps et au souffle",
-  "Mémoires familiales et lignée féminine",
-  "Énergie créatrice et expression de soi",
-  "Rituels de passage et nouvelles pages",
-  "Cacao et ouverture du cœur",
-  "Lune et rythmes naturels",
-  "Sororité et confidentialité",
-];
-
-export default function CerclesPage() {
+export default function CerclesDeFemmesPage() {
   return (
     <>
-      <PageHeader
-        variant="warm"
-        eyebrow="Rendez-vous mensuel"
+      <PageRefugeHero
+        eyebrow="Cercles de femmes"
+        greeting="Venir comme on est."
         title={
           <>
-            Un cercle pour{" "}
-            <span className="font-display-italic text-gold-deep">déposer</span>{" "}
-            et revenir à soi
+            Un espace mensuel pour déposer en{" "}
+            <EtincelleAccent variant="letter">sororité</EtincelleAccent>.
           </>
         }
-        description="Une fois par mois, un espace tenu pour partager, écouter et se relier en sororité."
+        body="Un cercle de femmes, en petit comité, où chacune peut venir avec ce qu'elle traverse — ou avec rien de précis. Un cadre confidentiel, sans préparation requise."
+        primaryCta={{ label: "Être prévenue du prochain cercle", href: "/contact?sujet=Liste%20cercles%20de%20femmes" }}
+        secondaryCta={{ label: "Voir le chemin Féminin", href: "/feminin-cacao" }}
+        visualId="feminin-cacao-tasse"
+        variant="ritual"
       />
 
       <PathwayBadge pathway="feminin" />
 
-      <section className="section">
-        <WhisperLine text={whisperLines[8]} position="left" tone="amethyst" />
-        <Container>
-          <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr] items-start">
-            <Reveal>
-              <div className="space-y-12">
-                <div className="space-y-5">
-                  <div className="inline-flex items-center gap-3 text-xs uppercase tracking-[0.32em] text-gold-deep">
-                    <Etincelle size={12} />
-                    <span>Ce que vous pouvez y vivre</span>
-                  </div>
-                  <ul className="grid gap-3 sm:grid-cols-2">
-                    {peutVivre.map((item) => (
-                      <li key={item} className="flex items-start gap-3 text-text-medium">
-                        <span className="mt-2 h-1 w-1 rounded-full bg-gold shrink-0" />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+      <DetailStrip
+        assetIds={["micro-feminin-1", "micro-feminin-2", "micro-feminin-3", "micro-feminin-4", "micro-feminin-5", "micro-feminin-6"]}
+        tone="rose"
+        size="md"
+        caption="Fragments du cercle — bougies, mains, tissus."
+      />
 
-                <div className="space-y-5">
-                  <div className="inline-flex items-center gap-3 text-xs uppercase tracking-[0.32em] text-gold-deep">
-                    <Etincelle size={12} />
-                    <span>À qui cela s&apos;adresse</span>
-                  </div>
-                  <ul className="space-y-2">
-                    {aQuiSadresse.map((item) => (
-                      <li key={item} className="flex items-start gap-3 text-text-medium">
-                        <span className="mt-1.5 text-gold"><Etincelle size={10} /></span>
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+      <PillarPourQuiSection
+        eyebrow={cerclesPourQui.eyebrow}
+        title={cerclesPourQui.title}
+        paragraphs={cerclesPourQui.paragraphs}
+        background="bg-base"
+      />
 
-                <div className="space-y-5">
-                  <div className="inline-flex items-center gap-3 text-xs uppercase tracking-[0.32em] text-gold-deep">
-                    <Etincelle size={12} />
-                    <span>Le déroulé d&apos;un cercle</span>
-                  </div>
-                  <ol className="space-y-3">
-                    {deroule.map((step, i) => (
-                      <li key={step} className="flex items-baseline gap-4 text-text-medium leading-relaxed">
-                        <span className="font-display-italic text-gold-deep tabular-nums shrink-0">
-                          {String(i + 1).padStart(2, "0")}
-                        </span>
-                        <span>{step}</span>
-                      </li>
-                    ))}
-                  </ol>
-                  <p className="text-xs text-text-soft italic">
-                    Déroulé indicatif — chaque cercle s&apos;ajuste à la thématique et à l&apos;énergie du groupe.
-                  </p>
-                </div>
+      <RitualStepsSection
+        eyebrow="Comment se déroule un cercle"
+        title="Arriver, déposer, refermer."
+        intro="Une mécanique simple, tenue avec soin. Ce qui se dit dans le cercle reste dans le cercle — c'est la règle."
+        steps={cerclesSteps}
+      />
 
-                <div className="space-y-5">
-                  <div className="inline-flex items-center gap-3 text-xs uppercase tracking-[0.32em] text-gold-deep">
-                    <Etincelle size={12} />
-                    <span>Thématiques possibles</span>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {thematiques.map((t) => (
-                      <span
-                        key={t}
-                        className="rounded-full border border-border-medium bg-bg-card px-4 py-1.5 text-sm text-text-deep"
-                      >
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-                  <p className="text-xs text-text-soft italic">
-                    La thématique du prochain cercle sera annoncée à l&apos;ouverture des inscriptions.
-                  </p>
-                </div>
+      <PillarFaqSection items={cerclesFaq} background="bg-base" />
 
-                <div className="rounded-3xl border border-rose-soft/60 bg-gradient-to-br from-rose-soft/40 via-bg-card to-bg-card p-8 space-y-4">
-                  <div className="flex items-center gap-3 text-xs uppercase tracking-[0.32em] text-gold-deep">
-                    <Lock className="h-3.5 w-3.5" />
-                    <span>Confidentialité</span>
-                  </div>
-                  <p className="font-display text-2xl text-text-deep leading-snug">
-                    Ce qui est partagé reste à l&apos;intérieur du cercle.
-                  </p>
-                  <p className="text-sm text-text-medium leading-relaxed">
-                    La confidentialité est un cadre fondamental du cercle. Aucune trace écrite, aucun partage extérieur, aucun jugement. Vous parlez seulement si vous le souhaitez.
-                  </p>
-                </div>
-              </div>
-            </Reveal>
-
-            <Reveal delay={0.1}>
-              <aside
-                id="inscription"
-                className="lg:sticky lg:top-28 rounded-3xl border border-border-soft bg-bg-card p-7 space-y-4"
-              >
-                <div className="flex items-center gap-2 text-xs uppercase tracking-[0.24em] text-gold-deep">
-                  <Calendar className="h-3.5 w-3.5" />
-                  <span>Prochain cercle</span>
-                </div>
-                <p className="font-display text-2xl leading-snug text-text-deep">
-                  Prochaine date à venir
-                </p>
-                <p className="text-sm text-text-medium leading-relaxed">
-                  Inscrivez-vous à la liste pour être prévenue en priorité dès qu&apos;une nouvelle date est ouverte.
-                </p>
-                <Link href="/contact?sujet=Cercle de femmes" className="btn-primary w-full">
-                  Rejoindre la liste d&apos;intérêt
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-                <Link
-                  href="/contact?sujet=Question cercle"
-                  className="block text-center text-sm text-text-medium hover:text-accent transition-colors py-2"
-                >
-                  Poser une question
-                </Link>
-                <p className="text-[0.7rem] text-text-soft leading-relaxed pt-2 border-t border-border-soft">
-                  Vos coordonnées ne seront utilisées que pour vous prévenir des prochains cercles. Désinscription à tout moment.
-                </p>
-              </aside>
-            </Reveal>
-          </div>
-        </Container>
-      </section>
-
-      <BilanGiftBanner variant="warm" />
+      <GuidanceFooter
+        variant="dates"
+        title="Recevoir l'invitation au prochain cercle ?"
+        body="Les dates sont annoncées en priorité aux personnes inscrites sur la liste d'intérêt — pas de spam, juste les ouvertures."
+      />
     </>
   );
 }

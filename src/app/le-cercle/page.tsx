@@ -19,10 +19,10 @@ import {
 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
-import { PageHeader } from "@/components/ui/PageHeader";
+import { PageRefugeHero } from "@/components/page/PageRefugeHero";
 import { Etincelle } from "@/components/ui/Etincelle";
+import { EtincelleAccent } from "@/components/ui/EtincelleAccent";
 import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
-import { SacredBackdrop } from "@/components/ornaments/SacredBackdrop";
 import { studio } from "@/lib/parcours";
 import { createCheckoutSession } from "@/lib/stripeProducts";
 import { whatsappMessages, whatsappLink } from "@/lib/whatsapp";
@@ -79,17 +79,24 @@ export default function CerclePage() {
 
   return (
     <>
-      <PageHeader
-        variant="warm"
-        eyebrow="Studio en ligne · communauté tenue par Céline"
+      <PageRefugeHero
+        eyebrow="Le Cercle · communauté en ligne"
+        greeting="Un espace en continu."
         title={
           <>
             Le Cercle{" "}
-            <span className="font-display-italic text-gold-deep">Etincel</span>.
+            <EtincelleAccent variant="signature" withSparkle>
+              Etincel
+            </EtincelleAccent>.
           </>
         }
-        description={studio.description}
+        body={studio.description}
+        primaryCta={{ label: "Rejoindre Le Cercle", href: "#abonner" }}
+        secondaryCta={{ label: "Poser une question", href: "https://wa.me/33627438104" }}
+        variant="portrait"
+        visualId="about-portrait-secondaire"
       />
+      <span id="abonner" />
 
       <section className="bg-bg-soft border-y border-border-soft py-8">
         <Container>
@@ -191,7 +198,7 @@ export default function CerclePage() {
       </section>
 
       <section className="section bg-bg-deep text-text-on-dark relative overflow-hidden">
-        <SacredBackdrop variant="feminin" intensity="medium" />
+        {/* SacredBackdrop retiré Sprint D — palette refuge prend le relais */}
         <Container className="relative">
           <div className="grid lg:grid-cols-[1fr_1fr] gap-10 items-center">
             <Reveal>

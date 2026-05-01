@@ -1,161 +1,76 @@
-import Link from "next/link";
 import type { Metadata } from "next";
-import { ArrowRight, Heart, Moon, Flower, BookOpen } from "lucide-react";
-import { Container } from "@/components/ui/Container";
-import { Reveal } from "@/components/ui/Reveal";
-import { PageHeader } from "@/components/ui/PageHeader";
-import { Etincelle } from "@/components/ui/Etincelle";
-import { BilanGiftBanner } from "@/components/layout/BilanGiftBanner";
+import { PageRefugeHero } from "@/components/page/PageRefugeHero";
+import { GuidanceFooter } from "@/components/page/GuidanceFooter";
+import { PillarPourQuiSection, PillarFaqSection, PillarDisclaimer } from "@/components/page/PillarSections";
+import { DetailStrip } from "@/components/ui/DetailStrip";
 import { PathwayBadge } from "@/components/layout/PathwayBadge";
+import { EtincelleAccent } from "@/components/ui/EtincelleAccent";
 import { disclaimers } from "@/lib/data";
 
 export const metadata: Metadata = {
-  title: "Féminin sacré",
+  title: "Féminin sacré — un espace symbolique pour le corps et l'intuition",
   description:
-    "Un accompagnement symbolique et énergétique autour du féminin, de la mémoire du corps, des cycles et de la reconnexion à soi.",
+    "Un accompagnement symbolique du féminin, des cycles, du corps comme territoire vivant. Démarche de bien-être — ne remplace pas un suivi médical, gynécologique ou psychologique.",
 };
 
-const formats = [
-  {
-    title: "Accompagnement individuel",
-    description: "Une séance dédiée à votre histoire et votre rythme.",
-    href: "/accompagnements/feminin-sacre",
-  },
-  {
-    title: "Cercles de femmes",
-    description: "Un rendez-vous mensuel pour partager en sororité.",
-    href: "/cercles-de-femmes",
-  },
-  {
-    title: "Retraites immersives",
-    description: "Un temps long pour vous déposer en profondeur.",
-    href: "/retraites",
-  },
-  {
-    title: "Ateliers thématiques",
-    description: "Des temps courts pour explorer une dimension précise.",
-    href: "/collectif#ateliers",
-  },
-];
+const fsPourQui = {
+  eyebrow: "Quand cet espace prend tout son sens",
+  title: "Quand le féminin appelle à être écouté.",
+  paragraphs: [
+    "Quand le corps demande de la place, quand un cycle devient inconfortable, quand une étape de vie de femme demande à être traversée. Quand l'intuition s'éloigne, quand le rapport à soi se brouille.",
+    "Quand l'envie est de retrouver un lien doux avec son corps, ses ressentis, son énergie créatrice. Sans injonction, sans modèle imposé, sans pseudo-médecine.",
+    "Cet espace s'adresse à toute personne se reconnaissant dans le féminin, à toute étape de la vie de femme.",
+  ],
+};
 
-const themes = [
-  { icon: Heart, title: "Reconnexion au corps", description: "Habiter à nouveau la maison qu'est votre corps." },
-  { icon: Moon, title: "Cycles & saisons intérieures", description: "Lire et honorer les rythmes du féminin." },
-  { icon: Flower, title: "Énergie créatrice", description: "Réveiller la puissance qui crée, donne et transforme." },
-  { icon: BookOpen, title: "Héritages émotionnels", description: "Reconnaître et déposer ce qui n'est pas à vous." },
+const fsFaq = [
+  { q: "Est-ce que c'est un soin médical ?", a: "Non. C'est un accompagnement symbolique et sensible. Il ne remplace pas un suivi médical, gynécologique ou psychologique. Si vous avez une question de santé, parlez-en à votre médecin." },
+  { q: "Comment se déroule une séance ?", a: "Une séance individuelle, dans un cadre confidentiel et sécure. On commence par un temps d'échange, puis on travaille avec ce qui se présente — souvent à partir d'un thème, d'un cycle, d'un ressenti corporel." },
+  { q: "Faut-il être prête à parler de tout ?", a: "Non. Vous décidez de ce que vous partagez. Le cadre respecte votre intimité et votre rythme." },
+  { q: "Quel est le tarif ?", a: "Sur demande — le format est ajusté à vous, donc le tarif aussi. Écrivez-moi avec votre intention pour qu'on en parle simplement." },
 ];
 
 export default function FemininSacrePage() {
   return (
     <>
-      <PageHeader
-        variant="warm"
-        eyebrow="Féminin sacré · médecine symbolique de l'utérus"
+      <PageRefugeHero
+        eyebrow="Féminin sacré"
+        greeting="Revenir à votre corps."
         title={
           <>
-            Revenir au corps, à l'intuition et à l'
-            <span className="font-display-italic text-gold-deep">énergie créatrice</span>
+            Un espace symbolique pour le corps, les{" "}
+            <EtincelleAccent variant="letter">cycles</EtincelleAccent>,
+            l&apos;intuition.
           </>
         }
-        description="Un accompagnement symbolique et énergétique autour du féminin, de la mémoire du corps, des cycles et de la reconnexion à soi."
+        body="Un accompagnement individuel autour du féminin sacré et de la symbolique de l'utérus. Pas une médecine — un espace de reconnexion à soi, à son corps, à son histoire."
+        primaryCta={{ label: "Écrire à Céline", href: "/contact?sujet=F%C3%A9minin%20sacr%C3%A9" }}
+        secondaryCta={{ label: "Voir le chemin Féminin", href: "/feminin-cacao" }}
+        visualId="feminin-cacao-tasse"
+        variant="ritual"
       />
 
       <PathwayBadge pathway="feminin" />
 
-      <section className="section">
-        <Container>
-          <div className="grid gap-16 lg:grid-cols-[1.3fr_1fr] items-start">
-            <Reveal>
-              <div className="space-y-12">
-                <div className="space-y-5">
-                  <div className="inline-flex items-center gap-3 text-xs uppercase tracking-[0.32em] text-gold-deep">
-                    <Etincelle size={12} />
-                    <span>L'intention</span>
-                  </div>
-                  <h2 className="font-display text-3xl md:text-4xl leading-tight text-text-deep">
-                    Un espace pour ce qui se vit dans le silence du corps.
-                  </h2>
-                  <div className="space-y-4 text-text-medium leading-relaxed">
-                    <p>
-                      Cet accompagnement s'adresse à celles qui ressentent l'appel d'un travail sensible autour de leur féminin. Il prend la forme d'un dialogue symbolique avec le corps, ses cycles, ses mémoires et son énergie créatrice.
-                    </p>
-                    <p>
-                      L'utérus est ici approché comme un territoire symbolique — celui de l'origine, du créatif, de la transformation. Aucun acte médical, aucune promesse de soin gynécologique. Une pratique de reconnexion sensible, à votre rythme.
-                    </p>
-                  </div>
-                </div>
+      <DetailStrip
+        assetIds={["micro-feminin-1", "micro-feminin-2", "micro-feminin-3", "micro-feminin-4", "micro-feminin-5", "micro-feminin-6"]}
+        tone="rose"
+        size="md"
+        caption="Fragments — matières, lumière, mains, présence."
+      />
 
-                <div className="space-y-5">
-                  <div className="inline-flex items-center gap-3 text-xs uppercase tracking-[0.32em] text-gold-deep">
-                    <Etincelle size={12} />
-                    <span>Les axes d'exploration</span>
-                  </div>
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    {themes.map((t) => (
-                      <div key={t.title} className="rounded-2xl border border-border-soft bg-bg-card p-5 space-y-2">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-rose-soft text-text-deep">
-                          <t.icon className="h-4 w-4" />
-                        </div>
-                        <p className="font-display text-lg text-text-deep">{t.title}</p>
-                        <p className="text-sm text-text-medium leading-relaxed">{t.description}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+      <PillarPourQuiSection
+        eyebrow={fsPourQui.eyebrow}
+        title={fsPourQui.title}
+        paragraphs={fsPourQui.paragraphs}
+        background="bg-base"
+      />
 
-                <div className="space-y-5">
-                  <div className="inline-flex items-center gap-3 text-xs uppercase tracking-[0.32em] text-gold-deep">
-                    <Etincelle size={12} />
-                    <span>Les formats possibles</span>
-                  </div>
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    {formats.map((f) => (
-                      <Link
-                        key={f.href}
-                        href={f.href}
-                        className="group rounded-2xl border border-border-soft bg-bg-card p-5 hover:border-gold-soft hover:bg-bg-soft transition-all"
-                      >
-                        <p className="font-display text-lg text-text-deep flex items-center justify-between">
-                          {f.title}
-                          <ArrowRight className="h-4 w-4 text-text-soft group-hover:text-accent group-hover:translate-x-0.5 transition-all" />
-                        </p>
-                        <p className="text-sm text-text-medium mt-1">{f.description}</p>
-                      </Link>
-                    ))}
-                  </div>
-                </div>
+      <PillarFaqSection items={fsFaq} background="paper-sand" />
 
-                <div className="flex flex-wrap gap-3 pt-4 border-t border-border-soft">
-                  <Link href="/contact?sujet=Féminin sacré" className="btn-primary">
-                    Échanger avec Céline
-                    <ArrowRight className="h-4 w-4" />
-                  </Link>
-                  <Link href="/cercles-de-femmes" className="btn-secondary">
-                    Découvrir les cercles
-                  </Link>
-                </div>
-              </div>
-            </Reveal>
+      <PillarDisclaimer text={disclaimers.feminin} />
 
-            <Reveal delay={0.1}>
-              <aside className="sticky top-32 rounded-3xl border border-gold-soft/40 bg-gradient-to-br from-rose-soft/40 via-bg-card to-bg-card p-7 space-y-4">
-                <p className="text-xs uppercase tracking-[0.24em] text-gold-deep">Précision importante</p>
-                <p className="font-display text-2xl leading-snug text-text-deep">
-                  Une démarche de bien-être, pas un soin médical.
-                </p>
-                <p className="text-sm text-text-medium leading-relaxed">
-                  {disclaimers.feminin}
-                </p>
-                <p className="text-xs text-text-soft leading-relaxed pt-3 border-t border-border-soft">
-                  En cas de douleur ou de trouble gynécologique, consultez un professionnel de santé.
-                </p>
-              </aside>
-            </Reveal>
-          </div>
-        </Container>
-      </section>
-
-      <BilanGiftBanner variant="warm" />
+      <GuidanceFooter variant="contact" />
     </>
   );
 }

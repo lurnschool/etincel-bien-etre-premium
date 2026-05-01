@@ -21,8 +21,9 @@ import {
 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
-import { PageHeader } from "@/components/ui/PageHeader";
+import { PageRefugeHero } from "@/components/page/PageRefugeHero";
 import { Etincelle } from "@/components/ui/Etincelle";
+import { EtincelleAccent } from "@/components/ui/EtincelleAccent";
 import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
 import { whatsappMessages, whatsappLink } from "@/lib/whatsapp";
 import { asset } from "@/lib/assets";
@@ -224,17 +225,21 @@ export default function DiagnosticPage() {
 
   return (
     <>
-      <PageHeader
-        variant="deep"
-        eyebrow="Bilan d'orientation · gratuit · 4 minutes"
+      <PageRefugeHero
+        eyebrow="Pas sûre par où commencer ?"
+        greeting="Quelques questions douces."
         title={
           <>
-            La boussole{" "}
-            <span className="font-display-italic text-gold-gradient">Etincel</span>.
+            Me laisser{" "}
+            <EtincelleAccent variant="glow">guider</EtincelleAccent>.
           </>
         }
-        description="Huit questions sensibles pour identifier la pratique la plus juste pour vous, votre rythme et votre moment de vie. Bilan personnalisé envoyé par email + guide PDF de 6 pages offert."
+        body="Huit questions sensibles pour identifier ce qui pourrait vous parler — pas un quiz technique, plutôt une conversation écrite. Vous recevez le résultat par email, et Céline vous lit personnellement."
+        primaryCta={{ label: "Commencer", href: "#commencer" }}
+        secondaryCta={{ label: "Plutôt écrire à Céline", href: "/contact" }}
+        variant="contact"
       />
+      <span id="commencer" />
 
       <section className="pb-24">
         <Container size="narrow">

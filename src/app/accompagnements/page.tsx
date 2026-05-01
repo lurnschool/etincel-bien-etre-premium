@@ -1,117 +1,91 @@
-import Link from "next/link";
 import type { Metadata } from "next";
+import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
-import { PageHeader } from "@/components/ui/PageHeader";
-import { BilanGiftBanner } from "@/components/layout/BilanGiftBanner";
-import { accompagnementsIndividuels, disclaimers } from "@/lib/data";
+import { Etincelle } from "@/components/ui/Etincelle";
+import { PageRefugeHero } from "@/components/page/PageRefugeHero";
+import { GuidanceFooter } from "@/components/page/GuidanceFooter";
+import { DetailStrip } from "@/components/ui/DetailStrip";
+import { EtincelleAccent } from "@/components/ui/EtincelleAccent";
+import { accompagnementsIndividuels } from "@/lib/data";
 
 export const metadata: Metadata = {
-  title: "Accompagnements individuels",
+  title: "Les outils que je peux mobiliser",
   description:
-    "Numérologie, hypnose, CellRelease®, massage énergétique, réflexologie amérindienne, breathwork, innerdance, féminin sacré : choisissez la séance qui vous correspond.",
+    "Hypnose, CellRelease, massages, breathwork, innerdance, numérologie. Les pratiques que Céline mobilise selon ce que vous traversez — pas un catalogue, des outils au service de votre chemin.",
 };
-
-const familyConfig = [
-  { id: "comprendre", label: "Comprendre son chemin", color: "from-gold-soft/40 to-bg-card" },
-  { id: "apaiser", label: "Apaiser, libérer", color: "from-accent-soft/30 to-bg-card" },
-  { id: "corps", label: "Revenir au corps", color: "from-rose-soft/40 to-bg-card" },
-  { id: "explorer", label: "Explorer l'intérieur", color: "from-bg-soft to-bg-card" },
-  { id: "feminin", label: "Féminin sacré", color: "from-rose-soft/50 to-bg-card" },
-] as const;
 
 export default function AccompagnementsPage() {
   return (
     <>
-      <PageHeader
-        eyebrow="Accompagnements individuels"
+      <PageRefugeHero
+        eyebrow="Les outils"
+        greeting="Pas un menu."
         title={
           <>
-            Une séance pour{" "}
-            <span className="font-display-italic text-gold-deep">votre histoire</span>
+            Les pratiques que je peux{" "}
+            <EtincelleAccent variant="glow">mobiliser</EtincelleAccent>{" "}
+            pour vous.
           </>
         }
-        description="Chaque pratique est une porte d'entrée. Céline ajuste l'approche, le rythme, la profondeur."
+        body="Aucun de ces outils n'est central. Chacun a sa place selon ce que vous traversez. C'est en parlant ensemble qu'on voit lesquels font sens."
+        primaryCta={{ label: "Me laisser guider", href: "/diagnostic" }}
+        secondaryCta={{ label: "Écrire à Céline", href: "/contact" }}
+        variant="contact"
       />
 
-      <section className="pb-24">
+      <DetailStrip
+        assetIds={["micro-refuge-1", "micro-refuge-2", "micro-refuge-3", "micro-refuge-4", "micro-refuge-5", "micro-refuge-6"]}
+        tone="warm"
+        size="md"
+        caption="Fragments du refuge — atmosphères et présences."
+      />
+
+      <section className="relative bg-bg-base py-24 md:py-32">
         <Container>
-          <div className="space-y-20">
-            {familyConfig.map((family) => {
-              const items = accompagnementsIndividuels.filter((a) => a.family === family.id);
-              if (!items.length) return null;
-              return (
-                <div key={family.id} className="space-y-6">
-                  <Reveal>
-                    <div className="flex items-end justify-between gap-6 flex-wrap">
-                      <div>
-                        <p className="text-xs uppercase tracking-[0.32em] text-gold-deep">Famille</p>
-                        <h2 className="font-display text-3xl md:text-4xl leading-tight text-text-deep mt-2">
-                          {family.label}
-                        </h2>
-                      </div>
-                    </div>
-                  </Reveal>
-                  <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-                    {items.map((item, i) => (
-                      <Reveal key={item.slug} delay={i * 0.04}>
-                        <article className={`group relative h-full overflow-hidden rounded-3xl border border-border-soft bg-gradient-to-br ${family.color} p-7 flex flex-col transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_24px_60px_rgba(31,26,46,0.1)] hover:border-gold-soft`}>
-                          <h3 className="font-display text-2xl leading-tight text-text-deep mb-3">
-                            {item.name}
-                          </h3>
-                          <p className="text-sm text-text-medium leading-relaxed flex-1">
-                            {item.pitch}
-                          </p>
-                          <p className="text-xs text-text-soft mt-4 italic">
-                            {item.forWho}
-                          </p>
-                          <dl className="mt-5 pt-5 border-t border-border-soft space-y-1.5 text-xs text-text-soft">
-                            <div className="flex justify-between gap-3">
-                              <dt>Format</dt>
-                              <dd className="text-text-medium">{item.format}</dd>
-                            </div>
-                            <div className="flex justify-between gap-3">
-                              <dt>Durée</dt>
-                              <dd className="text-text-medium">{item.duration}</dd>
-                            </div>
-                            <div className="flex justify-between gap-3">
-                              <dt>Tarif</dt>
-                              <dd className="text-text-medium font-medium">{item.price}</dd>
-                            </div>
-                          </dl>
-                          {item.disclaimer && (
-                            <p className="mt-4 text-[0.65rem] leading-relaxed text-text-soft border border-gold-soft/40 bg-bg-card/60 rounded-xl p-3">
-                              {item.disclaimer}
-                            </p>
-                          )}
-                          <div className="mt-5 flex items-center justify-between">
-                            <Link
-                              href={`/contact?sujet=${encodeURIComponent(item.name)}`}
-                              className="inline-flex items-center gap-1.5 text-sm font-medium text-accent group-hover:text-accent-deep"
-                            >
-                              Demander un rendez-vous
-                              <ArrowRight className="h-3.5 w-3.5" />
-                            </Link>
-                          </div>
-                        </article>
-                      </Reveal>
-                    ))}
-                  </div>
-                </div>
-              );
-            })}
+          <div className="max-w-2xl mx-auto text-center mb-12 md:mb-14">
+            <Reveal>
+              <div className="inline-flex items-center gap-3 text-[0.7rem] uppercase tracking-[0.32em] text-text-soft">
+                <span className="text-gold-deep">
+                  <Etincelle size={11} />
+                </span>
+                <span>Vue d&apos;ensemble</span>
+              </div>
+              <p className="mt-5 text-base md:text-lg leading-relaxed text-text-medium">
+                Vous pouvez parcourir la liste, mais le plus simple est souvent
+                de commencer par un mot ou par le bilan d&apos;orientation.
+              </p>
+            </Reveal>
           </div>
 
-          <Reveal>
-            <div className="mt-20 rounded-2xl border border-border-soft bg-bg-soft p-6 text-xs text-text-soft leading-relaxed">
-              {disclaimers.bienEtre}
-            </div>
-          </Reveal>
+          <ul className="grid gap-5 md:gap-6 sm:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto">
+            {accompagnementsIndividuels.map((p, i) => (
+              <Reveal key={p.slug} delay={i * 0.05}>
+                <Link
+                  href={`/accompagnements/${p.slug}`}
+                  className="group flex flex-col h-full rounded-[1.5rem] bg-bg-card border border-border-soft p-6 md:p-7 hover:border-gold-soft hover:shadow-[0_18px_40px_rgba(31,26,46,0.08)] transition-all duration-500"
+                >
+                  <h3 className="font-display text-lg md:text-xl text-text-deep leading-tight">
+                    {p.name}
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-text-medium flex-1">
+                    {p.pitch}
+                  </p>
+                  <div className="mt-5 pt-4 border-t border-border-soft/60 flex items-center justify-between gap-3">
+                    <span className="text-[0.7rem] uppercase tracking-[0.28em] text-text-soft">
+                      {p.duration} · {p.price}
+                    </span>
+                    <ArrowRight className="h-4 w-4 text-text-soft transition-transform group-hover:translate-x-0.5 group-hover:text-accent shrink-0" />
+                  </div>
+                </Link>
+              </Reveal>
+            ))}
+          </ul>
         </Container>
       </section>
 
-      <BilanGiftBanner variant="warm" />
+      <GuidanceFooter variant="guidance" />
     </>
   );
 }

@@ -1,161 +1,89 @@
-import Link from "next/link";
 import type { Metadata } from "next";
-import { Music, User, Users, ArrowRight } from "lucide-react";
-import { Container } from "@/components/ui/Container";
-import { Reveal } from "@/components/ui/Reveal";
-import { PageHeader } from "@/components/ui/PageHeader";
-import { Etincelle } from "@/components/ui/Etincelle";
-import { BilanGiftBanner } from "@/components/layout/BilanGiftBanner";
+import { PageRefugeHero } from "@/components/page/PageRefugeHero";
+import { GuidanceFooter } from "@/components/page/GuidanceFooter";
+import { PillarFormatsSection, PillarFaqSection, PillarDisclaimer } from "@/components/page/PillarSections";
+import { BreathSection } from "@/components/page/sections/BreathSection";
+import { DetailStrip } from "@/components/ui/DetailStrip";
 import { PathwayBadge } from "@/components/layout/PathwayBadge";
+import { EtincelleAccent } from "@/components/ui/EtincelleAccent";
 import { disclaimers } from "@/lib/data";
 
 export const metadata: Metadata = {
-  title: "Innerdance",
+  title: "Innerdance — écouter ce qui cherche à émerger",
   description:
-    "Une immersion intérieure mêlant musique, présence et corps pour écouter ce qui cherche à émerger.",
+    "Une expérience sensible mêlant musique, corps et états de présence. En individuel ou en collectif, pour ralentir et écouter ce qui cherche à émerger.",
 };
 
-const cles = [
-  "Expérience corporelle",
-  "Musique immersive",
-  "État de présence",
-  "Lâcher-prise",
-  "Exploration intérieure",
-  "Ressentis sensibles",
+const innerdancePhases = [
+  { label: "Arriver", body: "Vous vous installez allongée, dans un cadre tenu. Rien à faire, rien à réussir. La musique commence." },
+  { label: "Écouter", body: "Le corps reçoit la musique, des mouvements peuvent émerger d'eux-mêmes. Vous suivez ce qui vient, sans interpréter." },
+  { label: "Revenir", body: "L'expérience se referme doucement. Un temps de présence, parfois de partage. Vous repartez plus présente, plus posée." },
 ];
 
-const pourQui = [
-  "Personnes en transition de vie",
-  "Besoin de ralentir, de s'écouter",
-  "Envie de reconnexion sans mots",
-  "Curiosité d'explorer autrement",
-];
+const innerdanceFormats = {
+  eyebrow: "Deux formats",
+  title: "En individuel ou en cercle.",
+  body: "Selon votre disponibilité et ce qui appelle, l'expérience peut se vivre en individuel (cadre intime) ou en collectif (énergie de groupe).",
+  cards: [
+    { id: "innerdance-individuel", title: "Innerdance individuel", body: "Une séance dédiée, dans un cadre tenu à deux. Vous arrivez, vous vous déposez, je tiens l'espace. La musique est choisie pour vous.", meta: "Sur demande" },
+    { id: "innerdance-collectif", title: "Innerdance collectif", body: "Une session en petit groupe (6-10 personnes). L'énergie collective porte l'expérience individuelle. Plus immersif, plus enveloppant.", meta: "Sessions ponctuelles" },
+  ],
+} as const;
 
-const ceQueCeNestPas = [
-  "Ce n'est pas un acte médical.",
-  "Ce n'est pas une thérapie conventionnelle.",
-  "Ce n'est pas une promesse de résultat.",
+const innerdanceFaq = [
+  { q: "Faut-il avoir déjà dansé ou pratiqué de la méditation ?", a: "Non, aucun pré-requis. L'expérience se vit allongée, à votre rythme. Il n'y a rien à « bien faire » ou à « réussir » — juste à laisser arriver." },
+  { q: "Y a-t-il des contre-indications ?", a: "Très peu. C'est une pratique douce. Si vous suivez un traitement spécifique ou avez une condition particulière, on en parle avant pour s'assurer que c'est juste pour vous." },
+  { q: "Combien de temps dure une séance ?", a: "En individuel, environ 1h30 (musique + temps de présence). En collectif, généralement 2h (avec temps de partage en cercle)." },
+  { q: "Comment me préparer ?", a: "Vêtements confortables, repas léger 2h avant, et l'envie de vous déposer. Rien d'autre. Le reste est posé sur place." },
 ];
 
 export default function InnerdancePage() {
   return (
     <>
-      <PageHeader
-        variant="deep"
-        eyebrow="Pratique sensible"
+      <PageRefugeHero
+        eyebrow="Innerdance"
+        greeting="Une expérience sensible."
         title={
           <>
-            Innerdance —{" "}
-            <span className="font-display-italic text-gold-gradient">
-              écouter ce qui émerge
-            </span>
+            Écouter ce qui cherche à{" "}
+            <EtincelleAccent variant="glow">émerger</EtincelleAccent>,
+            par le corps.
           </>
         }
-        description="Une immersion intérieure pour écouter ce qui cherche à émerger, à travers la musique, le corps et la présence."
+        body="Allongée, portée par une musique conçue pour l'expérience, vous laissez les mouvements arriver d'eux-mêmes. Pas de chorégraphie, pas de performance — une écoute du corps, en présence."
+        primaryCta={{ label: "Écrire à Céline", href: "/contact?sujet=Innerdance" }}
+        secondaryCta={{ label: "Voir le chemin Corps", href: "/corps-integration" }}
+        visualId="corps-innerdance"
+        variant="movement"
       />
 
       <PathwayBadge pathway="corps" />
 
-      <section className="section">
-        <Container>
-          <div className="grid gap-16 lg:grid-cols-[1.3fr_1fr] items-start">
-            <Reveal>
-              <div className="space-y-10">
-                <div className="space-y-4">
-                  <h2 className="font-display text-3xl md:text-4xl leading-tight text-text-deep">
-                    Ce qui se vit pendant une séance
-                  </h2>
-                  <p className="text-text-medium leading-relaxed">
-                    L'innerdance se vit allongé, dans un espace tenu, soutenu par une musique soigneusement choisie. Pas de chorégraphie, pas de mots à trouver : l'invitation est de se laisser traverser par ce qui se présente, à son propre rythme.
-                  </p>
-                  <ul className="grid grid-cols-2 gap-3 pt-2">
-                    {cles.map((c) => (
-                      <li key={c} className="flex items-center gap-2 text-sm text-text-medium">
-                        <span className="text-gold"><Etincelle size={10} /></span>
-                        {c}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+      <DetailStrip
+        assetIds={["micro-corps-1", "micro-corps-2", "micro-corps-3", "micro-corps-4", "micro-corps-5", "micro-corps-6"]}
+        tone="sage"
+        size="md"
+        caption="Fragments — souffle, eau, mouvement, silhouettes."
+      />
 
-                <div id="individuel" className="rounded-3xl border border-border-soft bg-bg-card p-8 space-y-4">
-                  <div className="flex items-center gap-3 text-xs uppercase tracking-[0.32em] text-gold-deep">
-                    <User className="h-3.5 w-3.5" />
-                    <span>Format individuel</span>
-                  </div>
-                  <h3 className="font-display text-2xl text-text-deep">
-                    Une séance dédiée à votre intériorité
-                  </h3>
-                  <p className="text-text-medium leading-relaxed">
-                    Une bulle de temps protégée, à deux, pour explorer ce qui demande à émerger. Céline ajuste la musique, l'intensité et le rythme à ce que vous traversez.
-                  </p>
-                  <Link href="/contact?sujet=Innerdance individuel" className="btn-primary self-start">
-                    Découvrir une séance
-                    <ArrowRight className="h-4 w-4" />
-                  </Link>
-                </div>
+      <BreathSection
+        eyebrow="Le mouvement intérieur"
+        title="Arriver, écouter, revenir."
+        intro="Une séance d'innerdance se vit en trois temps. On ne force rien, on suit."
+        phases={innerdancePhases}
+      />
 
-                <div id="collectif" className="rounded-3xl border border-border-soft bg-bg-deep text-text-on-dark p-8 space-y-4 relative overflow-hidden">
-                  <div className="absolute -top-32 right-0 h-72 w-72 rounded-full bg-gold/15 blur-3xl pointer-events-none" />
-                  <div className="relative">
-                    <div className="flex items-center gap-3 text-xs uppercase tracking-[0.32em] text-gold-soft">
-                      <Users className="h-3.5 w-3.5" />
-                      <span>Format collectif</span>
-                    </div>
-                    <h3 className="font-display text-2xl text-text-on-dark mt-2">
-                      Une expérience partagée
-                    </h3>
-                    <p className="text-text-on-dark-soft leading-relaxed mt-3">
-                      Un groupe restreint, un même fil sonore, des présences qui se tiennent. La force du collectif amplifie ce qui se passe à l'intérieur de chacun.
-                    </p>
-                    <Link href="/contact?sujet=Innerdance collectif" className="btn-gold mt-4">
-                      Être informée du prochain collectif
-                      <ArrowRight className="h-4 w-4" />
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </Reveal>
+      <PillarFormatsSection
+        eyebrow={innerdanceFormats.eyebrow}
+        title={innerdanceFormats.title}
+        body={innerdanceFormats.body}
+        cards={innerdanceFormats.cards}
+        background="paper-sand"
+      />
 
-            <Reveal delay={0.1}>
-              <aside className="sticky top-32 space-y-5">
-                <div className="rounded-3xl border border-border-soft bg-bg-card p-6 space-y-3">
-                  <div className="flex items-center gap-2 text-gold mb-1">
-                    <Music className="h-4 w-4" />
-                    <span className="text-xs uppercase tracking-[0.24em] text-gold-deep">Pour qui ?</span>
-                  </div>
-                  <ul className="space-y-2 text-sm text-text-medium">
-                    {pourQui.map((q) => (
-                      <li key={q} className="flex items-start gap-2">
-                        <span className="mt-1.5 h-1 w-1 rounded-full bg-gold shrink-0" />
-                        {q}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="rounded-3xl border border-border-soft bg-bg-soft p-6 space-y-3">
-                  <p className="text-xs uppercase tracking-[0.24em] text-gold-deep">Ce que ce n'est pas</p>
-                  <ul className="space-y-2 text-sm text-text-medium">
-                    {ceQueCeNestPas.map((q) => (
-                      <li key={q} className="flex items-start gap-2">
-                        <span className="mt-1.5 h-1 w-1 rounded-full bg-text-soft shrink-0" />
-                        {q}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <p className="text-[0.7rem] text-text-soft leading-relaxed px-2">
-                  {disclaimers.bienEtre}
-                </p>
-              </aside>
-            </Reveal>
-          </div>
-        </Container>
-      </section>
-
-      <BilanGiftBanner />
+      <PillarFaqSection items={innerdanceFaq} background="bg-base" />
+      <PillarDisclaimer text={disclaimers.bienEtre} />
+      <GuidanceFooter variant="contact" />
     </>
   );
 }

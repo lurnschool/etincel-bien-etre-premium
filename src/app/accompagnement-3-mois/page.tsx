@@ -16,10 +16,10 @@ import {
 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
-import { PageHeader } from "@/components/ui/PageHeader";
+import { PageRefugeHero } from "@/components/page/PageRefugeHero";
 import { Etincelle } from "@/components/ui/Etincelle";
+import { EtincelleAccent } from "@/components/ui/EtincelleAccent";
 import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
-import { SacredBackdrop } from "@/components/ornaments/SacredBackdrop";
 import { parcours } from "@/lib/parcours";
 
 export const metadata: Metadata = {
@@ -129,20 +129,23 @@ const tierStyles: Record<number, { bg: string; border: string; accent: string; t
 export default function ParcoursPage() {
   return (
     <>
-      <PageHeader
-        variant="deep"
-        eyebrow="Accompagnement 12 semaines · conçu par Céline"
+      <PageRefugeHero
+        eyebrow="Accompagnement sur plusieurs mois"
+        greeting="Un cadre construit avec vous."
         title={
           <>
             Un parcours pensé{" "}
-            <span className="font-display-italic text-gold-gradient">pour vous</span>.
+            <EtincelleAccent variant="glow">pour vous</EtincelleAccent>.
           </>
         }
-        description="Trois directions possibles — Reflet, Boussole, Métamorphose. Céline vous attribue celle qui résonne après un échange préalable de 30 min. Suivi continu, accès prioritaire, Studio Le Cercle inclus."
+        body="Quand le moment appelle un cadre plus long. Trois directions possibles — à ajuster ensemble après un échange préalable. Aucun pack rigide, aucune promesse forcée."
+        primaryCta={{ label: "Échanger avec Céline", href: "/contact?sujet=Parcours%203%20mois" }}
+        secondaryCta={{ label: "Me laisser guider", href: "/diagnostic" }}
+        variant="portrait"
+        visualId="about-portrait-secondaire"
       />
 
       <section className="bg-bg-deep text-text-on-dark py-10 border-y border-white/10 relative overflow-hidden">
-        <SacredBackdrop variant="retraite" intensity="soft" />
         <Container className="relative">
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
             {[
@@ -344,7 +347,7 @@ export default function ParcoursPage() {
       </section>
 
       <section className="section bg-bg-deep text-text-on-dark relative overflow-hidden">
-        <SacredBackdrop variant="retraite" intensity="medium" />
+        {/* SacredBackdrop retiré Sprint D */}
         <Container className="relative">
           <Reveal>
             <div className="max-w-2xl mx-auto text-center space-y-5">

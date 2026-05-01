@@ -1,64 +1,90 @@
-import Link from "next/link";
 import type { Metadata } from "next";
-import { ArrowRight, Users } from "lucide-react";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
-import { PageHeader } from "@/components/ui/PageHeader";
-import { BilanGiftBanner } from "@/components/layout/BilanGiftBanner";
+import { Etincelle } from "@/components/ui/Etincelle";
+import { PageRefugeHero } from "@/components/page/PageRefugeHero";
+import { GuidanceFooter } from "@/components/page/GuidanceFooter";
+import { DetailStrip } from "@/components/ui/DetailStrip";
+import { EtincelleAccent } from "@/components/ui/EtincelleAccent";
 import { experiencesCollectives } from "@/lib/data";
 
 export const metadata: Metadata = {
-  title: "Expériences collectives",
+  title: "Les espaces collectifs — cercles, cérémonies, immersions",
   description:
-    "Cercles de femmes, breathwork, innerdance, constellations, ateliers et week-ends reconnexion : la force du groupe.",
+    "Cercles de femmes, cérémonies cacao, breathwork, innerdance, constellations et retraites. Des espaces vivants en petit comité, jamais en série.",
 };
 
 export default function CollectifPage() {
   return (
     <>
-      <PageHeader
-        variant="warm"
-        eyebrow="Expériences collectives"
+      <PageRefugeHero
+        eyebrow="Espaces collectifs"
+        greeting="Avancer ensemble."
         title={
           <>
-            La force du{" "}
-            <span className="font-display-italic text-gold-deep">groupe</span>
+            Des espaces vivants pour traverser à{" "}
+            <EtincelleAccent variant="glow">plusieurs</EtincelleAccent>.
           </>
         }
-        description="Des espaces partagés pour traverser, ressentir et avancer ensemble. Chaque expérience est unique."
+        body="Cercles, cérémonies, immersions. Des moments en petit comité où la présence d'autres devient un appui. Aucun n'est en série — chacun s'ouvre quand le moment est juste."
+        primaryCta={{ label: "Recevoir les prochaines dates", href: "/evenements" }}
+        secondaryCta={{ label: "Écrire à Céline", href: "/contact" }}
+        variant="contact"
       />
 
-      <section className="pb-24">
+      <DetailStrip
+        assetIds={["micro-refuge-1", "micro-refuge-2", "micro-refuge-3", "micro-refuge-4", "micro-refuge-5", "micro-refuge-6"]}
+        tone="warm"
+        size="md"
+        caption="Fragments d'espaces partagés."
+      />
+
+      <section className="relative bg-bg-base py-24 md:py-32">
         <Container>
-          <div className="grid gap-6 md:grid-cols-2">
-            {experiencesCollectives.map((experience, i) => (
-              <Reveal key={experience.slug} delay={i * 0.05}>
-                <article id={experience.slug} className="group flex h-full flex-col gap-4 rounded-3xl border border-border-soft bg-bg-card p-8 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_24px_60px_rgba(31,26,46,0.1)] hover:border-gold-soft">
-                  <div className="flex items-center gap-3 text-xs uppercase tracking-[0.24em] text-gold-deep">
-                    <Users className="h-3.5 w-3.5" />
-                    <span>{experience.rhythm}</span>
-                  </div>
-                  <h3 className="font-display text-3xl leading-tight text-text-deep">
-                    {experience.name}
+          <div className="max-w-2xl mx-auto text-center mb-12 md:mb-14">
+            <Reveal>
+              <div className="inline-flex items-center gap-3 text-[0.7rem] uppercase tracking-[0.32em] text-text-soft">
+                <span className="text-gold-deep">
+                  <Etincelle size={11} />
+                </span>
+                <span>Quelques formats</span>
+              </div>
+              <p className="mt-5 text-base md:text-lg leading-relaxed text-text-medium">
+                Selon ce qui vous attire et le rythme qui vous va, plusieurs
+                portes d&apos;entrée sont possibles.
+              </p>
+            </Reveal>
+          </div>
+
+          <ul className="grid gap-5 md:gap-6 sm:grid-cols-2 max-w-5xl mx-auto">
+            {experiencesCollectives.map((e, i) => (
+              <Reveal key={e.slug} delay={i * 0.06}>
+                <Link
+                  href={e.href}
+                  className="group flex flex-col h-full rounded-[1.5rem] bg-bg-card border border-border-soft p-7 md:p-8 hover:border-gold-soft hover:shadow-[0_18px_40px_rgba(31,26,46,0.08)] transition-all duration-500"
+                >
+                  <h3 className="font-display text-xl md:text-2xl text-text-deep leading-tight">
+                    {e.name}
                   </h3>
-                  <p className="text-text-medium leading-relaxed flex-1">
-                    {experience.pitch}
+                  <p className="mt-3 text-sm md:text-[0.95rem] leading-relaxed text-text-medium flex-1">
+                    {e.pitch}
                   </p>
-                  <Link
-                    href={experience.href}
-                    className="inline-flex items-center gap-1.5 text-sm font-medium text-accent group-hover:text-accent-deep mt-2"
-                  >
-                    Découvrir
-                    <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-                  </Link>
-                </article>
+                  <div className="mt-5 pt-4 border-t border-border-soft/60 flex items-center justify-between">
+                    <span className="text-[0.7rem] uppercase tracking-[0.28em] text-gold-deep">
+                      {e.rhythm}
+                    </span>
+                    <ArrowRight className="h-4 w-4 text-text-soft transition-transform group-hover:translate-x-0.5 group-hover:text-accent" />
+                  </div>
+                </Link>
               </Reveal>
             ))}
-          </div>
+          </ul>
         </Container>
       </section>
 
-      <BilanGiftBanner />
+      <GuidanceFooter variant="contact" />
     </>
   );
 }
