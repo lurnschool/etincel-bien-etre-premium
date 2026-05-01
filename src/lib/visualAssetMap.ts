@@ -66,6 +66,7 @@ export type VisualAssetEntry = {
 };
 
 const PLACEHOLDERS = {
+  // Sprint A — placeholders neutres
   cream: "/images/placeholders/texture-cream-warm.svg",
   sand: "/images/placeholders/texture-sand-light.svg",
   rose: "/images/placeholders/texture-rose-ancient.svg",
@@ -74,6 +75,15 @@ const PLACEHOLDERS = {
   arch: "/images/placeholders/organic-arch-warm.svg",
   circle: "/images/placeholders/organic-circle-gold.svg",
   light: "/images/placeholders/detail-light-soft.svg",
+  // Sprint C — placeholders thématiques par pièce du refuge
+  memoiresNight: "/images/placeholders/memoires-night.svg",
+  memoiresCircle: "/images/placeholders/memoires-circle.svg",
+  femininWarm: "/images/placeholders/feminin-warm.svg",
+  cacaoRitual: "/images/placeholders/cacao-ritual.svg",
+  corpsWater: "/images/placeholders/corps-water.svg",
+  breathFlow: "/images/placeholders/breath-flow.svg",
+  natureHorizon: "/images/placeholders/nature-horizon.svg",
+  paperKraft: "/images/placeholders/paper-kraft.svg",
 } as const;
 
 const SITE_ORIGINAL = "/images/source-site-original";
@@ -120,7 +130,7 @@ const homeAssets: VisualAssetEntry[] = [
     section: "chemins",
     usage: "Visuel du chemin Mémoires & constellations",
     expectedFileName: "chemin-memoires.jpg",
-    currentFile: PLACEHOLDERS.arch,
+    currentFile: PLACEHOLDERS.memoiresCircle,
     sourceKind: "placeholder",
     status: "waiting-client-photo",
     ratio: "4:5",
@@ -135,7 +145,7 @@ const homeAssets: VisualAssetEntry[] = [
     section: "chemins",
     usage: "Visuel du chemin Féminin & cacao",
     expectedFileName: "chemin-feminin-cacao.jpg",
-    currentFile: PLACEHOLDERS.rose,
+    currentFile: PLACEHOLDERS.femininWarm,
     sourceKind: "placeholder",
     status: "waiting-client-photo",
     ratio: "4:5",
@@ -150,7 +160,7 @@ const homeAssets: VisualAssetEntry[] = [
     section: "chemins",
     usage: "Visuel du chemin Corps & intégration",
     expectedFileName: "chemin-corps.jpg",
-    currentFile: PLACEHOLDERS.sage,
+    currentFile: PLACEHOLDERS.corpsWater,
     sourceKind: "placeholder",
     status: "waiting-client-photo",
     ratio: "4:5",
@@ -403,7 +413,7 @@ const memoiresAssets: VisualAssetEntry[] = [
     section: "details",
     usage: "Détail objets symboliques au sol",
     expectedFileName: "memoires-objets.jpg",
-    currentFile: PLACEHOLDERS.clay,
+    currentFile: PLACEHOLDERS.memoiresCircle,
     sourceKind: "placeholder",
     status: "waiting-client-photo",
     ratio: "4:5",
@@ -450,7 +460,7 @@ const femininAssets: VisualAssetEntry[] = [
     section: "rituel",
     usage: "Tasse de cacao tenue dans les mains",
     expectedFileName: "feminin-cacao-tasse.jpg",
-    currentFile: PLACEHOLDERS.clay,
+    currentFile: PLACEHOLDERS.cacaoRitual,
     sourceKind: "placeholder",
     status: "waiting-instagram-auth",
     ratio: "4:5",
@@ -511,7 +521,7 @@ const corpsAssets: VisualAssetEntry[] = [
     section: "pratiques",
     usage: "Innerdance — silhouette / mouvement",
     expectedFileName: "corps-innerdance.jpg",
-    currentFile: PLACEHOLDERS.sage,
+    currentFile: PLACEHOLDERS.breathFlow,
     sourceKind: "placeholder",
     status: "waiting-client-photo",
     ratio: "4:5",
@@ -640,7 +650,7 @@ const cacaoAssets: VisualAssetEntry[] = [
     section: "details",
     usage: "Détail cacao — préparation",
     expectedFileName: "cacao-preparation.jpg",
-    currentFile: PLACEHOLDERS.cream,
+    currentFile: PLACEHOLDERS.cacaoRitual,
     sourceKind: "placeholder",
     status: "waiting-instagram-auth",
     ratio: "4:5",
@@ -661,7 +671,7 @@ const cartesCadeauxAssets: VisualAssetEntry[] = [
     section: "hero",
     usage: "Image hero — carte posée comme une attention",
     expectedFileName: "carte-cadeau-hero.jpg",
-    currentFile: `${SITE_ORIGINAL}/carte-cadeau.png`,
+    currentFile: PLACEHOLDERS.paperKraft,
     sourceKind: "site-original",
     status: "waiting-client-photo",
     ratio: "16:9",
@@ -952,6 +962,98 @@ const carrouselCerclesCacao: VisualAssetEntry[] = [
 ];
 
 /* -------------------------------------------------------------------------- */
+/*  MINI-DÉTAILS PAR PAGE — Sprint C (DetailStrip)                            */
+/*                                                                            */
+/*  Petits emplacements 1:1 (~96-160px) pour des sliders horizontaux de      */
+/*  micro-photos qui personnalisent chaque page. Mix d'images du site         */
+/*  original + placeholders thématiques.                                      */
+/* -------------------------------------------------------------------------- */
+
+const microHomeRefuge: VisualAssetEntry[] = makeMicros(
+  "home",
+  "micro-refuge",
+  "Mini-photo refuge — détail de présence",
+  ["light", "cream", "sand", "rose", "circle", "arch"],
+);
+
+const microAProposCarnet: VisualAssetEntry[] = makeMicros(
+  "/a-propos",
+  "carnet",
+  "Fragment de carnet — détail personnel",
+  ["light", "rose", "sand", "cream", "circle", "arch"],
+);
+
+const microMemoires: VisualAssetEntry[] = makeMicros(
+  "/memoires-constellations",
+  "micro-memoires",
+  "Détail symbolique — objets du cercle",
+  ["memoiresNight", "memoiresCircle", "clay", "memoiresNight", "circle", "memoiresCircle"],
+);
+
+const microFeminin: VisualAssetEntry[] = makeMicros(
+  "/feminin-cacao",
+  "micro-feminin",
+  "Détail féminin — main, tissu, bougie",
+  ["femininWarm", "cacaoRitual", "rose", "clay", "femininWarm", "cream"],
+);
+
+const microCorps: VisualAssetEntry[] = makeMicros(
+  "/corps-integration",
+  "micro-corps",
+  "Détail corps — souffle, mouvement, silhouette",
+  ["corpsWater", "breathFlow", "sage", "breathFlow", "corpsWater", "sand"],
+);
+
+const microCacao: VisualAssetEntry[] = makeMicros(
+  "/cacao",
+  "micro-cacao",
+  "Détail cérémonie — tasse, fève, rituel",
+  ["cacaoRitual", "clay", "cacaoRitual", "femininWarm", "cream", "rose"],
+);
+
+const microRetraites: VisualAssetEntry[] = makeMicros(
+  "/retraites",
+  "micro-retraites",
+  "Détail retraite — nature, partage, accueil",
+  ["natureHorizon", "sand", "sage", "cream", "natureHorizon", "rose"],
+);
+
+const microCartesCadeaux: VisualAssetEntry[] = makeMicros(
+  "/cartes-cadeaux",
+  "micro-cartes",
+  "Détail cadeau — papier, ruban, attention",
+  ["paperKraft", "cream", "paperKraft", "sand", "rose", "paperKraft"],
+);
+
+/**
+ * Helper interne pour créer 6 mini-slots 1:1 par page de manière concise.
+ * Toutes les micros sont en `waiting-shooting` priorité bonus,
+ * remplaçables au fil des livraisons photo.
+ */
+function makeMicros(
+  page: string,
+  prefix: string,
+  baseUsage: string,
+  placeholderKeys: (keyof typeof PLACEHOLDERS)[],
+): VisualAssetEntry[] {
+  return placeholderKeys.map((key, i) => ({
+    id: `${prefix}-${i + 1}`,
+    page,
+    section: "detail-strip",
+    usage: `${baseUsage} (${i + 1})`,
+    expectedFileName: `${prefix}-${i + 1}.jpg`,
+    currentFile: PLACEHOLDERS[key],
+    sourceKind: "placeholder" as VisualSourceKind,
+    status: "waiting-shooting" as VisualStatus,
+    ratio: "1:1" as VisualRatio,
+    altText: `${baseUsage} — emplacement ${i + 1}`,
+    priority: "bonus" as VisualPriority,
+    replacementInstructions:
+      "Mini-shooting carré (1:1) — détail intime, lumière chaude, objet ou main.",
+  }));
+}
+
+/* -------------------------------------------------------------------------- */
 /*  Index global + helpers                                                    */
 /* -------------------------------------------------------------------------- */
 
@@ -968,6 +1070,14 @@ export const visualAssetMap: VisualAssetEntry[] = [
   ...toolsAssets,
   ...carrouselDetailsRefuge,
   ...carrouselCerclesCacao,
+  ...microHomeRefuge,
+  ...microAProposCarnet,
+  ...microMemoires,
+  ...microFeminin,
+  ...microCorps,
+  ...microCacao,
+  ...microRetraites,
+  ...microCartesCadeaux,
 ];
 
 const indexById = new Map(visualAssetMap.map((a) => [a.id, a]));

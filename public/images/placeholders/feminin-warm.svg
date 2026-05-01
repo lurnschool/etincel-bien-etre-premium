@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" preserveAspectRatio="xMidYMid slice" role="img" aria-hidden="true">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="40%" r="90%">
+      <stop offset="0%" stop-color="#f4d3c2"/>
+      <stop offset="40%" stop-color="#e0a988"/>
+      <stop offset="80%" stop-color="#b87554"/>
+      <stop offset="100%" stop-color="#8a4f37"/>
+    </radialGradient>
+    <radialGradient id="warmth" cx="50%" cy="58%" r="35%">
+      <stop offset="0%" stop-color="#fff0d5" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#fff0d5" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="noise">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="71"/>
+      <feColorMatrix values="0 0 0 0 0.55 0 0 0 0 0.35 0 0 0 0 0.22 0 0 0 0.06 0"/>
+    </filter>
+  </defs>
+  <rect width="800" height="1000" fill="url(#bg)"/>
+  <rect width="800" height="1000" fill="url(#warmth)"/>
+  <!-- Drapé stylisé sur le bas -->
+  <path d="M 0 850 Q 200 800 400 830 T 800 820 L 800 1000 L 0 1000 Z" fill="#a06548" fill-opacity="0.30"/>
+  <path d="M 0 880 Q 250 850 500 870 T 800 860 L 800 1000 L 0 1000 Z" fill="#7a4630" fill-opacity="0.35"/>
+  <rect width="800" height="1000" filter="url(#noise)"/>
+</svg>

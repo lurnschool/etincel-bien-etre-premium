@@ -2,16 +2,18 @@ import type { Metadata } from "next";
 import { PageRefugeHero } from "@/components/page/PageRefugeHero";
 import { GuidanceFooter } from "@/components/page/GuidanceFooter";
 import {
-  PillarPourQuiSection,
   PillarFormatsSection,
   PillarFaqSection,
   PillarDisclaimer,
 } from "@/components/page/PillarSections";
 import { SoftCarousel } from "@/components/ui/SoftCarousel";
+import { DetailStrip } from "@/components/ui/DetailStrip";
+import { BreathSection } from "@/components/page/sections/BreathSection";
 import { Container } from "@/components/ui/Container";
 import { Etincelle } from "@/components/ui/Etincelle";
 import { Reveal } from "@/components/ui/Reveal";
-import { corpsRefuge, carouselsRefuge } from "@/lib/data";
+import { EtincelleAccent } from "@/components/ui/EtincelleAccent";
+import { corpsRefuge, carouselsRefuge, corpsBreathPhases } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Corps & intégration — souffle, mouvement et présence",
@@ -20,22 +22,22 @@ export const metadata: Metadata = {
 };
 
 /**
- * Page /corps-integration — Sprint B "refuge connecté".
+ * Page /corps-integration — Sprint C "pages-pièces".
  *
- * Sortie de :
- *  - Stats-block, "Ce qui appelle l'intégration" 01–06, "Trois formats"
- *    cards 3× marketing, "Outils complémentaires" grille, "Comment se
- *    préparer" 5 cards, SacredBackdrop "souffle", WhisperLine,
- *    BilanGiftBanner.
+ * Pièce du refuge : L'ESPACE DU SOUFFLE, DU MOUVEMENT, DU CORPS.
+ * Émotion : souffle, mouvement, traversée.
  *
- * À la place, structure refuge :
- *  - PageRefugeHero avec photo corps (corps-innerdance)
- *  - PillarPourQuiSection
- *  - PillarFormatsSection 4 cards (breathwork, innerdance, retraites, massage)
+ * Différenciation :
+ *  - Hero variant "movement" — bandeau visuel large palette eau/sauge +
+ *    texte centré dans une carte qui flotte au-dessus
+ *  - DetailStrip ton "sage" sous le hero
+ *  - BreathSection : cercle qui respire (animation CSS pulse 8s) +
+ *    3 phases (inspirer / traverser / intégrer) — PAS de grille de cards
+ *  - PillarFormatsSection 4 cards
  *  - SoftCarousel "Retraites & immersions"
- *  - PillarFaqSection 4 questions
+ *  - PillarFaqSection
  *  - PillarDisclaimer breathwork
- *  - GuidanceFooter "Écrivez-moi un mot"
+ *  - GuidanceFooter variant "contact"
  */
 export default function CorpsIntegrationPage() {
   return (
@@ -43,20 +45,40 @@ export default function CorpsIntegrationPage() {
       <PageRefugeHero
         eyebrow={corpsRefuge.hero.eyebrow}
         greeting={corpsRefuge.hero.greeting}
-        title={corpsRefuge.hero.title}
+        title={
+          <>
+            Intégrer par le{" "}
+            <EtincelleAccent variant="glow">souffle</EtincelleAccent>{" "}
+            ce que les mots ne suffisent pas à transformer.
+          </>
+        }
         body={corpsRefuge.hero.body}
         primaryCta={corpsRefuge.hero.primaryCta}
         secondaryCta={corpsRefuge.hero.secondaryCta}
         visualId="corps-innerdance"
-        background="paper-warm"
+        variant="movement"
         contentStatus={corpsRefuge.contentStatus}
       />
 
-      <PillarPourQuiSection
+      <DetailStrip
+        assetIds={[
+          "micro-corps-1",
+          "micro-corps-2",
+          "micro-corps-3",
+          "micro-corps-4",
+          "micro-corps-5",
+          "micro-corps-6",
+        ]}
+        tone="sage"
+        size="md"
+        caption="Fragments — souffle, eau, mouvement, silhouettes."
+      />
+
+      <BreathSection
         eyebrow={corpsRefuge.pourQui.eyebrow}
-        title={corpsRefuge.pourQui.title}
-        paragraphs={corpsRefuge.pourQui.paragraphs}
-        background="bg-base"
+        title="Inspirer, traverser, intégrer."
+        intro="Ce travail se vit en trois temps — comme un souffle. On ne le force pas, on le suit."
+        phases={corpsBreathPhases}
       />
 
       <PillarFormatsSection
@@ -93,7 +115,6 @@ function RetraitesCarrousel() {
             </div>
           </Reveal>
         </div>
-
         <Reveal>
           <div className="max-w-2xl mx-auto">
             <SoftCarousel

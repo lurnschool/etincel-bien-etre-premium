@@ -8,9 +8,11 @@ import {
   PillarDisclaimer,
 } from "@/components/page/PillarSections";
 import { SoftCarousel } from "@/components/ui/SoftCarousel";
+import { DetailStrip } from "@/components/ui/DetailStrip";
 import { Container } from "@/components/ui/Container";
 import { Etincelle } from "@/components/ui/Etincelle";
 import { Reveal } from "@/components/ui/Reveal";
+import { EtincelleAccent } from "@/components/ui/EtincelleAccent";
 import { femininRefuge, carouselsRefuge } from "@/lib/data";
 
 export const metadata: Metadata = {
@@ -20,21 +22,21 @@ export const metadata: Metadata = {
 };
 
 /**
- * Page /feminin-cacao — Sprint B "refuge connecté".
+ * Page /feminin-cacao — Sprint C "pages-pièces".
  *
- * Sortie de :
- *  - Stats-block, "Ce que vous portez" 01–06, "Quatre formats" cards 2×2,
- *    "Outils mobilisés" grille séparée, SmartImage sticky, SacredBackdrop
- *    "cacao", WhisperLine, BilanGiftBanner.
+ * Pièce du refuge : LA PIÈCE CHAUDE, SENSORIELLE, RITUELLE.
+ * Émotion : chaleur, cœur, féminin, présence.
  *
- * À la place, structure refuge :
- *  - PageRefugeHero avec photo cacao (feminin-cacao-tasse)
- *  - PillarPourQuiSection
- *  - PillarFormatsSection 4 cards (cercles, cacao, féminin sacré, massage)
+ * Différenciation :
+ *  - Hero variant "ritual" — fond gradient terre cuite/rose ancien,
+ *    photo carrée chaude en bas, layout centré (pas portrait classique)
+ *  - DetailStrip ton "clay" sous le hero — détails objets féminins
+ *  - PillarPourQuiSection avec EtincelleAccent sur "féminin"
+ *  - PillarFormatsSection 4 cards
  *  - SoftCarousel "Cercles & cérémonies cacao"
- *  - PillarFaqSection 4 questions
+ *  - PillarFaqSection
  *  - PillarDisclaimer santé
- *  - GuidanceFooter "Écrivez-moi un mot"
+ *  - GuidanceFooter variant "contact"
  */
 export default function FemininCacaoPage() {
   return (
@@ -42,13 +44,32 @@ export default function FemininCacaoPage() {
       <PageRefugeHero
         eyebrow={femininRefuge.hero.eyebrow}
         greeting={femininRefuge.hero.greeting}
-        title={femininRefuge.hero.title}
+        title={
+          <>
+            Un espace pour le corps, le cœur, le{" "}
+            <EtincelleAccent variant="letter">féminin</EtincelleAccent>.
+          </>
+        }
         body={femininRefuge.hero.body}
         primaryCta={femininRefuge.hero.primaryCta}
         secondaryCta={femininRefuge.hero.secondaryCta}
         visualId="feminin-cacao-tasse"
-        background="paper-warm"
+        variant="ritual"
         contentStatus={femininRefuge.contentStatus}
+      />
+
+      <DetailStrip
+        assetIds={[
+          "micro-feminin-1",
+          "micro-feminin-2",
+          "micro-feminin-3",
+          "micro-feminin-4",
+          "micro-feminin-5",
+          "micro-feminin-6",
+        ]}
+        tone="clay"
+        size="md"
+        caption="Détails de l'espace — tissus, mains, lumière chaude."
       />
 
       <PillarPourQuiSection

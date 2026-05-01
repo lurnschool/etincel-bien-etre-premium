@@ -4,13 +4,12 @@ import { Reveal } from "@/components/ui/Reveal";
 import { Etincelle } from "@/components/ui/Etincelle";
 import { PageRefugeHero } from "@/components/page/PageRefugeHero";
 import { GuidanceFooter } from "@/components/page/GuidanceFooter";
-import {
-  PillarPourQuiSection,
-  PillarFaqSection,
-} from "@/components/page/PillarSections";
+import { PillarFaqSection } from "@/components/page/PillarSections";
 import { SoftCarousel } from "@/components/ui/SoftCarousel";
+import { DetailStrip } from "@/components/ui/DetailStrip";
+import { EtincelleAccent } from "@/components/ui/EtincelleAccent";
 import { RetreatInterestForm } from "@/components/retraites/RetreatInterestForm";
-import { temoignages, carouselsRefuge } from "@/lib/data";
+import { temoignages, carouselsRefuge, retraitesQuitteRetrouve } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Retraites & immersions",
@@ -25,16 +24,6 @@ const retraitesHero = {
   body: "6 à 12 personnes, lieu choisi avec soin, séance individuelle intégrée. Souffle, innerdance, cercles, cacao, féminin sacré, nature. Pensé comme un retour, pas comme un séjour.",
   primaryCta: { label: "Recevoir les prochaines dates", href: "#interet" },
   secondaryCta: { label: "Écrire à Céline", href: "/contact" },
-};
-
-const retraitesPourQui = {
-  eyebrow: "Quand une retraite prend tout son sens",
-  title: "Quand le quotidien ne suffit plus.",
-  paragraphs: [
-    "Quand vous sentez qu'il faut un temps long, pas une heure entre deux. Quand l'envie est de couper vraiment, de ralentir, de poser plusieurs jours hors du quotidien.",
-    "Quand vous traversez une transition de vie qui demande de la place. Quand vous voulez approfondir un travail commencé en séance individuelle. Quand l'appel est de vivre quelque chose de fort, en cercle, en présence d'autres.",
-    "Aucune connaissance préalable nécessaire. Aucune performance attendue. Juste l'envie de vous déposer pleinement.",
-  ],
 };
 
 const retraitesFaq = [
@@ -65,26 +54,22 @@ const retraitesFaq = [
 ];
 
 /**
- * Page /retraites — Sprint B "refuge connecté".
+ * Page /retraites — Sprint C "pages-pièces".
  *
- * Sortie de :
- *  - L'ancien stats-block (6-12 / 1+1+1 / 100% / 0)
- *  - "Cinq piliers non négociables" cards 3×
- *  - Programme type 8 étapes timeline
- *  - "Trois formats" cards avec fourchettes tarifaires
- *  - "Pour qui / pas pour qui" colonnes asymétriques
- *  - SacredBackdrop "retraite", WhisperLine
- *  - BilanGiftBanner final
+ * Pièce du refuge : L'OUVERTURE VERS LE DEHORS, LA NATURE, LE TEMPS LONG.
+ * Émotion : ouverture, nature, temps long.
  *
- * À la place :
- *  - PageRefugeHero refuge avec photo retraite
- *  - PillarPourQuiSection en prose
+ * Différenciation :
+ *  - Hero variant "nature" — bandeau visuel ample (paysage horizon),
+ *    texte centré respirant en dessous, palette sable/horizon
+ *  - DetailStrip ton "warm" sous le hero — détails de retraite
+ *  - QuitteRetrouveSection : 2 colonnes face-à-face "Ce qu'on quitte / Ce qu'on retrouve"
+ *    — pas une grille de cards
  *  - SoftCarousel "Retraites & immersions"
- *  - Bandeau "Ce qu'on tient" (5 piliers en prose unifiée)
- *  - Témoignage cartes-souvenirs
- *  - RetreatInterestForm CONSERVÉ (Resend branché)
- *  - PillarFaqSection 6 questions
- *  - GuidanceFooter variant gift (offrir une retraite)
+ *  - Témoignage — un seul, en carte-souvenir
+ *  - RetreatInterestForm CONSERVÉ (Resend)
+ *  - PillarFaqSection
+ *  - GuidanceFooter variant "gift"
  */
 export default function RetraitesPage() {
   return (
@@ -92,22 +77,35 @@ export default function RetraitesPage() {
       <PageRefugeHero
         eyebrow={retraitesHero.eyebrow}
         greeting={retraitesHero.greeting}
-        title={retraitesHero.title}
+        title={
+          <>
+            Quelques jours pour{" "}
+            <EtincelleAccent variant="glow">ralentir</EtincelleAccent>,
+            respirer, traverser.
+          </>
+        }
         body={retraitesHero.body}
         primaryCta={retraitesHero.primaryCta}
         secondaryCta={retraitesHero.secondaryCta}
         visualId="retraites-hero"
-        background="paper-warm"
+        variant="nature"
       />
 
-      <PillarPourQuiSection
-        eyebrow={retraitesPourQui.eyebrow}
-        title={retraitesPourQui.title}
-        paragraphs={retraitesPourQui.paragraphs}
-        background="bg-base"
+      <DetailStrip
+        assetIds={[
+          "micro-retraites-1",
+          "micro-retraites-2",
+          "micro-retraites-3",
+          "micro-retraites-4",
+          "micro-retraites-5",
+          "micro-retraites-6",
+        ]}
+        tone="sand"
+        size="md"
+        caption="Fragments de moments partagés en retraite."
       />
 
-      <CeQuonTientSection />
+      <QuitteRetrouveSection />
 
       <RetraitesCarrousel />
 
@@ -154,74 +152,82 @@ export default function RetraitesPage() {
   );
 }
 
-/** Section "Ce qu'on tient" — 5 piliers refondus en prose unifiée. */
-function CeQuonTientSection() {
+/** Section "Ce qu'on quitte / Ce qu'on retrouve" — 2 colonnes face-à-face. */
+function QuitteRetrouveSection() {
+  const { quitte, retrouve } = retraitesQuitteRetrouve;
   return (
-    <section className="relative paper-sand py-20 md:py-28">
+    <section className="relative bg-bg-base py-24 md:py-32 overflow-hidden">
       <Container>
-        <div className="max-w-3xl mx-auto space-y-7 text-center">
+        <div className="max-w-2xl mx-auto text-center mb-14 md:mb-20 space-y-5">
           <Reveal>
-            <div className="space-y-5">
-              <div className="inline-flex items-center gap-3 text-[0.7rem] uppercase tracking-[0.32em] text-text-soft">
-                <span className="text-gold-deep">
-                  <Etincelle size={11} />
-                </span>
-                <span>Ce qu&apos;on tient</span>
-              </div>
-              <h2 className="font-display text-balance text-2xl md:text-3xl lg:text-[2.2rem] leading-[1.2] text-text-deep">
-                Un cadre simple, posé, sans fioriture.
-              </h2>
+            <div className="inline-flex items-center gap-3 text-[0.7rem] uppercase tracking-[0.32em] text-text-soft">
+              <span className="text-gold-deep">
+                <Etincelle size={11} />
+              </span>
+              <span>Le mouvement d&apos;une retraite</span>
             </div>
+            <h2 className="font-display text-balance text-3xl md:text-4xl leading-[1.15] tracking-tight text-text-deep">
+              Ce qu&apos;on quitte, ce qu&apos;on retrouve.
+            </h2>
+          </Reveal>
+        </div>
+
+        <div className="grid gap-8 md:gap-12 md:grid-cols-2 max-w-4xl mx-auto">
+          {/* Quitte — palette grise/sable */}
+          <Reveal>
+            <article className="rounded-[1.5rem] border border-border-soft bg-bg-soft/40 p-7 md:p-9 space-y-5">
+              <div className="flex items-baseline gap-3">
+                <span className="font-display-italic text-3xl text-text-soft">←</span>
+                <h3 className="font-display text-xl md:text-2xl text-text-deep">
+                  {quitte.title}
+                </h3>
+              </div>
+              <ul className="space-y-3 text-text-medium">
+                {quitte.items.map((item) => (
+                  <li
+                    key={item}
+                    className="flex items-baseline gap-3 text-[0.95rem] leading-relaxed line-through decoration-text-soft/40 decoration-1 underline-offset-2"
+                  >
+                    <span className="text-text-soft">·</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </article>
           </Reveal>
 
-          <div className="space-y-5 max-w-2xl mx-auto pt-4 text-left">
-            <Reveal delay={0.05}>
-              <p className="text-base md:text-[1.05rem] leading-relaxed text-text-medium">
-                <strong className="text-text-deep">Un écrin choisi.</strong>{" "}
-                Domaines en pleine nature, lieux d&apos;accueil sélectionnés un par
-                un. Pas d&apos;usine à séminaires.
-              </p>
-            </Reveal>
-            <Reveal delay={0.1}>
-              <p className="text-base md:text-[1.05rem] leading-relaxed text-text-medium">
-                <strong className="text-text-deep">Un petit groupe.</strong> 6 à 12
-                personnes maximum. Chaque participante est connue par Céline avant
-                l&apos;arrivée — la qualité du cercle fait la profondeur du travail.
-              </p>
-            </Reveal>
-            <Reveal delay={0.15}>
-              <p className="text-base md:text-[1.05rem] leading-relaxed text-text-medium">
-                <strong className="text-text-deep">Des pratiques tenues.</strong>{" "}
-                Souffle, cacao, féminin sacré, innerdance, cercles, marche
-                silencieuse. Composées comme une partition, jamais empilées.
-              </p>
-            </Reveal>
-            <Reveal delay={0.2}>
-              <p className="text-base md:text-[1.05rem] leading-relaxed text-text-medium">
-                <strong className="text-text-deep">Un fil personnel.</strong> Une
-                séance individuelle avec Céline est intégrée dans le déroulé. Vous
-                repartez avec quelque chose qui n&apos;appartient qu&apos;à vous.
-              </p>
-            </Reveal>
-            <Reveal delay={0.25}>
-              <p className="text-base md:text-[1.05rem] leading-relaxed text-text-medium">
-                <strong className="text-text-deep">Un cadre sécure.</strong>{" "}
-                Confidentialité totale du cercle, alimentation végétarienne soignée,
-                hébergement individuel ou en duo selon préférence. Aucune injonction.
-              </p>
-            </Reveal>
-          </div>
+          {/* Retrouve — palette dorée chaude */}
+          <Reveal delay={0.1}>
+            <article className="rounded-[1.5rem] border border-gold-soft/50 bg-gradient-to-br from-gold-soft/15 via-bg-card to-bg-card p-7 md:p-9 space-y-5">
+              <div className="flex items-baseline gap-3">
+                <span className="font-display-italic text-3xl text-gold-deep">→</span>
+                <h3 className="font-display text-xl md:text-2xl text-text-deep">
+                  {retrouve.title}
+                </h3>
+              </div>
+              <ul className="space-y-3 text-text-deep">
+                {retrouve.items.map((item) => (
+                  <li
+                    key={item}
+                    className="flex items-baseline gap-3 text-[0.95rem] leading-relaxed"
+                  >
+                    <span className="text-gold-deep">·</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </article>
+          </Reveal>
         </div>
       </Container>
     </section>
   );
 }
 
-/** SoftCarousel "Retraites & immersions". */
 function RetraitesCarrousel() {
   const c = carouselsRefuge.retraitesImmersions;
   return (
-    <section className="relative bg-bg-base py-20 md:py-28 overflow-hidden">
+    <section className="relative paper-sand py-20 md:py-28 overflow-hidden">
       <Container>
         <div className="max-w-2xl mx-auto text-center mb-12 space-y-5">
           <Reveal>
@@ -247,11 +253,10 @@ function RetraitesCarrousel() {
   );
 }
 
-/** Témoignage doux — un seul, posé comme un souvenir. */
 function TemoignageSection() {
   const t = temoignages[0]!;
   return (
-    <section className="relative paper-warm py-20 md:py-28 overflow-hidden">
+    <section className="relative bg-bg-base py-20 md:py-28 overflow-hidden">
       <Container>
         <div className="max-w-3xl mx-auto">
           <Reveal>

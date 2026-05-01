@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" preserveAspectRatio="xMidYMid slice" role="img" aria-hidden="true">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#5a4575"/>
+      <stop offset="50%" stop-color="#3d3253"/>
+      <stop offset="100%" stop-color="#2d2540"/>
+    </linearGradient>
+    <radialGradient id="center" cx="50%" cy="58%" r="35%">
+      <stop offset="0%" stop-color="#ead7af" stop-opacity="0.40"/>
+      <stop offset="60%" stop-color="#ad8e4a" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#ad8e4a" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="noise">
+      <feTurbulence type="fractalNoise" baseFrequency="0.88" numOctaves="2" seed="51"/>
+      <feColorMatrix values="0 0 0 0 0.78 0 0 0 0 0.70 0 0 0 0 0.55 0 0 0 0.04 0"/>
+    </filter>
+  </defs>
+  <rect width="800" height="1000" fill="url(#bg)"/>
+  <rect width="800" height="1000" fill="url(#center)"/>
+  <!-- Cercle au sol stylisé -->
+  <ellipse cx="400" cy="600" rx="240" ry="60" fill="none" stroke="#ead7af" stroke-opacity="0.22" stroke-width="0.8"/>
+  <ellipse cx="400" cy="600" rx="200" ry="50" fill="none" stroke="#ead7af" stroke-opacity="0.16" stroke-width="0.6"/>
+  <ellipse cx="400" cy="600" rx="160" ry="40" fill="none" stroke="#ead7af" stroke-opacity="0.10" stroke-width="0.5"/>
+  <!-- Quelques nœuds discrets -->
+  <circle cx="240" cy="600" r="2.5" fill="#ead7af" opacity="0.6"/>
+  <circle cx="400" cy="540" r="2.5" fill="#ead7af" opacity="0.6"/>
+  <circle cx="560" cy="600" r="2.5" fill="#ead7af" opacity="0.6"/>
+  <circle cx="400" cy="660" r="2.5" fill="#ead7af" opacity="0.6"/>
+  <rect width="800" height="1000" filter="url(#noise)"/>
+</svg>

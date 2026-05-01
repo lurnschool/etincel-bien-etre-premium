@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" preserveAspectRatio="xMidYMid slice" role="img" aria-hidden="true">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e8eddf"/>
+      <stop offset="50%" stop-color="#c8d3b8"/>
+      <stop offset="100%" stop-color="#9cb094"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="55%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="noise">
+      <feTurbulence type="fractalNoise" baseFrequency="0.92" numOctaves="2" seed="111"/>
+      <feColorMatrix values="0 0 0 0 0.50 0 0 0 0 0.55 0 0 0 0 0.42 0 0 0 0.05 0"/>
+    </filter>
+  </defs>
+  <rect width="800" height="1000" fill="url(#bg)"/>
+  <rect width="800" height="1000" fill="url(#halo)"/>
+  <!-- Vagues très douces -->
+  <path d="M 0 580 Q 200 540 400 580 T 800 580 L 800 1000 L 0 1000 Z" fill="#9cb094" fill-opacity="0.35"/>
+  <path d="M 0 700 Q 200 680 400 720 T 800 700 L 800 1000 L 0 1000 Z" fill="#7a8f74" fill-opacity="0.40"/>
+  <path d="M 0 820 Q 250 800 500 840 T 800 820 L 800 1000 L 0 1000 Z" fill="#5e7359" fill-opacity="0.45"/>
+  <rect width="800" height="1000" filter="url(#noise)"/>
+</svg>

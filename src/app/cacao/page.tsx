@@ -2,17 +2,19 @@ import type { Metadata } from "next";
 import { PageRefugeHero } from "@/components/page/PageRefugeHero";
 import { GuidanceFooter } from "@/components/page/GuidanceFooter";
 import {
-  PillarPourQuiSection,
   PillarFormatsSection,
   PillarFaqSection,
   PillarDisclaimer,
 } from "@/components/page/PillarSections";
 import { SoftCarousel } from "@/components/ui/SoftCarousel";
+import { DetailStrip } from "@/components/ui/DetailStrip";
+import { RitualStepsSection } from "@/components/page/sections/RitualStepsSection";
 import { Container } from "@/components/ui/Container";
 import { Etincelle } from "@/components/ui/Etincelle";
 import { Reveal } from "@/components/ui/Reveal";
 import { PathwayBadge } from "@/components/layout/PathwayBadge";
-import { carouselsRefuge, disclaimers } from "@/lib/data";
+import { EtincelleAccent } from "@/components/ui/EtincelleAccent";
+import { carouselsRefuge, disclaimers, cacaoRitualSteps } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Cérémonie cacao",
@@ -27,16 +29,6 @@ const cacaoHero = {
   body: "Un rituel sensoriel et symbolique, sans promesse de soin ni performance. Une dose cérémonielle, un espace tenu, et le temps de s'écouter.",
   primaryCta: { label: "Écrire à Céline", href: "/contact" },
   secondaryCta: { label: "Voir les retraites", href: "/retraites" },
-};
-
-const cacaoPourQui = {
-  eyebrow: "Pour qui",
-  title: "Quand le besoin est de ralentir et d'ouvrir.",
-  paragraphs: [
-    "Pour celles et ceux qui cherchent à ralentir, à ouvrir un espace de présence, à se déposer un instant. Pour les femmes qui souhaitent se relier au féminin, en cercle ou en duo.",
-    "Pour les personnes en transition qui cherchent un rituel doux pour marquer un passage. Pour les groupes (équipes, collectifs, cercles d'amis) qui veulent vivre une parenthèse alignée.",
-    "Aucun pré-requis. Aucune connaissance préalable nécessaire. Juste l'envie de se poser.",
-  ],
 };
 
 const cacaoFormats = {
@@ -89,24 +81,23 @@ const cacaoFaq = [
 ];
 
 /**
- * Page /cacao — Sprint B "refuge connecté".
+ * Page /cacao — Sprint C "pages-pièces".
  *
- * Sortie de :
- *  - PageHeader variant "deep" + gold-gradient titre
- *  - SmartImage sticky + ImageMosaic trio + SacredBackdrop "cacao" (×2)
- *  - WhisperLine
- *  - Bloc "Précautions" sur fond bg-deep dramatique
- *  - "Pratiques en résonance" en grille 4 cards
+ * Pièce du refuge : LA TABLE RITUELLE OÙ L'ON OUVRE LE CŒUR.
+ * Émotion : rituel, cœur, chaleur.
  *
- * À la place :
- *  - PageRefugeHero refuge
+ * Différenciation :
+ *  - Hero variant "ritual" — fond terre cuite chaud, photo cacao centrée
+ *    en cercle, EtincelleAccent doré sur "cacao"
  *  - PathwayBadge adouci (chemin féminin)
- *  - PillarPourQuiSection en prose
+ *  - DetailStrip ton "clay" — détails de la table rituelle
+ *  - RitualStepsSection : 3 temps narratifs (Entrer / Déposer / Partager)
+ *    — partition verticale avec fil doré conducteur, PAS de grille
  *  - PillarFormatsSection 3 cards
  *  - SoftCarousel "Cercles & cérémonies cacao"
- *  - PillarFaqSection 5 questions
+ *  - PillarFaqSection
  *  - PillarDisclaimer santé
- *  - GuidanceFooter contact
+ *  - GuidanceFooter variant "contact"
  */
 export default function CacaoPage() {
   return (
@@ -114,21 +105,41 @@ export default function CacaoPage() {
       <PageRefugeHero
         eyebrow={cacaoHero.eyebrow}
         greeting={cacaoHero.greeting}
-        title={cacaoHero.title}
+        title={
+          <>
+            Le{" "}
+            <EtincelleAccent variant="letter">cacao</EtincelleAccent>{" "}
+            comme espace de présence et d&apos;ouverture du cœur.
+          </>
+        }
         body={cacaoHero.body}
         primaryCta={cacaoHero.primaryCta}
         secondaryCta={cacaoHero.secondaryCta}
         visualId="cacao-detail"
-        background="paper-warm"
+        variant="ritual"
       />
 
       <PathwayBadge pathway="feminin" />
 
-      <PillarPourQuiSection
-        eyebrow={cacaoPourQui.eyebrow}
-        title={cacaoPourQui.title}
-        paragraphs={cacaoPourQui.paragraphs}
-        background="bg-base"
+      <DetailStrip
+        assetIds={[
+          "micro-cacao-1",
+          "micro-cacao-2",
+          "micro-cacao-3",
+          "micro-cacao-4",
+          "micro-cacao-5",
+          "micro-cacao-6",
+        ]}
+        tone="clay"
+        size="md"
+        caption="Détails du rituel — tasse, fève, mains, lumière chaude."
+      />
+
+      <RitualStepsSection
+        eyebrow="Le rituel en trois temps"
+        title="Entrer, déposer, partager."
+        intro="Une cérémonie cacao n'est pas une suite d'étapes techniques. C'est un mouvement intérieur que je tiens avec vous."
+        steps={cacaoRitualSteps}
       />
 
       <PillarFormatsSection

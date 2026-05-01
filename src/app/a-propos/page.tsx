@@ -5,7 +5,10 @@ import { Reveal } from "@/components/ui/Reveal";
 import { PageRefugeHero } from "@/components/page/PageRefugeHero";
 import { GuidanceFooter } from "@/components/page/GuidanceFooter";
 import { SoftCarousel } from "@/components/ui/SoftCarousel";
-import { aProposRefuge } from "@/lib/data";
+import { DetailStrip } from "@/components/ui/DetailStrip";
+import { RefugeNotebookSection } from "@/components/page/sections/RefugeNotebookSection";
+import { EtincelleAccent } from "@/components/ui/EtincelleAccent";
+import { aProposRefuge, aProposFragments } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Céline Dusseval — accompagnatrice bien-être en Gironde",
@@ -14,25 +17,20 @@ export const metadata: Metadata = {
 };
 
 /**
- * Page /a-propos — Sprint B "refuge connecté".
+ * Page /a-propos — Sprint C "pages-pièces".
  *
- * Sortie de :
- *  - L'ancien hero "Accompagner les mémoires, le féminin et l'intégration par
- *    le corps" (trop conceptuel, en 3ème personne).
- *  - Des "quatre postures que je ne suis pas" (grille de cards défensives).
- *  - Des "trois axes structurants" affichés comme architecture visible.
- *  - Du BilanGiftBanner final.
+ * Pièce du refuge : LE SALON où Céline se présente.
+ * Émotion : confiance, proximité, sincérité.
  *
- * À la place, structure refuge :
- *  - PageRefugeHero avec photo Céline + greeting "Bienvenue."
- *  - Récit personnel en "je" (waiting-celine-voice — placeholder doux)
- *  - Posture "Pas un protocole. Un espace."
- *  - SoftCarousel "Mon univers" — 7 fragments du refuge
- *  - GuidanceFooter "Écrivez-moi un mot."
- *
- * Tous les blocs de récit sont en attente de la voix Céline. Marqué
- * `waiting-celine-voice` dans data.ts, prêt à être remplacé sans
- * toucher au layout.
+ * Différenciation :
+ *  - Hero variant "portrait" (cohérent home, mais ici on assume le portrait)
+ *  - DetailStrip "carnet" sous le hero (mini-souvenirs personnels)
+ *  - Récit en "je" en colonne étroite avec EtincelleAccent sur "Bienvenue."
+ *  - Posture en prose centrée
+ *  - RefugeNotebookSection : 6 fragments style carnet (le tambour, le cacao,
+ *    les cercles, l'écoute, le corps, le silence) — pas une grille de cards
+ *  - SoftCarousel "Mon univers" maintenu
+ *  - GuidanceFooter variant "contact"
  */
 export default function AProposPage() {
   return (
@@ -40,16 +38,42 @@ export default function AProposPage() {
       <PageRefugeHero
         eyebrow={aProposRefuge.hero.eyebrow}
         greeting={aProposRefuge.hero.greeting}
-        title={aProposRefuge.hero.title}
+        title={
+          <>
+            Je m&apos;appelle{" "}
+            <EtincelleAccent variant="signature" withSparkle>
+              Céline
+            </EtincelleAccent>
+            .
+          </>
+        }
         body={aProposRefuge.hero.body}
         primaryCta={aProposRefuge.hero.primaryCta}
         secondaryCta={aProposRefuge.hero.secondaryCta}
         visualId="about-portrait-main"
+        variant="portrait"
         contentStatus={aProposRefuge.contentStatus}
+      />
+
+      {/* Mini-souvenirs en strip horizontal — fragments rapides du quotidien */}
+      <DetailStrip
+        assetIds={["carnet-1", "carnet-2", "carnet-3", "carnet-4", "carnet-5", "carnet-6"]}
+        tone="warm"
+        size="md"
+        caption="Quelques fragments du quotidien — d'autres viendront s'ajouter."
       />
 
       <RecitSection />
       <PostureSection />
+
+      {/* Carnet de fragments incarnés — pas une grille uniforme */}
+      <RefugeNotebookSection
+        eyebrow="Au fil des années"
+        title="Quelques rencontres qui m'ont façonnée."
+        intro="Un carnet de ce qui a compté — des outils, des présences, des moments."
+        fragments={aProposFragments}
+      />
+
       <UniversSection />
 
       <GuidanceFooter variant="contact" />
@@ -57,7 +81,6 @@ export default function AProposPage() {
   );
 }
 
-/** Section récit personnel — en attente du vocal Céline. */
 function RecitSection() {
   return (
     <section
@@ -95,7 +118,6 @@ function RecitSection() {
   );
 }
 
-/** Section posture — "Pas un protocole. Un espace." */
 function PostureSection() {
   return (
     <section className="relative paper-sand py-20 md:py-28">
@@ -110,7 +132,8 @@ function PostureSection() {
                 <span>{aProposRefuge.posture.eyebrow}</span>
               </div>
               <h2 className="font-display text-balance text-2xl md:text-3xl lg:text-[2.2rem] leading-[1.2] text-text-deep">
-                {aProposRefuge.posture.title}
+                Pas un protocole.{" "}
+                <EtincelleAccent variant="glow">Un espace</EtincelleAccent>.
               </h2>
             </div>
           </Reveal>
@@ -130,7 +153,6 @@ function PostureSection() {
   );
 }
 
-/** Section univers — SoftCarousel de fragments du refuge. */
 function UniversSection() {
   return (
     <section className="relative bg-bg-base py-20 md:py-28">

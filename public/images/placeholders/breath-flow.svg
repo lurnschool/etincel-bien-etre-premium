@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" preserveAspectRatio="xMidYMid slice" role="img" aria-hidden="true">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.5" y2="1">
+      <stop offset="0%" stop-color="#fbf3e3"/>
+      <stop offset="55%" stop-color="#e6d3b0"/>
+      <stop offset="100%" stop-color="#caa093"/>
+    </linearGradient>
+    <radialGradient id="ray" cx="50%" cy="40%" r="55%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="noise">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="131"/>
+      <feColorMatrix values="0 0 0 0 0.55 0 0 0 0 0.45 0 0 0 0 0.35 0 0 0 0.04 0"/>
+    </filter>
+  </defs>
+  <rect width="800" height="1000" fill="url(#bg)"/>
+  <rect width="800" height="1000" fill="url(#ray)"/>
+  <!-- Courbes ondulées comme un souffle -->
+  <path d="M 0 350 Q 200 270 400 360 T 800 340" stroke="#ad8e4a" stroke-opacity="0.18" stroke-width="1.2" fill="none"/>
+  <path d="M 0 470 Q 220 380 440 480 T 800 460" stroke="#ad8e4a" stroke-opacity="0.15" stroke-width="1.0" fill="none"/>
+  <path d="M 0 580 Q 240 490 480 590 T 800 570" stroke="#ad8e4a" stroke-opacity="0.12" stroke-width="0.9" fill="none"/>
+  <path d="M 0 690 Q 260 600 520 700 T 800 680" stroke="#ad8e4a" stroke-opacity="0.10" stroke-width="0.8" fill="none"/>
+  <rect width="800" height="1000" filter="url(#noise)"/>
+</svg>

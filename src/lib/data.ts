@@ -1047,6 +1047,127 @@ export const corpsRefuge = {
   contentStatus: "waiting-celine-voice" as const,
 } as const;
 
+/** Sprint C — fragments style "carnet" pour /a-propos. */
+export const aProposFragments = [
+  {
+    visualId: "carnet-1",
+    title: "Le tambour",
+    body: "Reçu lors d'une initiation chamanique — il m'accompagne depuis dans presque tous les cercles.",
+  },
+  {
+    visualId: "carnet-2",
+    title: "Le cacao",
+    body: "Une rencontre lente, qui a transformé ma manière d'ouvrir un espace.",
+  },
+  {
+    visualId: "carnet-3",
+    title: "Les cercles",
+    body: "Là où j'ai compris que le collectif portait souvent ce que l'individuel ne peut pas seul.",
+  },
+  {
+    visualId: "carnet-4",
+    title: "L'écoute",
+    body: "Apprise au fil des années, plus précieuse que toutes les techniques.",
+  },
+  {
+    visualId: "carnet-5",
+    title: "Le corps",
+    body: "Souvent ce qui reste quand les mots ne suffisent plus.",
+  },
+  {
+    visualId: "carnet-6",
+    title: "Le silence",
+    body: "Un outil aussi puissant que la parole, dans certaines séances.",
+  },
+] as const;
+
+/** Sprint C — nœuds de constellation pour CircleLinksSection. */
+export const memoiresConstellationsNodes = [
+  {
+    label: "La place",
+    body: "Trouver ou retrouver sa juste place dans l'arbre familial.",
+  },
+  {
+    label: "Les loyautés",
+    body: "Mettre en lumière ce qu'on porte sans l'avoir choisi.",
+  },
+  {
+    label: "Les répétitions",
+    body: "Voir le motif qui se rejoue à travers les générations.",
+  },
+  {
+    label: "Les exclus",
+    body: "Honorer ceux qu'on a oubliés, écartés, tus.",
+  },
+  {
+    label: "La transmission",
+    body: "Recevoir ce qui appartient, déposer ce qui n'appartient plus.",
+  },
+  {
+    label: "L'origine",
+    body: "Revenir à la naissance, à la première inscription.",
+  },
+] as const;
+
+/** Sprint C — 3 temps du rituel cacao pour RitualStepsSection. */
+export const cacaoRitualSteps = [
+  {
+    label: "I",
+    title: "Entrer.",
+    body: "On s'installe, on pose une intention, on ralentit. L'espace est tenu, le cacao est préparé. Il n'y a rien à réussir, juste à venir.",
+  },
+  {
+    label: "II",
+    title: "Déposer.",
+    body: "On reçoit le cacao en pleine conscience. Le cœur s'ouvre, ce qui demande à être écouté arrive. On reste avec, en présence.",
+  },
+  {
+    label: "III",
+    title: "Partager.",
+    body: "En cercle, on peut déposer un mot. En individuel, on prend le temps. La cérémonie se referme doucement, on rentre apaisée.",
+  },
+] as const;
+
+/** Sprint C — 3 phases du souffle pour BreathSection. */
+export const corpsBreathPhases = [
+  {
+    label: "Inspirer",
+    body: "Accueillir ce qui est là — sensations, émotions, mémoires anciennes qui remontent par le corps.",
+  },
+  {
+    label: "Traverser",
+    body: "Laisser passer sans bloquer, sans diriger. Le souffle ouvre un chemin que la tête ne contrôle pas.",
+  },
+  {
+    label: "Intégrer",
+    body: "Revenir doucement, ancrer, sentir ce qui s'est déposé. Le corps garde la mémoire de ce qui a été traversé.",
+  },
+] as const;
+
+/** Sprint C — bloc "Ce qu'on quitte / Ce qu'on retrouve" pour /retraites. */
+export const retraitesQuitteRetrouve = {
+  quitte: {
+    title: "Ce qu'on quitte",
+    items: [
+      "L'agenda saturé",
+      "Les notifications qui pèsent",
+      "Le rythme imposé du quotidien",
+      "Le devoir de tout tenir",
+      "La parole de surface",
+    ],
+  },
+  retrouve: {
+    title: "Ce qu'on retrouve",
+    items: [
+      "Le temps long sans effort",
+      "L'écoute, vraiment",
+      "Le corps qui revient",
+      "Une respiration partagée",
+      "Le silence qui répare",
+    ],
+  },
+} as const;
+
 /** Carrousels secondaires partagés sur les pages internes. */
 export const carouselsRefuge = {
   cerclesEtCacao: {

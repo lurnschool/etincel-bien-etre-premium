@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" preserveAspectRatio="xMidYMid slice" role="img" aria-hidden="true">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="0.55">
+      <stop offset="0%" stop-color="#fce8d4"/>
+      <stop offset="50%" stop-color="#f0c9a3"/>
+      <stop offset="100%" stop-color="#d39775"/>
+    </linearGradient>
+    <linearGradient id="ground" x1="0" y1="0.55" x2="0" y2="1">
+      <stop offset="0%" stop-color="#a06548"/>
+      <stop offset="50%" stop-color="#7d4c33"/>
+      <stop offset="100%" stop-color="#5e3724"/>
+    </linearGradient>
+    <radialGradient id="sun" cx="65%" cy="45%" r="15%">
+      <stop offset="0%" stop-color="#fff0d5" stop-opacity="0.7"/>
+      <stop offset="100%" stop-color="#fff0d5" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="noise">
+      <feTurbulence type="fractalNoise" baseFrequency="0.88" numOctaves="2" seed="151"/>
+      <feColorMatrix values="0 0 0 0 0.55 0 0 0 0 0.40 0 0 0 0 0.28 0 0 0 0.05 0"/>
+    </filter>
+  </defs>
+  <rect width="800" height="550" fill="url(#sky)"/>
+  <rect y="550" width="800" height="450" fill="url(#ground)"/>
+  <ellipse cx="520" cy="450" rx="180" ry="180" fill="url(#sun)"/>
+  <!-- Silhouette de relief lointain -->
+  <path d="M 0 540 Q 150 510 300 530 Q 450 555 600 525 Q 750 505 800 530 L 800 560 L 0 560 Z" fill="#9c4f30" fill-opacity="0.6"/>
+  <rect width="800" height="1000" filter="url(#noise)"/>
+</svg>

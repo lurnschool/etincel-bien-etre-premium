@@ -6,7 +6,13 @@ import { ArrowRight, MessageCircle, Gift } from "lucide-react";
 import { Etincelle } from "@/components/ui/Etincelle";
 import { whatsappLink, whatsappMessages } from "@/lib/whatsapp";
 
-type Variant = "guidance" | "contact" | "gift";
+type Variant =
+  | "guidance" // "Pas sûre par où commencer ?" → diagnostic + WhatsApp
+  | "contact"  // "Écrivez-moi un mot." → contact + WhatsApp
+  | "gift"     // "Offrir un moment ?" → carte cadeau + WhatsApp
+  | "dates"    // "Recevoir les prochaines dates ?" → liste d'intérêt + WhatsApp
+  | "question" // "Une question simple ?" → WhatsApp + email
+  | "program"; // "Demander le programme" → contact + WhatsApp
 
 type Props = {
   /** Quelle action mettre en avant en sortie de page. Défaut : guidance. */
@@ -129,6 +135,63 @@ function getConfig(
         },
         secondary: {
           label: "Poser une question",
+          href: wa,
+          icon: MessageCircle,
+          external: true,
+        },
+      };
+    case "dates":
+      return {
+        eyebrow: "Pour ne pas manquer",
+        title: titleOverride ?? "Recevoir les prochaines dates.",
+        body:
+          bodyOverride ??
+          "Pas de calendrier figé — chaque espace s'ouvre quand le moment est juste. Vous serez prévenue en priorité dès qu'une date est posée.",
+        primary: {
+          label: "Rejoindre la liste d'intérêt",
+          href: "/retraites#interet",
+          icon: undefined,
+        },
+        secondary: {
+          label: "Écrire à Céline",
+          href: wa,
+          icon: MessageCircle,
+          external: true,
+        },
+      };
+    case "question":
+      return {
+        eyebrow: "Une question ?",
+        title: titleOverride ?? "Posez-la simplement.",
+        body:
+          bodyOverride ??
+          "Le plus rapide, c'est WhatsApp. Vous pouvez aussi écrire un email — Céline répond personnellement.",
+        primary: {
+          label: "Poser une question",
+          href: wa,
+          icon: MessageCircle,
+        },
+        secondary: {
+          label: "Écrire un email",
+          href: "mailto:etincel33@gmail.com",
+          icon: undefined,
+          external: true,
+        },
+      };
+    case "program":
+      return {
+        eyebrow: "Pour aller plus loin",
+        title: titleOverride ?? "Demander le programme.",
+        body:
+          bodyOverride ??
+          "Écrivez-moi avec votre intention — je vous envoie le programme détaillé et les prochaines dates ouvertes.",
+        primary: {
+          label: "Demander le programme",
+          href: "/contact?sujet=Programme",
+          icon: undefined,
+        },
+        secondary: {
+          label: "Plutôt sur WhatsApp",
           href: wa,
           icon: MessageCircle,
           external: true,
