@@ -1,7 +1,4 @@
-"use client";
-
 import Link from "next/link";
-import { motion } from "framer-motion";
 import { ArrowRight, MessageSquare } from "lucide-react";
 import { Etincelle } from "@/components/ui/Etincelle";
 import { VisualAsset } from "@/components/ui/VisualAsset";
@@ -24,17 +21,12 @@ export function HeroRefuge() {
     >
       <div className="relative mx-auto max-w-7xl px-6 md:px-10 py-16 md:py-24 lg:py-28">
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-16 items-center">
-          {/* Colonne texte. NOTE: en static export GitHub Pages,
-              `animate` ne se déclenche pas systématiquement après hydratation.
-              On utilise `whileInView` qui est plus fiable (le hero est par
-              définition dans le viewport au mount). */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.1 }}
-            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-            className="lg:col-span-7 lg:order-1 order-2 space-y-7"
-          >
+          {/* Colonne texte. Sprint A→C : on a tenté Framer initial→animate
+              et whileInView, les deux sont peu fiables sur le hero en static
+              export GitHub Pages (l'élément est déjà visible au mount, donc
+              IntersectionObserver ne se déclenche pas). On utilise simplement
+              une <div> standard avec animation CSS si besoin. */}
+          <div className="lg:col-span-7 lg:order-1 order-2 space-y-7 animate-fade-up">
             <div className="inline-flex items-center gap-3 text-[0.7rem] uppercase tracking-[0.32em] text-text-soft">
               <span className="text-gold-deep">
                 <Etincelle size={11} />
@@ -74,16 +66,10 @@ export function HeroRefuge() {
                 {heroRefuge.secondaryCta.label}
               </Link>
             </div>
-          </motion.div>
+          </div>
 
           {/* Colonne photo — Céline en présence */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.97 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true, amount: 0.1 }}
-            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
-            className="lg:col-span-5 lg:order-2 order-1 relative"
-          >
+          <div className="lg:col-span-5 lg:order-2 order-1 relative animate-fade-up">
             <div className="relative max-w-md mx-auto lg:max-w-none">
               {/* Halo très doux derrière la photo */}
               <div
@@ -106,7 +92,7 @@ export function HeroRefuge() {
                 />
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

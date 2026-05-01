@@ -1,7 +1,4 @@
-"use client";
-
 import Link from "next/link";
-import { motion } from "framer-motion";
 import { ArrowRight, MessageSquare } from "lucide-react";
 import { Etincelle } from "@/components/ui/Etincelle";
 import { VisualAsset } from "@/components/ui/VisualAsset";
@@ -77,15 +74,13 @@ export function PageRefugeHero({
             visualId ? "lg:grid-cols-12 lg:gap-16" : "max-w-3xl",
           )}
         >
-          {/* Colonne texte. NOTE: `whileInView` plutôt que `animate`
-              pour fiabilité en static export GitHub Pages. */}
-          <motion.div
-            initial={{ opacity: 0, y: 14 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.1 }}
-            transition={{ duration: 0.95, ease: [0.22, 1, 0.36, 1] }}
+          {/* Colonne texte. Pas de Framer Motion — animation CSS pure
+              car le hero est par définition au-dessus du fold et
+              IntersectionObserver / animate ne se déclenche pas en
+              static export GitHub Pages. */}
+          <div
             className={cn(
-              "space-y-6",
+              "space-y-6 animate-fade-up",
               visualId && "lg:col-span-7 lg:order-1 order-2",
             )}
           >
@@ -135,17 +130,11 @@ export function PageRefugeHero({
                 )}
               </div>
             )}
-          </motion.div>
+          </div>
 
           {/* Colonne photo optionnelle */}
           {visualId && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.97 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true, amount: 0.1 }}
-              transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
-              className="lg:col-span-5 lg:order-2 order-1"
-            >
+            <div className="lg:col-span-5 lg:order-2 order-1 animate-fade-up">
               <div className="relative max-w-md mx-auto lg:max-w-none">
                 <div
                   aria-hidden
@@ -159,7 +148,7 @@ export function PageRefugeHero({
                   sizes="(max-width: 1024px) 80vw, 35vw"
                 />
               </div>
-            </motion.div>
+            </div>
           )}
         </div>
       </div>
