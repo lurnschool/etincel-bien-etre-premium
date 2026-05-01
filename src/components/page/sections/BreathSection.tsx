@@ -30,10 +30,10 @@ type Props = {
 export function BreathSection({ eyebrow, title, intro, phases }: Props) {
   return (
     <section className="relative bg-gradient-to-b from-bg-base via-sage-soft/30 to-sage-soft/10 py-18 md:py-24 overflow-hidden">
-      {/* Vagues douces en fond */}
+      {/* Vagues douces en fond — animées en flottement très subtil */}
       <div aria-hidden className="absolute inset-x-0 bottom-0 h-1/2 pointer-events-none opacity-50">
         <svg
-          className="absolute inset-0 w-full h-full"
+          className="absolute inset-0 w-full h-full motion-safe:animate-[float_12s_ease-in-out_infinite]"
           preserveAspectRatio="none"
           viewBox="0 0 800 400"
         >
@@ -83,16 +83,30 @@ export function BreathSection({ eyebrow, title, intro, phases }: Props) {
 
         {/* Cercle pulsant + 3 phases */}
         <div className="relative max-w-5xl mx-auto">
-          {/* Cercle central qui respire — animation CSS pure */}
+          {/* Cercle central qui respire — animations CSS multicouches.
+              Sprint F : amélioration premium (3 anneaux indépendants qui
+              respirent à des rythmes différents, point central qui pulse). */}
           <div className="flex justify-center mb-12 md:mb-16">
             <div
               aria-hidden
-              className="relative h-40 w-40 md:h-56 md:w-56 motion-safe:animate-[breathe_8s_ease-in-out_infinite]"
+              className="relative h-40 w-40 md:h-56 md:w-56"
             >
-              <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle,rgba(156,176,148,0.45)_0%,rgba(156,176,148,0.10)_60%,rgba(156,176,148,0)_100%)]" />
-              <div className="absolute inset-[20%] rounded-full ring-1 ring-sage/40" />
-              <div className="absolute inset-[40%] rounded-full ring-1 ring-sage/30" />
-              <div className="absolute inset-1/2 -translate-x-1/2 -translate-y-1/2 h-2 w-2 rounded-full bg-sage" />
+              {/* Halo radial principal qui respire (8s) */}
+              <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle,rgba(156,176,148,0.45)_0%,rgba(156,176,148,0.10)_60%,rgba(156,176,148,0)_100%)] motion-safe:animate-[breathe_8s_ease-in-out_infinite]" />
+              {/* Anneau extérieur — respire 6s */}
+              <div className="absolute inset-[10%] rounded-full ring-1 ring-sage/45 motion-safe:animate-[ring-breath_6s_ease-in-out_infinite]" />
+              {/* Anneau intermédiaire — respire 5s, décalé */}
+              <div
+                className="absolute inset-[24%] rounded-full ring-1 ring-sage/35 motion-safe:animate-[ring-breath_5s_ease-in-out_infinite]"
+                style={{ animationDelay: "0.6s" }}
+              />
+              {/* Anneau intérieur — respire 4s, encore décalé */}
+              <div
+                className="absolute inset-[40%] rounded-full ring-1 ring-sage/25 motion-safe:animate-[ring-breath_4s_ease-in-out_infinite]"
+                style={{ animationDelay: "1.2s" }}
+              />
+              {/* Point central — pulse subtil */}
+              <div className="absolute inset-1/2 -translate-x-1/2 -translate-y-1/2 h-2.5 w-2.5 rounded-full bg-sage motion-safe:animate-[center-pulse_3.5s_ease-in-out_infinite]" />
             </div>
           </div>
 
