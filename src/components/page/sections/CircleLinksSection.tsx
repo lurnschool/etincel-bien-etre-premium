@@ -18,31 +18,22 @@ type Props = {
 };
 
 /**
- * CircleLinksSection — composition visuelle douce d'un cercle de liens.
+ * CircleLinksSection v2 — disposition de cercle au sol, plus ancrée.
  *
- * Sprint C "pages-pièces" — pour /memoires-constellations et /constellations.
- * Représente les "thèmes qui peuvent émerger" en disposition autour
- * d'un cercle central, avec lignes connectrices subtiles.
+ * Sprint E ajustement (le brief : "réduire le côté orbital / portail /
+ * astrologique, plus humain et plus ancré").
  *
- * Pas de cards alignées en grille — composition visuelle qui rappelle
- * la disposition au sol d'une constellation.
+ * Avant : fond nuit profonde + étoiles + arc orbital → trop spatial.
+ * Maintenant : palette papier sable, cercle posé au sol comme une
+ * vraie disposition de constellation (vue plongeante), nœuds en
+ * disposition organique avec un point central doré et des liens
+ * subtils. Garde le schéma (bien d'illustrer), enlève le côté cosmique.
  */
 export function CircleLinksSection({ eyebrow, title, intro, nodes }: Props) {
-  // Calcul des positions angulaires autour du cercle central
   const total = nodes.length;
 
   return (
-    <section className="relative bg-bg-deep text-text-on-dark py-24 md:py-32 overflow-hidden">
-      {/* Étoiles d'arrière-plan très discrètes */}
-      <div aria-hidden className="absolute inset-0 pointer-events-none opacity-50">
-        <div className="absolute top-[12%] left-[18%] h-1 w-1 rounded-full bg-gold-soft" />
-        <div className="absolute top-[28%] right-[24%] h-0.5 w-0.5 rounded-full bg-gold-soft" />
-        <div className="absolute bottom-[22%] left-[32%] h-1 w-1 rounded-full bg-gold-soft" />
-        <div className="absolute bottom-[15%] right-[18%] h-0.5 w-0.5 rounded-full bg-gold-soft" />
-        <div className="absolute top-[55%] left-[8%] h-0.5 w-0.5 rounded-full bg-gold-soft" />
-        <div className="absolute top-[65%] right-[8%] h-1 w-1 rounded-full bg-gold-soft" />
-      </div>
-
+    <section className="relative paper-sand py-18 md:py-24 overflow-hidden">
       <Container>
         {/* En-tête */}
         <motion.div
@@ -50,44 +41,51 @@ export function CircleLinksSection({ eyebrow, title, intro, nodes }: Props) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.9 }}
-          className="text-center max-w-3xl mx-auto mb-16 md:mb-20 space-y-5"
+          className="text-center max-w-3xl mx-auto mb-12 md:mb-14 space-y-5"
         >
-          <div className="inline-flex items-center gap-3 text-[0.7rem] uppercase tracking-[0.32em] text-gold-soft">
-            <Etincelle size={11} />
+          <div className="inline-flex items-center gap-3 text-[0.7rem] uppercase tracking-[0.32em] text-text-soft">
+            <span className="text-gold-deep">
+              <Etincelle size={11} />
+            </span>
             <span>{eyebrow}</span>
           </div>
-          <h2 className="font-display text-balance text-3xl md:text-4xl lg:text-[2.6rem] leading-[1.15] tracking-tight text-text-on-dark">
+          <h2 className="font-display text-balance text-3xl md:text-4xl lg:text-[2.4rem] leading-[1.15] tracking-tight text-text-deep">
             {title}
           </h2>
           {intro && (
-            <p className="text-base md:text-lg leading-relaxed text-text-on-dark-soft">
+            <p className="text-base md:text-lg leading-relaxed text-text-medium">
               {intro}
             </p>
           )}
         </motion.div>
 
-        {/* Composition cercle + nœuds */}
-        <div className="relative max-w-4xl mx-auto aspect-square md:aspect-[5/4] flex items-center justify-center">
-          {/* Cercle central */}
+        {/* Composition cercle au sol — vue plongeante, palette claire */}
+        <div className="relative max-w-3xl mx-auto aspect-square md:aspect-[5/4] flex items-center justify-center">
+          {/* Cercle au sol stylisé — ressemble à la disposition réelle
+              d'une constellation (plusieurs anneaux dorés concentriques) */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
+            initial={{ opacity: 0, scale: 0.92 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 1.1, delay: 0.2 }}
+            transition={{ duration: 1.1, delay: 0.15 }}
             aria-hidden
             className="absolute"
-            style={{ width: "min(50%, 18rem)", height: "min(50%, 18rem)" }}
+            style={{ width: "min(60%, 22rem)", height: "min(60%, 22rem)" }}
           >
-            <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle,rgba(234,215,175,0.12)_0%,rgba(234,215,175,0.04)_55%,rgba(234,215,175,0)_100%)]" />
-            <div className="absolute inset-[15%] rounded-full ring-1 ring-gold/20" />
-            <div className="absolute inset-[28%] rounded-full ring-1 ring-gold/15" />
-            <div className="absolute inset-1/2 -translate-x-1/2 -translate-y-1/2 h-2 w-2 rounded-full bg-gold/70 shadow-[0_0_12px_rgba(201,168,106,0.6)]" />
+            {/* Anneaux dorés concentriques (style mandala posé au sol) */}
+            <div className="absolute inset-0 rounded-full border border-gold/25" />
+            <div className="absolute inset-[12%] rounded-full border border-gold/20" />
+            <div className="absolute inset-[26%] rounded-full border border-gold/15" />
+            {/* Halo sable doré subtil */}
+            <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle,rgba(234,215,175,0.30)_0%,rgba(234,215,175,0.10)_55%,transparent_85%)]" />
+            {/* Point central doré (le focus de la constellation) */}
+            <div className="absolute inset-1/2 -translate-x-1/2 -translate-y-1/2 h-2.5 w-2.5 rounded-full bg-gold-deep shadow-[0_0_10px_rgba(201,168,106,0.6)]" />
           </motion.div>
 
-          {/* Nœuds disposés en arc */}
+          {/* Nœuds disposés autour du cercle */}
           {nodes.map((node, i) => {
             const angle = (i / total) * Math.PI * 2 - Math.PI / 2;
-            const radiusPct = 42; // % du parent
+            const radiusPct = 44;
             const left = 50 + Math.cos(angle) * radiusPct;
             const top = 50 + Math.sin(angle) * radiusPct;
             return (
@@ -96,50 +94,28 @@ export function CircleLinksSection({ eyebrow, title, intro, nodes }: Props) {
                 initial={{ opacity: 0, scale: 0.85 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.7, delay: 0.3 + i * 0.08 }}
-                className="absolute -translate-x-1/2 -translate-y-1/2 max-w-[180px] md:max-w-[200px] text-center"
+                transition={{ duration: 0.7, delay: 0.3 + i * 0.07 }}
+                className="absolute -translate-x-1/2 -translate-y-1/2 max-w-[170px] md:max-w-[190px] text-center"
                 style={{ left: `${left}%`, top: `${top}%` }}
               >
                 <div className="inline-flex flex-col items-center">
-                  <span className="h-1.5 w-1.5 rounded-full bg-gold/80 shadow-[0_0_8px_rgba(201,168,106,0.5)] mb-2.5" />
-                  <p className="font-display-italic text-sm md:text-base text-gold-soft mb-1">
+                  <span className="h-1.5 w-1.5 rounded-full bg-gold-deep mb-2" />
+                  <p className="font-display-italic text-sm md:text-base text-gold-deep mb-1">
                     {node.label}
                   </p>
-                  <p className="text-[0.72rem] md:text-xs leading-relaxed text-text-on-dark-soft/85 px-1">
+                  <p className="text-[0.72rem] md:text-xs leading-relaxed text-text-medium px-1">
                     {node.body}
                   </p>
                 </div>
               </motion.div>
             );
           })}
-
-          {/* Lignes connectrices très discrètes (SVG en overlay) */}
-          <svg
-            aria-hidden
-            className="absolute inset-0 w-full h-full pointer-events-none"
-            preserveAspectRatio="none"
-            viewBox="0 0 100 100"
-          >
-            {nodes.map((_, i) => {
-              const angle = (i / total) * Math.PI * 2 - Math.PI / 2;
-              const r = 42;
-              const x = 50 + Math.cos(angle) * r;
-              const y = 50 + Math.sin(angle) * r;
-              return (
-                <line
-                  key={i}
-                  x1="50"
-                  y1="50"
-                  x2={x}
-                  y2={y}
-                  stroke="rgba(201,168,106,0.18)"
-                  strokeWidth="0.15"
-                  strokeDasharray="0.6 1.2"
-                />
-              );
-            })}
-          </svg>
         </div>
+
+        <p className="mt-10 md:mt-12 text-center text-xs italic text-text-soft max-w-md mx-auto">
+          Aucun thème n&apos;est imposé. C&apos;est ce qui appelle au moment
+          de la séance qui se met en place.
+        </p>
       </Container>
     </section>
   );

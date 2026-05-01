@@ -18,7 +18,7 @@ export function RetoursDexperience() {
   const rotations = ["rotate-[-1.2deg]", "rotate-[0.8deg]", "rotate-[-0.6deg]"];
 
   return (
-    <section className="relative paper-warm py-24 md:py-32 overflow-hidden">
+    <section className="relative paper-warm py-16 md:py-22 overflow-hidden">
       <div className="mx-auto max-w-6xl px-6 md:px-10">
         <motion.div
           initial={{ opacity: 0, y: 14 }}

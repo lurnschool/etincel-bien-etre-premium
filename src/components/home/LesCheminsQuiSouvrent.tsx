@@ -19,7 +19,7 @@ import { cheminsRefuge } from "@/lib/data";
  */
 export function LesCheminsQuiSouvrent() {
   return (
-    <section className="relative bg-bg-base py-24 md:py-32">
+    <section className="relative bg-bg-base py-16 md:py-22">
       <div className="mx-auto max-w-5xl px-6 md:px-10">
         {/* Intro */}
         <motion.div

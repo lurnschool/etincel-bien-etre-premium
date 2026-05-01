@@ -33,7 +33,7 @@ type Props = {
  */
 export function RitualStepsSection({ eyebrow, title, intro, steps }: Props) {
   return (
-    <section className="relative paper-warm py-24 md:py-32 overflow-hidden">
+    <section className="relative paper-warm py-18 md:py-24 overflow-hidden">
       {/* Halo doux chaud en fond */}
       <div aria-hidden className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 h-[28rem] w-[28rem] rounded-full bg-gradient-to-br from-[#f4d3c2]/35 via-[#fff0d5]/25 to-transparent blur-[120px]" />

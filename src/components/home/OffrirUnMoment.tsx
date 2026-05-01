@@ -15,7 +15,7 @@ import { offrirUnMoment } from "@/lib/data";
  */
 export function OffrirUnMoment() {
   return (
-    <section className="relative paper-sand py-24 md:py-32 overflow-hidden">
+    <section className="relative paper-sand py-16 md:py-22 overflow-hidden">
       <div className="mx-auto max-w-6xl px-6 md:px-10">
         <div className="grid gap-12 md:gap-16 lg:grid-cols-12 items-center">
           {/* Photo */}

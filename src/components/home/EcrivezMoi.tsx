@@ -80,7 +80,7 @@ export function EcrivezMoi() {
 
   return (
     <section
-      className="relative paper-sand py-24 md:py-32 overflow-hidden"
+      className="relative paper-sand py-18 md:py-24 overflow-hidden"
       aria-labelledby="ecrivez-moi-title"
     >
       <div className="mx-auto max-w-6xl px-6 md:px-10">

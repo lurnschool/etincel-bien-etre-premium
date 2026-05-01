@@ -35,7 +35,7 @@ const ROTATIONS = ["rotate-[-2deg]", "rotate-[1.5deg]", "rotate-[-1deg]", "rotat
  */
 export function RefugeNotebookSection({ eyebrow, title, intro, fragments }: Props) {
   return (
-    <section className="relative paper-warm py-24 md:py-32 overflow-hidden">
+    <section className="relative paper-warm py-18 md:py-24 overflow-hidden">
       <Container>
         {/* En-tête */}
         <motion.div

@@ -53,7 +53,9 @@ type Props = {
 const VARIANT_BG: Record<HeroVariant, string> = {
   portrait: "paper-warm",
   ritual: "bg-[linear-gradient(135deg,#fbeadf,#f5dfd9_45%,#e0a988_100%)]",
-  circle: "bg-[linear-gradient(180deg,#3d3253_0%,#2d2540_55%,#1f1a30_100%)] text-text-on-dark",
+  // Sprint E : circle adouci — sortie du fond nuit profonde "cosmique"
+  // pour passer en papier sable doré, plus ancré et humain.
+  circle: "bg-[linear-gradient(180deg,#fbf7ef_0%,#f1eadc_55%,#ead7af_100%)]",
   movement: "bg-[linear-gradient(180deg,#fbf7ef_0%,#dfe5d4_55%,#b6c2a8_100%)]",
   nature: "bg-[linear-gradient(180deg,#fce8d4_0%,#f0c9a3_55%,#d39775_100%)]",
   gift: "bg-[linear-gradient(135deg,#f4e8d2_0%,#e6c79a_60%,#caa376_100%)]",
@@ -63,7 +65,7 @@ const VARIANT_BG: Record<HeroVariant, string> = {
 const VARIANT_ACCENT_TEXT: Record<HeroVariant, string> = {
   portrait: "text-text-soft",
   ritual: "text-[#7a4630]",
-  circle: "text-gold-soft",
+  circle: "text-text-soft",
   movement: "text-[#5e7359]",
   nature: "text-[#8a4f37]",
   gift: "text-[#7a5d3a]",
@@ -73,7 +75,7 @@ const VARIANT_ACCENT_TEXT: Record<HeroVariant, string> = {
 const VARIANT_GREETING_COLOR: Record<HeroVariant, string> = {
   portrait: "text-gold-deep",
   ritual: "text-[#a04a32]",
-  circle: "text-gold-soft",
+  circle: "text-gold-deep",
   movement: "text-[#4a6353]",
   nature: "text-[#a8542d]",
   gift: "text-[#8b6936]",
@@ -83,7 +85,7 @@ const VARIANT_GREETING_COLOR: Record<HeroVariant, string> = {
 const VARIANT_TITLE_COLOR: Record<HeroVariant, string> = {
   portrait: "text-text-deep",
   ritual: "text-[#3a2418]",
-  circle: "text-text-on-dark",
+  circle: "text-text-deep",
   movement: "text-text-deep",
   nature: "text-[#3a2418]",
   gift: "text-[#3a2418]",
@@ -93,7 +95,7 @@ const VARIANT_TITLE_COLOR: Record<HeroVariant, string> = {
 const VARIANT_BODY_COLOR: Record<HeroVariant, string> = {
   portrait: "text-text-medium",
   ritual: "text-[#5e3a28]",
-  circle: "text-text-on-dark-soft",
+  circle: "text-text-medium",
   movement: "text-text-medium",
   nature: "text-[#5e3a28]",
   gift: "text-[#5a4530]",
@@ -284,10 +286,10 @@ function HeroBody({ children, variant }: { children: React.ReactNode; variant: H
 
 function HeroCtas({ primaryCta, secondaryCta, variant }: { primaryCta?: CtaConfig; secondaryCta?: CtaConfig; variant: HeroVariant }) {
   if (!primaryCta && !secondaryCta) return null;
-  const isDark = variant === "circle";
-  const secondaryClass = isDark
-    ? "border-white/30 text-text-on-dark hover:border-gold hover:text-gold"
-    : "border-text-deep/15 text-text-deep hover:border-accent hover:text-accent";
+  // Sprint E : plus de variant sombre — tous les hero sont sur fond clair
+  void variant;
+  const secondaryClass =
+    "border-text-deep/15 text-text-deep hover:border-accent hover:text-accent";
   return (
     <div className="flex flex-wrap gap-3 pt-2">
       {primaryCta && (
@@ -379,19 +381,20 @@ function RitualLayout({ eyebrow, greeting, title, body, primaryCta, secondaryCta
   );
 }
 
-/** CIRCLE — vertical sur fond nuit profonde, photo carrée au-dessus. */
+/** CIRCLE — vertical, photo carrée au-dessus. Sprint E : palette sable
+    dorée claire (au lieu de nuit profonde cosmique). Plus ancré. */
 function CircleLayout({ eyebrow, greeting, title, body, primaryCta, secondaryCta, visualId, variant }: LayoutProps) {
   return (
-    <div className="relative mx-auto max-w-4xl px-6 md:px-10 py-20 md:py-28">
+    <div className="relative mx-auto max-w-4xl px-6 md:px-10 py-16 md:py-22">
       {visualId && (
-        <div className="mb-12 md:mb-16 max-w-xs mx-auto animate-fade-up">
+        <div className="mb-10 md:mb-14 max-w-xs mx-auto animate-fade-up">
           <div className="relative">
-            <div aria-hidden className="absolute -inset-8 rounded-full bg-[radial-gradient(circle,rgba(234,215,175,0.30)_0%,rgba(234,215,175,0)_70%)] blur-xl" />
+            <div aria-hidden className="absolute -inset-6 rounded-full bg-[radial-gradient(circle,rgba(234,215,175,0.45)_0%,rgba(234,215,175,0)_75%)] blur-xl" />
             <VisualAsset
               id={visualId}
               ratio="1:1"
               priority
-              className="rounded-full overflow-hidden shadow-[0_18px_40px_rgba(0,0,0,0.45)] ring-1 ring-gold/30"
+              className="rounded-full overflow-hidden shadow-[0_14px_36px_rgba(31,26,46,0.18)] ring-1 ring-gold-deep/35"
               sizes="(max-width: 1024px) 65vw, 22rem"
             />
           </div>

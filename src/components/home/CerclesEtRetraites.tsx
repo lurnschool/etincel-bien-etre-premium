@@ -14,7 +14,7 @@ import { cerclesEtRetraites } from "@/lib/data";
  */
 export function CerclesEtRetraites() {
   return (
-    <section className="relative bg-bg-base py-24 md:py-32 overflow-hidden">
+    <section className="relative bg-bg-base py-16 md:py-22 overflow-hidden">
       <div className="mx-auto max-w-6xl px-6 md:px-10">
         {/* Intro avec image retraite en bandeau doux */}
         <div className="grid gap-10 md:gap-14 lg:grid-cols-12 items-center mb-16 md:mb-20">

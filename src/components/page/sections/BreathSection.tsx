@@ -29,7 +29,7 @@ type Props = {
  */
 export function BreathSection({ eyebrow, title, intro, phases }: Props) {
   return (
-    <section className="relative bg-gradient-to-b from-bg-base via-sage-soft/30 to-sage-soft/10 py-24 md:py-32 overflow-hidden">
+    <section className="relative bg-gradient-to-b from-bg-base via-sage-soft/30 to-sage-soft/10 py-18 md:py-24 overflow-hidden">
       {/* Vagues douces en fond */}
       <div aria-hidden className="absolute inset-x-0 bottom-0 h-1/2 pointer-events-none opacity-50">
         <svg
