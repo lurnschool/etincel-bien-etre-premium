@@ -1,12 +1,27 @@
 import { ImageResponse } from "next/og";
+import { readFile } from "fs/promises";
+import { join } from "path";
 
-// OpenGraph image 1200x630 — partagée sur Facebook, LinkedIn, Slack, etc.
+// OpenGraph image 1200×630 — partagée sur Facebook, LinkedIn, Slack, iMessage…
+// Sprint J : refonte avec photo Céline + composition "début du site".
 export const dynamic = "force-static";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-export const alt = "Etincel de bien être — Céline Dusseval, accompagnatrice holistique en Gironde";
+export const alt =
+  "Etincel — Céline Dusseval, accompagnatrice holistique en Gironde";
 
-export default function OpenGraphImage() {
+export default async function OpenGraphImage() {
+  // Photo de Céline avec tambour (visuel hero du site) — chargée en base64
+  // car satori (moteur ImageResponse) ne sait pas résoudre les chemins
+  // relatifs vers /public à build time. Image embarquée 1 seule fois.
+  const imageBuffer = await readFile(
+    join(
+      process.cwd(),
+      "public/images/source-site-original/approche-philosophie.jpg",
+    ),
+  );
+  const photoData = `data:image/jpeg;base64,${imageBuffer.toString("base64")}`;
+
   return new ImageResponse(
     (
       <div
@@ -14,146 +29,199 @@ export default function OpenGraphImage() {
           width: 1200,
           height: 630,
           display: "flex",
-          flexDirection: "column",
-          background: "linear-gradient(135deg, #2a1232 0%, #4a2742 45%, #3a1f3d 100%)",
-          padding: 80,
-          position: "relative",
+          background: "#fbf7ef",
           fontFamily: "serif",
+          position: "relative",
         }}
       >
-        {/* Halos dorés en arrière-plan */}
-        <div
-          style={{
-            display: "flex",
-            position: "absolute",
-            top: -200,
-            right: -200,
-            width: 700,
-            height: 700,
-            borderRadius: "50%",
-            background:
-              "radial-gradient(circle, rgba(201,168,106,0.35) 0%, rgba(201,168,106,0) 70%)",
-          }}
-        />
-        <div
-          style={{
-            display: "flex",
-            position: "absolute",
-            bottom: -150,
-            left: -150,
-            width: 500,
-            height: 500,
-            borderRadius: "50%",
-            background:
-              "radial-gradient(circle, rgba(232,213,173,0.25) 0%, rgba(201,168,106,0) 70%)",
-          }}
-        />
-
-        {/* Eyebrow */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 16,
-            marginBottom: 32,
-            position: "relative",
-          }}
-        >
-          <svg width="24" height="24" viewBox="0 0 32 32" fill="none">
-            <path
-              d="M16 2 L17.5 14.5 L30 16 L17.5 17.5 L16 30 L14.5 17.5 L2 16 L14.5 14.5 Z"
-              fill="#c9a86a"
-            />
-          </svg>
-          <div
-            style={{
-              fontSize: 22,
-              letterSpacing: 8,
-              color: "#c9a86a",
-              textTransform: "uppercase",
-              fontWeight: 400,
-            }}
-          >
-            Etincel · de bien être
-          </div>
-        </div>
-
-        {/* Titre principal — chaque ligne dans son propre div (satori
-            ne sait pas faire wrap dans un display:flex sans direction) */}
+        {/* === Colonne texte (gauche, 660px) === */}
         <div
           style={{
             display: "flex",
             flexDirection: "column",
-            fontSize: 80,
-            color: "#f5efe3",
-            lineHeight: 1.05,
-            letterSpacing: -1.5,
-            maxWidth: 980,
+            width: 660,
+            padding: "70px 60px 60px 80px",
             position: "relative",
-          }}
-        >
-          <div style={{ display: "flex" }}>Libérer les mémoires,</div>
-          <div style={{ display: "flex" }}>revenir au corps,</div>
-          <div
-            style={{
-              display: "flex",
-              fontStyle: "italic",
-              color: "#e8d5ad",
-            }}
-          >
-            retrouver votre élan.
-          </div>
-        </div>
-
-        {/* Footer */}
-        <div
-          style={{
-            marginTop: "auto",
-            display: "flex",
             justifyContent: "space-between",
-            alignItems: "flex-end",
-            position: "relative",
           }}
         >
+          {/* Halo doré subtil en arrière */}
           <div
             style={{
               display: "flex",
-              flexDirection: "column",
-              fontSize: 24,
-              color: "rgba(245,239,227,0.75)",
-              maxWidth: 700,
-              lineHeight: 1.4,
+              position: "absolute",
+              top: -120,
+              left: -120,
+              width: 480,
+              height: 480,
+              borderRadius: "50%",
+              background:
+                "radial-gradient(circle, rgba(234,215,175,0.45) 0%, rgba(234,215,175,0) 70%)",
             }}
-          >
-            <div style={{ display: "flex" }}>
-              Céline Dusseval · accompagnatrice holistique en Gironde
-            </div>
-            <div
-              style={{
-                display: "flex",
-                fontSize: 18,
-                marginTop: 6,
-                color: "rgba(245,239,227,0.55)",
-              }}
-            >
-              Mémoires & constellations · Féminin & cacao · Corps & intégration
-            </div>
-          </div>
+          />
+
+          {/* Eyebrow : lieu + signature */}
           <div
             style={{
               display: "flex",
               alignItems: "center",
-              gap: 12,
-              padding: "14px 28px",
-              borderRadius: 999,
-              background: "rgba(201,168,106,0.18)",
-              border: "1px solid rgba(201,168,106,0.5)",
-              color: "#f5efe3",
-              fontSize: 20,
+              gap: 14,
+              fontSize: 16,
+              letterSpacing: 5,
+              color: "#8b819b",
+              textTransform: "uppercase",
+              fontWeight: 500,
+              position: "relative",
             }}
           >
-            etinceldebienetre.fr
+            <svg width="14" height="14" viewBox="0 0 32 32" fill="none">
+              <path
+                d="M16 2 L17.5 14.5 L30 16 L17.5 17.5 L16 30 L14.5 17.5 L2 16 L14.5 14.5 Z"
+                fill="#c9a86a"
+              />
+            </svg>
+            <span>Bordeaux · Gironde</span>
+            <span style={{ display: "flex", color: "#c9a86a" }}>·</span>
+            <span>Etincel</span>
           </div>
+
+          {/* Bloc principal : Bienvenue + titre */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              position: "relative",
+              marginTop: 30,
+            }}
+          >
+            {/* "Bienvenue" en cursive dorée */}
+            <div
+              style={{
+                display: "flex",
+                fontSize: 64,
+                fontStyle: "italic",
+                color: "#b88a3d",
+                lineHeight: 1,
+                letterSpacing: -1,
+                marginBottom: 20,
+              }}
+            >
+              Bienvenue.
+            </div>
+
+            {/* Titre principal — gradient or champagne (color simple car
+                satori ne supporte pas background-clip:text) */}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                fontSize: 56,
+                color: "#c89b45",
+                lineHeight: 1.05,
+                letterSpacing: -1.5,
+                fontWeight: 500,
+              }}
+            >
+              <div style={{ display: "flex" }}>Ici, vous pouvez</div>
+              <div style={{ display: "flex" }}>vous poser un instant.</div>
+            </div>
+
+            {/* Filet doré */}
+            <div
+              style={{
+                display: "flex",
+                marginTop: 32,
+                width: 80,
+                height: 2,
+                background:
+                  "linear-gradient(90deg, #c9a86a 0%, rgba(201,168,106,0) 100%)",
+              }}
+            />
+
+            {/* Sous-titre */}
+            <div
+              style={{
+                display: "flex",
+                marginTop: 18,
+                fontSize: 22,
+                color: "#4d4661",
+                lineHeight: 1.4,
+                fontStyle: "italic",
+              }}
+            >
+              Céline Dusseval — un refuge en Gironde.
+            </div>
+          </div>
+
+          {/* Footer : 3 axes + URL */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              fontSize: 16,
+              color: "rgba(77,70,97,0.75)",
+              position: "relative",
+            }}
+          >
+            <div style={{ display: "flex" }}>
+              Mémoires & constellations · Féminin & cacao · Corps & intégration
+            </div>
+            <div
+              style={{
+                display: "flex",
+                marginTop: 8,
+                fontSize: 15,
+                color: "#ad8e4a",
+                fontWeight: 500,
+              }}
+            >
+              etinceldebienetre.fr
+            </div>
+          </div>
+        </div>
+
+        {/* === Colonne photo Céline (droite, 540px) === */}
+        <div
+          style={{
+            display: "flex",
+            position: "relative",
+            width: 540,
+            height: 630,
+          }}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={photoData}
+            width={540}
+            height={630}
+            alt=""
+            style={{
+              width: 540,
+              height: 630,
+              objectFit: "cover",
+              objectPosition: "center 30%",
+            }}
+          />
+          {/* Dégradé crème sur le bord gauche pour adoucir la transition */}
+          <div
+            style={{
+              display: "flex",
+              position: "absolute",
+              inset: 0,
+              background:
+                "linear-gradient(to right, #fbf7ef 0%, rgba(251,247,239,0) 8%)",
+            }}
+          />
+          {/* Vignette dorée subtile au centre droit */}
+          <div
+            style={{
+              display: "flex",
+              position: "absolute",
+              inset: 0,
+              background:
+                "radial-gradient(ellipse at right, rgba(201,168,106,0) 60%, rgba(201,168,106,0.18) 100%)",
+            }}
+          />
         </div>
       </div>
     ),
