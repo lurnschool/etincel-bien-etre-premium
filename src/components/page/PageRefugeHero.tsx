@@ -77,10 +77,12 @@ export function PageRefugeHero({
             visualId ? "lg:grid-cols-12 lg:gap-16" : "max-w-3xl",
           )}
         >
-          {/* Colonne texte */}
+          {/* Colonne texte. NOTE: `whileInView` plutôt que `animate`
+              pour fiabilité en static export GitHub Pages. */}
           <motion.div
             initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.1 }}
             transition={{ duration: 0.95, ease: [0.22, 1, 0.36, 1] }}
             className={cn(
               "space-y-6",
@@ -139,7 +141,8 @@ export function PageRefugeHero({
           {visualId && (
             <motion.div
               initial={{ opacity: 0, scale: 0.97 }}
-              animate={{ opacity: 1, scale: 1 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true, amount: 0.1 }}
               transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
               className="lg:col-span-5 lg:order-2 order-1"
             >

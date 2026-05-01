@@ -24,10 +24,14 @@ export function HeroRefuge() {
     >
       <div className="relative mx-auto max-w-7xl px-6 md:px-10 py-16 md:py-24 lg:py-28">
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-16 items-center">
-          {/* Colonne texte */}
+          {/* Colonne texte. NOTE: en static export GitHub Pages,
+              `animate` ne se déclenche pas systématiquement après hydratation.
+              On utilise `whileInView` qui est plus fiable (le hero est par
+              définition dans le viewport au mount). */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.1 }}
             transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
             className="lg:col-span-7 lg:order-1 order-2 space-y-7"
           >
@@ -75,7 +79,8 @@ export function HeroRefuge() {
           {/* Colonne photo — Céline en présence */}
           <motion.div
             initial={{ opacity: 0, scale: 0.97 }}
-            animate={{ opacity: 1, scale: 1 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, amount: 0.1 }}
             transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
             className="lg:col-span-5 lg:order-2 order-1 relative"
           >
