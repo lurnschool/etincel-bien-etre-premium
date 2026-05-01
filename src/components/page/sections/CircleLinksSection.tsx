@@ -63,7 +63,10 @@ export function CircleLinksSection({ eyebrow, title, intro, nodes }: Props) {
 
         {/* Composition cercle au sol — vue plongeante, animée */}
         <div className="relative max-w-3xl mx-auto aspect-square md:aspect-[5/4] flex items-center justify-center">
-          {/* Cercle au sol stylisé — 3 anneaux dorés qui pulsent doucement */}
+          {/* Cercle au sol stylisé — 3 anneaux dorés qui pulsent doucement,
+              + un anneau extérieur en pointillés dorés qui tourne lentement
+              (rotation 90s) et un petit point lumineux qui orbite (72s).
+              Sprint G : mouvement de rotation léger demandé pour animer la page. */}
           <motion.div
             initial={{ opacity: 0, scale: 0.92 }}
             whileInView={{ opacity: 1, scale: 1 }}
@@ -73,6 +76,23 @@ export function CircleLinksSection({ eyebrow, title, intro, nodes }: Props) {
             className="absolute"
             style={{ width: "min(60%, 22rem)", height: "min(60%, 22rem)" }}
           >
+            {/* Anneau extérieur en pointillés dorés — tourne en 90s linear */}
+            <svg
+              viewBox="0 0 100 100"
+              className="absolute -inset-[6%] motion-safe:animate-[slowSpin_90s_linear_infinite]"
+            >
+              <circle
+                cx="50"
+                cy="50"
+                r="48"
+                fill="none"
+                stroke="rgba(173, 142, 74, 0.32)"
+                strokeWidth="0.35"
+                strokeDasharray="1.4 2.6"
+                strokeLinecap="round"
+              />
+            </svg>
+
             {/* Anneau extérieur — pulse 6s */}
             <div className="absolute inset-0 rounded-full border border-gold/30 motion-safe:animate-[ring-breath_6s_ease-in-out_infinite]" />
             {/* Anneau intermédiaire — pulse 5s, decalé */}
@@ -87,6 +107,12 @@ export function CircleLinksSection({ eyebrow, title, intro, nodes }: Props) {
             />
             {/* Halo sable doré subtil */}
             <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle,rgba(234,215,175,0.32)_0%,rgba(234,215,175,0.10)_55%,transparent_85%)]" />
+
+            {/* Petit point lumineux qui orbite sur l'anneau extérieur — 72s */}
+            <div className="absolute -inset-[6%] motion-safe:animate-[slowSpin_72s_linear_infinite]">
+              <span className="absolute left-1/2 -top-[3px] -translate-x-1/2 h-1.5 w-1.5 rounded-full bg-gold-deep shadow-[0_0_10px_rgba(201,168,106,0.65)]" />
+            </div>
+
             {/* Point central doré qui pulse — focus de la constellation */}
             <div className="absolute inset-1/2 -translate-x-1/2 -translate-y-1/2 h-2.5 w-2.5 rounded-full bg-gold-deep motion-safe:animate-[center-pulse_4s_ease-in-out_infinite]" />
           </motion.div>
