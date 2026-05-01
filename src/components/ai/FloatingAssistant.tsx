@@ -3,7 +3,18 @@
 import { useState, useRef, useEffect, FormEvent } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ArrowRight, Send, AlertTriangle, Loader2 } from "lucide-react";
+import {
+  X,
+  ArrowRight,
+  Send,
+  AlertTriangle,
+  Loader2,
+  Compass,
+  Sparkles,
+  Phone,
+  Calendar,
+} from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { disclaimers } from "@/lib/data";
 import { whatsappLink, whatsappMessages } from "@/lib/whatsapp";
@@ -25,10 +36,43 @@ const suggestions = [
   { id: "retraite", label: "Y a-t-il une prochaine retraite ?" },
 ];
 
+type QuickAction = {
+  id: string;
+  label: string;
+  description: string;
+  icon: LucideIcon;
+  href?: string;
+  external?: boolean;
+};
+
+const quickActions: QuickAction[] = [
+  {
+    id: "bilan",
+    label: "Faire mon bilan d'orientation",
+    description: "8 questions · 4 minutes · gratuit",
+    icon: Compass,
+    href: "/diagnostic",
+  },
+  {
+    id: "numerologie",
+    label: "Découvrir la numérologie",
+    description: "Animation symbolique de votre date",
+    icon: Sparkles,
+    href: "/accompagnements/numerologie",
+  },
+  {
+    id: "rdv",
+    label: "Prendre rendez-vous",
+    description: "Voir les pratiques et réserver",
+    icon: Calendar,
+    href: "/tarifs",
+  },
+];
+
 const intro: ChatMessage = {
   role: "assistant",
   content:
-    "Bonjour, je suis la conciergerie virtuelle d'Etincel. Je peux vous orienter vers la pratique la plus juste pour votre besoin. Posez-moi votre question — ou choisissez une suggestion ci-dessous.",
+    "Bonjour, je suis l'assistante d'Etincel. Posez-moi votre question, ou commencez par le bilan d'orientation gratuit pour identifier l'axe le plus juste — mémoires, féminin ou corps. Vous pouvez aussi essayer l'animation numérologie symbolique en attendant un échange réel avec Céline.",
 };
 
 /**
@@ -424,22 +468,28 @@ export function FloatingAssistant() {
 
               <div
                 ref={scrollRef}
-                className="flex-1 overflow-y-auto px-5 py-4 space-y-3"
+                className="flex-1 overflow-y-auto px-5 py-4 space-y-4"
               >
+                {/* Messages — bulles avec avatar Etincelle pour l'assistant */}
                 {messages.map((m, i) => (
                   <div
                     key={i}
                     className={cn(
-                      "flex",
-                      m.role === "user" ? "justify-end" : "justify-start",
+                      "flex gap-2.5",
+                      m.role === "user" ? "justify-end" : "justify-start items-start",
                     )}
                   >
+                    {m.role === "assistant" && (
+                      <span className="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-accent to-accent-deep text-gold ring-1 ring-gold/30">
+                        <Etincelle size={11} />
+                      </span>
+                    )}
                     <div
                       className={cn(
-                        "max-w-[85%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed whitespace-pre-wrap",
+                        "max-w-[80%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed whitespace-pre-wrap",
                         m.role === "user"
-                          ? "bg-accent-deep text-text-on-dark"
-                          : "bg-bg-soft text-text-deep border border-border-soft",
+                          ? "bg-accent-deep text-text-on-dark rounded-br-sm"
+                          : "bg-bg-soft text-text-deep border border-border-soft rounded-tl-sm",
                       )}
                     >
                       {m.content}
@@ -447,51 +497,119 @@ export function FloatingAssistant() {
                   </div>
                 ))}
                 {status === "sending" && (
-                  <div className="flex justify-start">
-                    <div className="flex items-center gap-2 rounded-2xl bg-bg-soft border border-border-soft px-4 py-2.5 text-sm text-text-medium">
-                      <Loader2 className="h-3.5 w-3.5 animate-spin text-accent" />
-                      Recherche en cours…
+                  <div className="flex gap-2.5 items-start">
+                    <span className="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-accent to-accent-deep text-gold ring-1 ring-gold/30">
+                      <Etincelle size={11} />
+                    </span>
+                    <div className="flex items-center gap-1.5 rounded-2xl rounded-tl-sm bg-bg-soft border border-border-soft px-4 py-3 text-sm text-text-medium">
+                      <span className="h-1.5 w-1.5 rounded-full bg-accent animate-[twinkle_1.2s_ease-in-out_infinite]" />
+                      <span className="h-1.5 w-1.5 rounded-full bg-accent animate-[twinkle_1.2s_ease-in-out_0.2s_infinite]" />
+                      <span className="h-1.5 w-1.5 rounded-full bg-accent animate-[twinkle_1.2s_ease-in-out_0.4s_infinite]" />
                     </div>
                   </div>
                 )}
 
+                {/* Premier état : actions stratégiques mises en avant + suggestions de questions */}
                 {messages.length <= 1 && status === "idle" && (
-                  <div className="pt-2 space-y-2">
-                    <p className="text-[0.7rem] uppercase tracking-[0.24em] text-gold-deep px-1">
-                      Suggestions
-                    </p>
-                    <ul className="space-y-1.5">
-                      {suggestions.map((s) => (
-                        <li key={s.id}>
+                  <div className="pt-2 space-y-5">
+                    <div className="space-y-2">
+                      <p className="text-[0.65rem] uppercase tracking-[0.28em] text-gold-deep px-1 flex items-center gap-2">
+                        <Etincelle size={9} />
+                        Par où commencer
+                      </p>
+                      <div className="space-y-2">
+                        {quickActions.map((a) => {
+                          const Icon = a.icon;
+                          const content = (
+                            <div className="flex items-center gap-3 rounded-2xl border border-gold-soft/50 bg-gradient-to-br from-gold-soft/15 via-bg-card to-bg-card p-3.5 hover:border-gold-soft hover:bg-gradient-to-br hover:from-gold-soft/25 hover:to-bg-card transition-all group">
+                              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gold-soft/40 text-gold-deep group-hover:bg-gold-soft transition-colors">
+                                <Icon className="h-4 w-4" />
+                              </span>
+                              <div className="flex-1 min-w-0">
+                                <p className="font-medium text-sm text-text-deep leading-tight">
+                                  {a.label}
+                                </p>
+                                <p className="text-[0.7rem] text-text-soft mt-0.5">
+                                  {a.description}
+                                </p>
+                              </div>
+                              <ArrowRight className="h-3.5 w-3.5 text-gold-deep transition-transform group-hover:translate-x-0.5" />
+                            </div>
+                          );
+                          return a.href ? (
+                            <Link
+                              key={a.id}
+                              href={a.href}
+                              onClick={() => setOpen(false)}
+                              className="block"
+                            >
+                              {content}
+                            </Link>
+                          ) : (
+                            <button
+                              key={a.id}
+                              type="button"
+                              onClick={() => setOpen(false)}
+                              className="w-full text-left"
+                            >
+                              {content}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <p className="text-[0.65rem] uppercase tracking-[0.28em] text-text-soft px-1">
+                        Ou posez une question
+                      </p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {suggestions.map((s) => (
                           <button
+                            key={s.id}
                             onClick={() => void send(s.label)}
-                            className="w-full text-left rounded-xl border border-border-soft bg-bg-soft/40 px-3.5 py-2.5 text-[0.85rem] text-text-deep hover:border-accent hover:bg-bg-card transition-colors"
+                            className="rounded-full border border-border-soft bg-bg-soft/40 px-3 py-1.5 text-[0.75rem] text-text-deep hover:border-accent hover:bg-bg-card transition-colors"
                           >
                             {s.label}
                           </button>
-                        </li>
-                      ))}
-                    </ul>
-                    <Link
-                      href="/diagnostic"
-                      onClick={() => setOpen(false)}
-                      className="mt-3 block rounded-xl bg-gradient-to-br from-gold-soft/40 via-rose-soft/30 to-bg-soft border border-gold-soft/60 p-4 hover:border-gold transition-colors"
-                    >
-                      <div className="flex items-center justify-between gap-3">
-                        <div>
-                          <p className="text-[0.65rem] uppercase tracking-[0.28em] text-gold-deep">
-                            Bilan d&apos;orientation
-                          </p>
-                          <p className="font-display text-base text-text-deep mt-1">
-                            Faire mon bilan
-                          </p>
-                        </div>
-                        <ArrowRight className="h-4 w-4 text-gold-deep" />
+                        ))}
                       </div>
-                    </Link>
+                    </div>
                   </div>
                 )}
               </div>
+
+              {/* Barre d'actions persistante — toujours visible une fois le chat lancé */}
+              {messages.length > 1 && (
+                <div className="px-3 py-2.5 border-t border-border-soft bg-bg-soft/40 flex items-center gap-1.5 overflow-x-auto">
+                  <span className="text-[0.62rem] uppercase tracking-[0.24em] text-gold-deep px-1 shrink-0">
+                    Actions
+                  </span>
+                  {quickActions.map((a) => {
+                    const Icon = a.icon;
+                    return (
+                      <Link
+                        key={a.id}
+                        href={a.href ?? "#"}
+                        onClick={() => setOpen(false)}
+                        className="shrink-0 inline-flex items-center gap-1.5 rounded-full border border-gold-soft/50 bg-bg-card px-2.5 py-1.5 text-[0.7rem] text-text-deep hover:border-gold hover:bg-gold-soft/20 transition-colors"
+                      >
+                        <Icon className="h-3 w-3 text-gold-deep" />
+                        {a.id === "bilan" ? "Bilan" : a.id === "numerologie" ? "Numérologie" : "Tarifs"}
+                      </Link>
+                    );
+                  })}
+                  <a
+                    href={whatsappLink(whatsappMessages.generic)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="shrink-0 inline-flex items-center gap-1.5 rounded-full bg-[#25D366]/10 border border-[#25D366]/40 px-2.5 py-1.5 text-[0.7rem] text-[#1ebe5a] hover:bg-[#25D366]/20 transition-colors"
+                  >
+                    <Phone className="h-3 w-3" />
+                    Céline
+                  </a>
+                </div>
+              )}
 
               <form
                 onSubmit={handleSubmit}
@@ -527,14 +645,21 @@ export function FloatingAssistant() {
                   </button>
                 </div>
                 <div className="flex items-center justify-between gap-2 px-1">
-                  <a
-                    href={whatsappLink(whatsappMessages.generic)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[0.7rem] text-[#1ebe5a] hover:underline"
-                  >
-                    Plutôt parler à Céline directement →
-                  </a>
+                  {messages.length <= 1 ? (
+                    <a
+                      href={whatsappLink(whatsappMessages.generic)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-[0.7rem] text-[#1ebe5a] hover:underline"
+                    >
+                      <Phone className="h-3 w-3" />
+                      Plutôt écrire à Céline
+                    </a>
+                  ) : (
+                    <span className="text-[0.65rem] text-text-soft">
+                      Entrée pour envoyer · Maj+Entrée pour aller à la ligne
+                    </span>
+                  )}
                   {messages.length > 1 && (
                     <button
                       type="button"
