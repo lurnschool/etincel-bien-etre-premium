@@ -257,40 +257,48 @@ body {
 /*  pas de clip-path — un vrai bloom de lumière qui se cristallise.          */
 /* ======================================================================== */
 
-/* Bloom doré : le texte commence flou + scale + halo lumineux énorme,
-   puis se condense en mot net. Effet "lumière qui se cristallise". */
+/* Bloom doré XL : le texte naît comme une étincelle de lumière intense.
+   Plus long (2.8s), plus brillant (brightness 3+), plus visible.
+   Phase de pic tenue plus longtemps pour que l'œil ait le temps de voir. */
 @keyframes etincelle-bloom {
   0% {
     opacity: 0;
-    filter: blur(24px) brightness(2.2)
-            drop-shadow(0 0 0px rgba(255, 230, 160, 0));
-    transform: scale(1.5);
+    filter: blur(28px) brightness(2.8)
+            drop-shadow(0 0 0px rgba(255, 240, 180, 0));
+    transform: scale(1.6);
   }
-  18% {
+  12% {
     opacity: 1;
-    filter: blur(16px) brightness(2.4)
-            drop-shadow(0 0 50px rgba(255, 230, 160, 1))
-            drop-shadow(0 0 30px rgba(255, 200, 100, 0.95));
-    transform: scale(1.25);
+    filter: blur(22px) brightness(3.2)
+            drop-shadow(0 0 80px rgba(255, 240, 180, 1))
+            drop-shadow(0 0 40px rgba(255, 200, 100, 1));
+    transform: scale(1.35);
   }
-  45% {
+  28% {
     opacity: 1;
-    filter: blur(4px) brightness(1.6)
-            drop-shadow(0 0 35px rgba(255, 215, 130, 0.85))
-            drop-shadow(0 0 16px rgba(184, 138, 61, 0.75));
-    transform: scale(1.05);
+    filter: blur(14px) brightness(2.8)
+            drop-shadow(0 0 60px rgba(255, 230, 160, 0.95))
+            drop-shadow(0 0 30px rgba(255, 200, 100, 0.9));
+    transform: scale(1.2);
+  }
+  50% {
+    opacity: 1;
+    filter: blur(5px) brightness(1.8)
+            drop-shadow(0 0 40px rgba(255, 215, 130, 0.85))
+            drop-shadow(0 0 18px rgba(184, 138, 61, 0.75));
+    transform: scale(1.06);
   }
   75% {
     opacity: 1;
-    filter: blur(0) brightness(1.15)
-            drop-shadow(0 0 18px rgba(184, 138, 61, 0.55))
-            drop-shadow(0 0 6px rgba(255, 215, 130, 0.4));
-    transform: scale(1);
+    filter: blur(1px) brightness(1.25)
+            drop-shadow(0 0 22px rgba(184, 138, 61, 0.65))
+            drop-shadow(0 0 8px rgba(255, 215, 130, 0.5));
+    transform: scale(1.01);
   }
   100% {
     opacity: 1;
     filter: blur(0) brightness(1)
-            drop-shadow(0 0 8px rgba(184, 138, 61, 0.5));
+            drop-shadow(0 0 10px rgba(184, 138, 61, 0.55));
     transform: scale(1);
   }
 }
