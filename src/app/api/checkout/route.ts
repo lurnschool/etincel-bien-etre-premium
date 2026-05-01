@@ -94,7 +94,7 @@ export async function POST(req: Request) {
   const mode = payload.mode === "subscription" ? "subscription" : "payment";
   const origin = buildOrigin(req);
   const successUrl = safeUrl(payload.successUrl, origin, "/panier/merci/?session_id={CHECKOUT_SESSION_ID}");
-  const cancelUrl = safeUrl(payload.cancelUrl, origin, "/panier/");
+  const cancelUrl = safeUrl(payload.cancelUrl, origin, "/panier/annule/");
 
   const form = new URLSearchParams();
   form.append("mode", mode);

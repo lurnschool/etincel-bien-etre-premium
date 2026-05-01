@@ -185,30 +185,24 @@ export function Header() {
 
         {/* Nav principale (centre) — 7 items, paddings serrés pour faire
             tenir « Tarifs » sans casser sur lg. */}
-        <nav className="hidden lg:flex items-center gap-0.5 xl:gap-1 mx-auto">
+        <nav className="hidden lg:flex items-center gap-0 xl:gap-0.5 mx-auto">
           {navigation.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="flex items-center px-2 xl:px-2.5 py-2 text-[0.78rem] xl:text-[0.82rem] font-medium text-text-deep hover:text-accent transition-colors whitespace-nowrap"
+              className="flex items-center px-1.5 xl:px-2 py-2 text-[0.76rem] xl:text-[0.82rem] font-medium text-text-deep hover:text-accent transition-colors whitespace-nowrap"
             >
               {item.label}
             </Link>
           ))}
         </nav>
 
-        {/* Actions secondaires (droite) — Sprint H : Offrir + Écrire à Céline
-            sont les 2 CTA principaux, tous deux halo-lumineux. « Pas sûre ? »
-            ne s'affiche qu'à partir de xl pour éviter la surcharge sur lg. */}
+        {/* Actions secondaires (droite) — Sprint H + Sprint I (responsive
+            fix) : « Pas sûre ? » retiré du header desktop (encombre, déjà
+            accessible via /diagnostic dans le menu mobile et plusieurs CTA
+            dans les pages). « Écrire à Céline » devient « Écrire » sur lg
+            et full sur xl pour éviter le débordement sur 1024-1280px. */}
         <div className="flex items-center gap-1 md:gap-1.5 shrink-0">
-          {/* Lien diagnostic discret — masqué sous xl pour laisser respirer */}
-          <Link
-            href="/diagnostic"
-            className="hidden xl:inline-flex items-center text-[0.78rem] font-medium text-text-soft hover:text-accent transition-colors mr-2"
-          >
-            Pas sûre par où commencer&nbsp;?
-          </Link>
-
           {/* Panier */}
           <CartButton className="ml-1" />
 
@@ -216,21 +210,22 @@ export function Header() {
           <ButtonHalo tone="gold" className="hidden md:inline-block ml-2">
             <Link
               href="/cartes-cadeaux"
-              className="inline-flex items-center gap-1.5 rounded-full bg-bg-card border border-gold/40 px-3.5 py-2 text-[0.78rem] font-medium tracking-wide text-text-deep hover:border-gold hover:text-gold-deep transition-colors"
+              className="inline-flex items-center gap-1.5 rounded-full bg-bg-card border border-gold/40 px-3 lg:px-3.5 py-2 text-[0.78rem] font-medium tracking-wide text-text-deep hover:border-gold hover:text-gold-deep transition-colors"
             >
               <Gift className="h-3.5 w-3.5 text-gold-deep" />
               Offrir
             </Link>
           </ButtonHalo>
 
-          {/* CTA primaire : Écrire à Céline */}
+          {/* CTA primaire : Écrire à Céline (label compact en lg) */}
           <ButtonHalo tone="mixed" className="hidden md:inline-block ml-1.5">
             <Link
               href="/contact"
-              className="inline-flex items-center gap-1.5 rounded-full bg-accent-deep px-4 py-2 text-[0.78rem] font-medium tracking-wide text-text-on-dark hover:bg-accent transition-colors"
+              className="inline-flex items-center gap-1.5 rounded-full bg-accent-deep px-3 lg:px-4 py-2 text-[0.78rem] font-medium tracking-wide text-text-on-dark hover:bg-accent transition-colors"
             >
               <MessageSquare className="h-3.5 w-3.5" />
-              Écrire à Céline
+              <span>Écrire</span>
+              <span className="hidden xl:inline">&nbsp;à Céline</span>
             </Link>
           </ButtonHalo>
 

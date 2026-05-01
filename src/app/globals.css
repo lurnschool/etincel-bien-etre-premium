@@ -703,15 +703,20 @@ body {
  *
  * 3 variantes de teinte : --gold / --violet / --mixed (défaut).
  * Forme par défaut "pill" (border-radius 9999px), --rounded pour 1.5rem.
+ *
+ * NB : @layer components → les utilities Tailwind (hidden, inline-block,
+ * etc.) restent prioritaires sur ces règles (Sprint I — fix responsive).
  * ---------------------------------------------------------------- */
-.button-halo {
-  position: relative;
-  display: inline-block;
-  isolation: isolate;
-  border-radius: 9999px;
-}
-.button-halo--rounded {
-  border-radius: 1.5rem;
+@layer components {
+  .button-halo {
+    position: relative;
+    display: inline-block;
+    isolation: isolate;
+    border-radius: 9999px;
+  }
+  .button-halo--rounded {
+    border-radius: 1.5rem;
+  }
 }
 
 /* Halo radial doux derrière (ambiance) */
