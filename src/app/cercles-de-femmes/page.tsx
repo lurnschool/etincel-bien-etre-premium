@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { PageRefugeHero } from "@/components/page/PageRefugeHero";
 import { GuidanceFooter } from "@/components/page/GuidanceFooter";
+import { ProchainesDates } from "@/components/page/ProchainesDates";
 import { PillarPourQuiSection, PillarFaqSection } from "@/components/page/PillarSections";
 import { RitualStepsSection } from "@/components/page/sections/RitualStepsSection";
 import { DetailStrip } from "@/components/ui/DetailStrip";
@@ -77,6 +78,13 @@ export default function CerclesDeFemmesPage() {
         title="Arriver, déposer, refermer."
         intro="Une mécanique simple, tenue avec soin. Ce qui se dit dans le cercle reste dans le cercle — c'est la règle."
         steps={cerclesSteps}
+      />
+
+      <ProchainesDates
+        eyebrow="Prochains cercles"
+        title="Les prochains cercles de femmes."
+        kind="cercle"
+        notifyLabel="Recevoir l'invitation au prochain cercle"
       />
 
       <PillarFaqSection items={cerclesFaq} background="bg-base" />
