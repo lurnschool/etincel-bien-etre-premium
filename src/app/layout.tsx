@@ -4,6 +4,7 @@ import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { FloatingWhatsApp } from "@/components/layout/FloatingWhatsApp";
+import { AmbianceToggle } from "@/components/layout/AmbianceToggle";
 import { FloatingAssistant } from "@/components/ai/FloatingAssistant";
 import { CartProvider } from "@/lib/cart";
 import { CartDrawer } from "@/components/cart/CartDrawer";
@@ -95,6 +96,7 @@ export default function RootLayout({
           <Footer />
           <FloatingWhatsApp />
           <FloatingAssistant />
+          <AmbianceToggle />
           <CartDrawer />
         </CartProvider>
       </body>

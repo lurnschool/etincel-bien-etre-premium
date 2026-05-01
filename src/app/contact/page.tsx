@@ -17,7 +17,9 @@ import { GoogleReviewsTeaser } from "@/components/home/GoogleReviewsTeaser";
 import { EcrivezMoi } from "@/components/home/EcrivezMoi";
 import { contact } from "@/lib/data";
 import { whatsappLink, whatsappMessages } from "@/lib/whatsapp";
-import { InstagramIcon, FacebookIcon } from "@/components/ui/SocialIcons";
+import { InstagramIcon, FacebookIcon, WhatsAppIcon } from "@/components/ui/SocialIcons";
+import { ButtonHalo } from "@/components/ui/ButtonHalo";
+import { OfferStrip } from "@/components/page/OfferStrip";
 
 export const metadata: Metadata = {
   title: "Écrire à Céline",
@@ -79,13 +81,15 @@ export default function ContactPage() {
                   personnellement.
                 </p>
                 <div className="flex flex-wrap gap-3 pt-1">
-                  <Link
-                    href="/diagnostic"
-                    className="soft-glow inline-flex items-center gap-2 rounded-full bg-accent-deep px-5 py-2.5 text-sm font-medium text-text-on-dark hover:bg-accent transition-colors"
-                  >
-                    Me laisser guider
-                    <ArrowRight className="h-4 w-4" />
-                  </Link>
+                  <ButtonHalo tone="mixed">
+                    <Link
+                      href="/diagnostic"
+                      className="inline-flex items-center gap-2 rounded-full bg-accent-deep px-5 py-2.5 text-sm font-medium text-text-on-dark hover:bg-accent transition-colors"
+                    >
+                      Me laisser guider
+                      <ArrowRight className="h-4 w-4" />
+                    </Link>
+                  </ButtonHalo>
                   <a
                     href={whatsappLink(whatsappMessages.generic)}
                     target="_blank"
@@ -96,6 +100,10 @@ export default function ContactPage() {
                     Écrire sur WhatsApp
                   </a>
                 </div>
+                <p className="text-xs text-text-soft italic pt-1">
+                  Réponse personnelle de Céline — pas de robot, pas de chatbot
+                  scripté.
+                </p>
               </div>
 
               <div className="mt-8">
@@ -127,12 +135,12 @@ export default function ContactPage() {
                 <p className="text-[0.65rem] uppercase tracking-[0.28em] text-text-soft">
                   Réseaux
                 </p>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2.5">
                   <a
                     href={contact.social.instagram.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label="Instagram"
+                    aria-label="Instagram — Céline Dusseval"
                     className="flex h-10 w-10 items-center justify-center rounded-full border border-border-medium text-text-deep hover:border-accent hover:text-accent transition-colors"
                   >
                     <InstagramIcon size={16} />
@@ -141,15 +149,24 @@ export default function ContactPage() {
                     href={contact.social.facebook.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label="Facebook"
+                    aria-label="Facebook — Etincel"
                     className="flex h-10 w-10 items-center justify-center rounded-full border border-border-medium text-text-deep hover:border-accent hover:text-accent transition-colors"
                   >
                     <FacebookIcon size={16} />
                   </a>
-                  <span className="text-xs text-text-soft ml-1">
-                    {contact.social.instagram.label}
-                  </span>
+                  <a
+                    href={whatsappLink(whatsappMessages.generic)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="WhatsApp — écrire à Céline"
+                    className="flex h-10 w-10 items-center justify-center rounded-full border border-border-medium text-text-deep hover:border-[#25D366] hover:text-[#25D366] transition-colors"
+                  >
+                    <WhatsAppIcon size={15} />
+                  </a>
                 </div>
+                <p className="text-xs text-text-soft mt-2">
+                  {contact.social.instagram.label}
+                </p>
               </div>
               <GoogleReviewsTeaser />
             </Reveal>
@@ -160,6 +177,11 @@ export default function ContactPage() {
       <div id="message">
         <EcrivezMoi />
       </div>
+
+      <OfferStrip
+        intro="Vous pensez à quelqu'un qui aurait besoin d'un moment chez Céline ? Une carte préparée avec soin peut être offerte — montant libre ou expérience précise."
+        ctaLabel="Préparer une carte"
+      />
     </>
   );
 }
