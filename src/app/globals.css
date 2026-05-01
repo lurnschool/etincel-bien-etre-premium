@@ -12,21 +12,23 @@
 
 :root {
   /* Fonds */
-  --bg-base: #faf6f0;          /* crème chaud lumineux */
-  --bg-soft: #f3ecdf;          /* sable chaud */
+  --bg-base: #fbf7ef;          /* crème champagne — apaisant, lumineux */
+  --bg-soft: #f1eadc;          /* sable doux et chaud */
   --bg-card: #ffffff;          /* carte */
-  --bg-deep: #1d1530;          /* violet nuit profond — sections immersives */
-  --bg-deep-soft: #2a1f44;     /* violet profond moins intense */
+  --bg-deep: #2d2540;          /* violet brume — adouci, moins prune */
+  --bg-deep-soft: #3d3253;     /* violet poudré — encore plus doux */
 
   /* Accents */
-  --accent: #6b4f8a;           /* améthyste — couleur signature */
-  --accent-soft: #a98dc3;      /* améthyste douce */
-  --accent-deep: #4a3463;      /* améthyste profond */
-  --gold: #c9a86a;             /* doré chaud — l'étincelle */
-  --gold-soft: #e3cd9d;        /* doré pâle */
-  --gold-deep: #a3823f;        /* doré profond — texte sur clair */
-  --rose: #d8a9a4;             /* rose nude féminin */
-  --rose-soft: #f1d9d4;        /* rose poudré */
+  --accent: #7a609a;           /* améthyste poudré — signature adoucie */
+  --accent-soft: #b8a0d0;      /* améthyste lavande */
+  --accent-deep: #5a4575;      /* améthyste profond mais doux (plus prune) */
+  --gold: #d2b078;             /* doré miel chaud */
+  --gold-soft: #ead7af;        /* doré pâle apaisant */
+  --gold-deep: #ad8e4a;        /* doré profond — texte sur clair */
+  --rose: #e0b3ae;             /* rose nude doux */
+  --rose-soft: #f5dfd9;        /* rose poudré encore plus tendre */
+  --sage: #b6c2a8;             /* sauge — accent végétal apaisant */
+  --sage-soft: #dfe5d4;        /* sauge brume */
 
   /* Texte */
   --text-deep: #1f1a2e;        /* texte principal */
@@ -36,8 +38,8 @@
   --text-on-dark-soft: #c9bdd9;
 
   /* Bordures */
-  --border-soft: #e6dccb;
-  --border-medium: #d4c5a8;
+  --border-soft: #ebdfca;
+  --border-medium: #d8c8aa;
   --border-dark: rgba(255, 255, 255, 0.12);
 
   /* Ombres premium */
@@ -68,6 +70,8 @@
   --color-gold-deep: var(--gold-deep);
   --color-rose: var(--rose);
   --color-rose-soft: var(--rose-soft);
+  --color-sage: var(--sage);
+  --color-sage-soft: var(--sage-soft);
   --color-text-deep: var(--text-deep);
   --color-text-medium: var(--text-medium);
   --color-text-soft: var(--text-soft);

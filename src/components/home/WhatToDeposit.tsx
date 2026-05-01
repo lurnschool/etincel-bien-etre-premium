@@ -22,10 +22,11 @@ const items = [
  */
 export function WhatToDeposit() {
   return (
-    <section className="relative py-24 md:py-32 overflow-hidden">
+    <section className="relative py-24 md:py-32 overflow-hidden bg-gradient-to-b from-bg-base via-rose-soft/15 to-bg-base">
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute -top-32 left-1/4 h-96 w-96 rounded-full bg-gold-soft/20 blur-[140px]" />
-        <div className="absolute -bottom-20 right-1/4 h-96 w-96 rounded-full bg-rose-soft/20 blur-[140px]" />
+        <div className="absolute -top-32 left-1/4 h-96 w-96 rounded-full bg-gold-soft/25 blur-[140px]" />
+        <div className="absolute -bottom-20 right-1/4 h-[26rem] w-[26rem] rounded-full bg-rose-soft/35 blur-[140px]" />
+        <div className="absolute top-1/3 -right-40 h-80 w-80 rounded-full bg-sage-soft/25 blur-[120px]" />
       </div>
 
       <div className="relative mx-auto max-w-5xl px-6 md:px-10">

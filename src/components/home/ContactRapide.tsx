@@ -73,7 +73,11 @@ export function ContactRapide() {
   };
 
   return (
-    <section className="section relative overflow-hidden">
+    <section className="section relative overflow-hidden bg-gradient-to-b from-bg-base via-rose-soft/12 to-bg-soft/40">
+      <div aria-hidden className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-12 -left-32 h-96 w-96 rounded-full bg-rose-soft/30 blur-[140px]" />
+        <div className="absolute bottom-12 -right-32 h-96 w-96 rounded-full bg-gold-soft/20 blur-[140px]" />
+      </div>
       <Container>
         <Reveal>
           <SectionTitle
