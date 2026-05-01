@@ -883,8 +883,26 @@ export const practiceFamilies: PracticeFamily[] = [
   },
 ];
 
+/**
+ * URL canonique du site selon le contexte de déploiement :
+ *   - GitHub Pages (build avec GITHUB_PAGES=true) → l'URL Pages avec basePath
+ *   - Production Vercel sur domaine officiel (NEXT_PUBLIC_SITE_URL posée) → cette URL
+ *   - Sinon → domaine officiel (utilisé pour SSR/dev)
+ *
+ * Cette URL sert de `metadataBase` Next.js — elle préfixe toutes les
+ * URLs absolues dans les balises og:image, twitter:image, canonical, etc.
+ * Si elle est mauvaise, WhatsApp/Facebook/etc. ne trouvent pas l'image.
+ */
+function resolveSiteUrl(): string {
+  if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL;
+  if (process.env.GITHUB_PAGES === "true") {
+    return "https://lurnschool.github.io/etincel-bien-etre-premium";
+  }
+  return "https://etinceldebienetre.fr";
+}
+
 export const seoDefaults = {
-  siteUrl: "https://etinceldebienetre.fr",
+  siteUrl: resolveSiteUrl(),
   defaultTitle: "Etincel de bien être — Céline Dusseval, accompagnatrice holistique en Gironde",
   defaultDescription:
     "Céline Dusseval vous accompagne à Bordeaux et en Gironde : numérologie, hypnose, CellRelease®, massages énergétiques, breathwork, innerdance, cercles de femmes, retraites et féminin sacré.",
