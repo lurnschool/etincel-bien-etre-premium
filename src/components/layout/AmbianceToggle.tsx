@@ -165,6 +165,15 @@ export function AmbianceToggle() {
 
   if (dismissed) return null;
 
+  // Mode minimal : juste une note de musique discrète, sans texte.
+  // Tooltip natif (title) pour l'info "Activer / Couper / Bientôt".
+  // Position : bottom-center, rond 36px, n'occulte pas le contenu.
+  const tooltip = available
+    ? playing
+      ? "Couper l'ambiance sonore"
+      : "Activer l'ambiance sonore"
+    : "Ambiance sonore bientôt disponible";
+
   return (
     <>
       {available && (
@@ -177,13 +186,7 @@ export function AmbianceToggle() {
         />
       )}
       <div
-        className={cn(
-          "fixed bottom-6 left-1/2 -translate-x-1/2 z-40",
-          "flex items-center gap-1.5 rounded-full bg-bg-card/95 backdrop-blur-md",
-          "border border-border-soft shadow-[0_8px_24px_rgba(31,26,46,0.12)]",
-          "pl-3 pr-1.5 py-1.5 text-[0.78rem] max-w-[calc(100vw-1.5rem)]",
-          available ? "hover:border-gold-soft transition-colors" : "opacity-90",
-        )}
+        className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 flex items-center gap-1.5"
         role="region"
         aria-label="Ambiance sonore du refuge"
       >
@@ -192,49 +195,32 @@ export function AmbianceToggle() {
           onClick={toggle}
           disabled={!available}
           aria-pressed={playing}
-          aria-label={
+          aria-label={tooltip}
+          title={tooltip}
+          className={cn(
+            "flex h-9 w-9 items-center justify-center rounded-full backdrop-blur-md",
+            "shadow-[0_4px_14px_rgba(31,26,46,0.12)] transition-colors",
             available
               ? playing
-                ? "Couper l'ambiance sonore"
-                : "Activer l'ambiance sonore"
-              : "Ambiance sonore bientôt disponible"
-          }
-          className={cn(
-            "flex items-center gap-2 text-text-deep",
-            available ? "cursor-pointer" : "cursor-not-allowed text-text-soft",
+                ? "bg-gold-soft/95 text-gold-deep border border-gold/40 hover:border-gold motion-safe:animate-[center-pulse_3s_ease-in-out_infinite]"
+                : "bg-bg-card/95 text-gold-deep border border-gold-soft/60 hover:border-gold cursor-pointer"
+              : "bg-bg-card/85 text-text-soft border border-border-soft cursor-not-allowed opacity-75",
           )}
         >
-          <span
-            className={cn(
-              "flex h-7 w-7 items-center justify-center rounded-full transition-colors",
-              available
-                ? playing
-                  ? "bg-gold-soft text-gold-deep motion-safe:animate-[center-pulse_3s_ease-in-out_infinite]"
-                  : "bg-bg-soft text-gold-deep"
-                : "bg-bg-soft text-text-soft",
-            )}
-          >
-            {available ? (
-              playing ? <Pause className="h-3 w-3" /> : <Play className="h-3 w-3" />
-            ) : (
-              <Music2 className="h-3 w-3" />
-            )}
-          </span>
-          <span className="font-medium whitespace-nowrap">
-            {available
-              ? playing
-                ? "Couper l'ambiance"
-                : "Activer l'ambiance"
-              : "Ambiance bientôt disponible"}
-          </span>
+          {available ? (
+            playing ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5 ml-0.5" />
+          ) : (
+            <Music2 className="h-3.5 w-3.5" />
+          )}
         </button>
+        {/* Bouton de fermeture mini, visible seulement au hover du conteneur */}
         <button
           type="button"
           onClick={dismiss}
           aria-label="Masquer la barre d'ambiance"
-          className="flex h-6 w-6 items-center justify-center rounded-full text-text-soft hover:text-text-deep hover:bg-bg-soft transition-colors"
+          className="flex h-5 w-5 items-center justify-center rounded-full bg-bg-card/85 backdrop-blur-md border border-border-soft/60 text-text-soft hover:text-text-deep transition-opacity opacity-0 hover:opacity-100 focus-visible:opacity-100 group-hover:opacity-60"
         >
-          <X className="h-3 w-3" />
+          <X className="h-2.5 w-2.5" />
         </button>
       </div>
     </>

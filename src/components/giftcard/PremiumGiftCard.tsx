@@ -149,14 +149,77 @@ export function PremiumGiftCard({
             }}
           />
 
-          {/* Bord intérieur doré (cadre élégant) */}
+          {/* Cadre élégant double — premium éditorial */}
           <div
             aria-hidden
-            className="absolute inset-3 rounded-[1.1rem] ring-1"
-            style={{ boxShadow: `inset 0 0 0 1px ${styles.accent}30` }}
+            className="absolute inset-3 rounded-[1.1rem]"
+            style={{ boxShadow: `inset 0 0 0 1px ${styles.accent}40` }}
+          />
+          <div
+            aria-hidden
+            className="absolute inset-[14px] rounded-[1rem]"
+            style={{ boxShadow: `inset 0 0 0 1px ${styles.accent}18` }}
           />
 
-          {/* Étincelle décorative en haut à droite */}
+          {/* Ornements de coin façon Art Déco — 4 angles */}
+          {[
+            { pos: "top-3.5 left-3.5", rotate: "0deg" },
+            { pos: "top-3.5 right-3.5", rotate: "90deg" },
+            { pos: "bottom-3.5 right-3.5", rotate: "180deg" },
+            { pos: "bottom-3.5 left-3.5", rotate: "270deg" },
+          ].map((c, i) => (
+            <div
+              key={i}
+              aria-hidden
+              className={`absolute ${c.pos}`}
+              style={{ color: styles.accent, transform: `rotate(${c.rotate})` }}
+            >
+              <CornerOrnament className="h-5 w-5 opacity-65" />
+            </div>
+          ))}
+
+          {/* Monogramme É en watermark central très diffus */}
+          <div
+            aria-hidden
+            className="absolute inset-0 flex items-center justify-center pointer-events-none"
+          >
+            <p
+              className="font-display select-none leading-none"
+              style={{
+                color: styles.accent,
+                opacity: 0.07,
+                fontSize: "16rem",
+                fontStyle: "italic",
+              }}
+            >
+              É
+            </p>
+          </div>
+
+          {/* Constellation de petites étincelles secondaires */}
+          {[
+            { top: "18%", left: "14%", size: 6, delay: "0s" },
+            { top: "32%", left: "78%", size: 5, delay: "1.4s" },
+            { top: "62%", left: "20%", size: 4, delay: "0.7s" },
+            { top: "76%", left: "70%", size: 5, delay: "2.1s" },
+          ].map((s, i) => (
+            <div
+              key={i}
+              aria-hidden
+              className="absolute motion-safe:animate-[twinkle_3s_ease-in-out_infinite]"
+              style={{
+                top: s.top,
+                left: s.left,
+                color: styles.accent,
+                opacity: 0.5,
+                animationDelay: s.delay,
+              }}
+            >
+              <SparkleIcon style={{ width: s.size, height: s.size }} />
+            </div>
+          ))}
+
+          {/* Étincelle décorative principale en haut à droite */}
           <div
             className="absolute top-5 right-5 motion-safe:animate-[center-pulse_3s_ease-in-out_infinite]"
             style={{ color: styles.accent }}
@@ -322,16 +385,45 @@ export function PremiumGiftCard({
   );
 }
 
-function SparkleIcon({ className }: { className?: string }) {
+function SparkleIcon({
+  className,
+  style,
+}: {
+  className?: string;
+  style?: React.CSSProperties;
+}) {
   return (
     <svg
       viewBox="0 0 24 24"
       fill="currentColor"
       className={className}
+      style={style}
       aria-hidden
     >
       <path d="M 12 0 L 13.4 10.6 L 24 12 L 13.4 13.4 L 12 24 L 10.6 13.4 L 0 12 L 10.6 10.6 Z" />
       <circle cx="12" cy="12" r="1.4" fill="currentColor" opacity="0.6" />
+    </svg>
+  );
+}
+
+/**
+ * Petit ornement de coin Art Déco — 2 lignes courbées + point central.
+ * Décor premium qui habille les angles de la carte sans surcharger.
+ */
+function CornerOrnament({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="0.9"
+      strokeLinecap="round"
+      className={className}
+      aria-hidden
+    >
+      <path d="M 2 8 Q 2 2, 8 2" />
+      <path d="M 2 4 Q 4 2, 6 4" opacity="0.6" />
+      <circle cx="3.5" cy="3.5" r="0.7" fill="currentColor" stroke="none" />
     </svg>
   );
 }

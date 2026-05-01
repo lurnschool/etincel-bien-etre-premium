@@ -543,7 +543,14 @@ body {
   transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
   transform-style: preserve-3d;
 }
-.gift-card-3d:hover .gift-card-3d-inner,
+/* Le flip se déclenche au hover UNIQUEMENT sur dispositifs avec souris.
+ * Sur tactile, seul le tap (className `is-flipped` via React state) flip
+ * la carte — évite le bug "sticky hover" iOS qui re-flippait après tap. */
+@media (hover: hover) and (pointer: fine) {
+  .gift-card-3d:hover .gift-card-3d-inner {
+    transform: rotateY(180deg);
+  }
+}
 .gift-card-3d.is-flipped .gift-card-3d-inner {
   transform: rotateY(180deg);
 }
@@ -577,7 +584,14 @@ body {
   opacity: 0;
   transition: opacity 0.4s ease;
 }
-.gift-card-3d:hover .gift-card-shine::after {
+@media (hover: hover) and (pointer: fine) {
+  .gift-card-3d:hover .gift-card-shine::after {
+    opacity: 1;
+    animation: gift-shine-sweep 1.6s ease-out forwards;
+  }
+}
+/* En tactile, on déclenche le sweep une seule fois au flip */
+.gift-card-3d.is-flipped .gift-card-shine::after {
   opacity: 1;
   animation: gift-shine-sweep 1.6s ease-out forwards;
 }
@@ -719,38 +733,39 @@ body {
   }
 }
 
-/* Halo radial doux derrière (ambiance) */
+/* Halo radial doux derrière (ambiance) — desktop renforcé pour
+ * sensation premium plus marquée (réduction blur, augmentation opacité). */
 .button-halo::before {
   content: "";
   position: absolute;
-  inset: -10px;
+  inset: -14px;
   border-radius: inherit;
   background: radial-gradient(
     ellipse at center,
-    rgba(201, 168, 106, 0.45) 0%,
-    rgba(122, 96, 154, 0.20) 45%,
-    transparent 72%
+    rgba(201, 168, 106, 0.62) 0%,
+    rgba(122, 96, 154, 0.28) 45%,
+    transparent 75%
   );
-  filter: blur(14px);
+  filter: blur(16px);
   z-index: -2;
   pointer-events: none;
-  opacity: 0.85;
-  animation: button-halo-pulse 5s ease-in-out infinite;
+  opacity: 1;
+  animation: button-halo-pulse 4s ease-in-out infinite;
 }
 .button-halo--gold::before {
   background: radial-gradient(
     ellipse at center,
-    rgba(201, 168, 106, 0.50) 0%,
-    rgba(234, 215, 175, 0.25) 45%,
-    transparent 72%
+    rgba(201, 168, 106, 0.70) 0%,
+    rgba(234, 215, 175, 0.35) 45%,
+    transparent 75%
   );
 }
 .button-halo--violet::before {
   background: radial-gradient(
     ellipse at center,
-    rgba(122, 96, 154, 0.45) 0%,
-    rgba(184, 160, 208, 0.22) 45%,
-    transparent 72%
+    rgba(122, 96, 154, 0.62) 0%,
+    rgba(184, 160, 208, 0.30) 45%,
+    transparent 75%
   );
 }
 
@@ -764,19 +779,23 @@ body {
   inherits: false;
 }
 
-/* Reflet lumineux qui circule autour du border (conic-gradient + mask) */
+/* Reflet lumineux qui circule SUR le contour du bouton.
+ * Sprint J : pic blanc pur intense + arc plus large + animation 3.2s
+ * pour rendre le mouvement clairement perceptible et premium. */
 .button-halo::after {
   content: "";
   position: absolute;
-  inset: -1.5px;
+  inset: -2px;
   border-radius: inherit;
-  padding: 1.5px;
+  padding: 2px;
   background: conic-gradient(
     from var(--halo-angle, 0deg),
     transparent 0deg,
-    rgba(255, 240, 190, 0) 60deg,
-    rgba(255, 240, 190, 0.95) 90deg,
-    rgba(255, 240, 190, 0) 120deg,
+    rgba(255, 245, 215, 0) 40deg,
+    rgba(255, 250, 230, 0.7) 75deg,
+    rgba(255, 255, 255, 1) 95deg,
+    rgba(255, 250, 230, 0.7) 115deg,
+    rgba(255, 245, 215, 0) 150deg,
     transparent 360deg
   );
   -webkit-mask:
@@ -789,15 +808,17 @@ body {
   mask-composite: exclude;
   z-index: -1;
   pointer-events: none;
-  animation: button-halo-rotate 4.5s linear infinite;
+  animation: button-halo-rotate 3.2s linear infinite;
 }
 .button-halo--violet::after {
   background: conic-gradient(
     from var(--halo-angle, 0deg),
     transparent 0deg,
-    rgba(220, 200, 240, 0) 60deg,
-    rgba(220, 200, 240, 0.92) 90deg,
-    rgba(220, 200, 240, 0) 120deg,
+    rgba(230, 215, 245, 0) 40deg,
+    rgba(240, 225, 250, 0.7) 75deg,
+    rgba(255, 245, 255, 1) 95deg,
+    rgba(240, 225, 250, 0.7) 115deg,
+    rgba(230, 215, 245, 0) 150deg,
     transparent 360deg
   );
 }
@@ -805,21 +826,23 @@ body {
   background: conic-gradient(
     from var(--halo-angle, 0deg),
     transparent 0deg,
-    rgba(255, 235, 175, 0) 60deg,
-    rgba(255, 235, 175, 0.95) 90deg,
-    rgba(255, 235, 175, 0) 120deg,
+    rgba(255, 240, 195, 0) 40deg,
+    rgba(255, 245, 215, 0.7) 75deg,
+    rgba(255, 252, 235, 1) 95deg,
+    rgba(255, 245, 215, 0.7) 115deg,
+    rgba(255, 240, 195, 0) 150deg,
     transparent 360deg
   );
 }
 
 @keyframes button-halo-pulse {
   0%, 100% {
-    opacity: 0.55;
-    transform: scale(0.97);
+    opacity: 0.7;
+    transform: scale(0.96);
   }
   50% {
-    opacity: 0.95;
-    transform: scale(1.03);
+    opacity: 1;
+    transform: scale(1.06);
   }
 }
 
