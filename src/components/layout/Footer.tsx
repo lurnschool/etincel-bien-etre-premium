@@ -1,9 +1,10 @@
 import Link from "next/link";
-import { Phone, Mail, MapPin } from "lucide-react";
+import { Phone, Mail, MapPin, Star } from "lucide-react";
 import { brand, contact, navigation, navigationActions, navigationOffers, toolsLinks, disclaimers } from "@/lib/data";
+import { whatsappLink, whatsappMessages } from "@/lib/whatsapp";
 import { Container } from "@/components/ui/Container";
 import { Etincelle } from "@/components/ui/Etincelle";
-import { InstagramIcon, FacebookIcon } from "@/components/ui/SocialIcons";
+import { InstagramIcon, FacebookIcon, WhatsAppIcon, GoogleGIcon } from "@/components/ui/SocialIcons";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -43,25 +44,50 @@ export function Footer() {
             <p className="text-sm text-text-on-dark-soft leading-relaxed">
               {brand.shortDescription}
             </p>
-            <div className="flex gap-3">
-              <a
-                href={contact.social.instagram.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Instagram"
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 hover:border-gold hover:text-gold transition-colors"
-              >
-                <InstagramIcon size={16} />
-              </a>
-              <a
-                href={contact.social.facebook.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Facebook"
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 hover:border-gold hover:text-gold transition-colors"
-              >
-                <FacebookIcon size={16} />
-              </a>
+            <div>
+              <p className="text-[0.65rem] uppercase tracking-[0.32em] text-text-on-dark-soft/70 mb-3">
+                Suivre l&apos;univers de Céline
+              </p>
+              <div className="flex gap-2.5 flex-wrap">
+                <a
+                  href={contact.social.instagram.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Instagram — Céline Dusseval"
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 hover:border-gold hover:text-gold transition-colors"
+                >
+                  <InstagramIcon size={16} />
+                </a>
+                <a
+                  href={contact.social.facebook.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Facebook — Etincel"
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 hover:border-gold hover:text-gold transition-colors"
+                >
+                  <FacebookIcon size={16} />
+                </a>
+                <a
+                  href={whatsappLink(whatsappMessages.generic)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="WhatsApp — écrire à Céline"
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 hover:border-[#25D366] hover:text-[#25D366] transition-colors"
+                >
+                  <WhatsAppIcon size={15} />
+                </a>
+                {contact.googleReviewsUrl && (
+                  <a
+                    href={contact.googleReviewsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Voir les avis Google"
+                    className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 hover:border-white/40 transition-colors bg-white/5"
+                  >
+                    <GoogleGIcon size={15} />
+                  </a>
+                )}
+              </div>
             </div>
           </div>
 
@@ -136,6 +162,23 @@ export function Footer() {
                   </div>
                 </div>
               </li>
+              {contact.googleReviewsUrl ? (
+                <li>
+                  <a
+                    href={contact.googleReviewsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 mt-2 text-xs text-text-on-dark-soft hover:text-gold transition-colors"
+                  >
+                    <Star className="h-3.5 w-3.5 text-gold" />
+                    Voir les avis Google
+                  </a>
+                </li>
+              ) : (
+                <li className="text-xs text-text-on-dark-soft/60 italic mt-1">
+                  Avis Google — fiche en cours de connexion
+                </li>
+              )}
             </ul>
           </div>
         </div>
