@@ -249,30 +249,82 @@ body {
   letter-spacing: 0.005em;
 }
 
-/* Étincelle dorée pulsante — apparaît après l'écriture cursive */
+/* ======================================================================== */
+/*  ANIMATIONS ÉTINCELLE — Sprint D ajustements                              */
+/*                                                                            */
+/*  Effet "lumière qui trace le texte" : un clip-path révèle progressivement */
+/*  le texte de gauche à droite, et une tête de lumière dorée se déplace    */
+/*  en synchro pour donner l'illusion d'une plume lumineuse qui écrit.       */
+/* ======================================================================== */
+
+/* Le texte est révélé de gauche à droite par un clip-path qui se rétracte */
+@keyframes etincelle-trace {
+  0%   {
+    clip-path: inset(-30% 100% -30% 0);
+    filter: drop-shadow(0 0 14px rgba(255, 215, 130, 0.9))
+            drop-shadow(0 0 6px rgba(184, 138, 61, 0.7));
+  }
+  90%  {
+    clip-path: inset(-30% 0% -30% 0);
+    filter: drop-shadow(0 0 16px rgba(255, 215, 130, 0.8))
+            drop-shadow(0 0 8px rgba(184, 138, 61, 0.6));
+  }
+  100% {
+    clip-path: inset(-30% 0% -30% 0);
+    filter: drop-shadow(0 0 6px rgba(184, 138, 61, 0.5));
+  }
+}
+
+/* La "tête de lumière" qui se déplace de gauche à droite,
+   donnant l'illusion d'une plume dorée qui trace le mot. */
+@keyframes etincelle-light-head {
+  0%   { left: -8%; opacity: 0; }
+  8%   { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { left: 102%; opacity: 0; }
+}
+
+/* Étincelle dorée pulsante — apparaît à la fin du tracé */
 @keyframes etincelle-flash {
-  0%   { opacity: 0; transform: scale(0.6) rotate(-12deg); }
-  35%  { opacity: 1; transform: scale(1.15) rotate(0deg); filter: drop-shadow(0 0 12px rgba(184,138,61,0.85)); }
-  60%  { opacity: 1; transform: scale(1) rotate(4deg); filter: drop-shadow(0 0 8px rgba(184,138,61,0.6)); }
-  100% { opacity: 1; transform: scale(1) rotate(0deg); filter: drop-shadow(0 0 4px rgba(184,138,61,0.4)); }
+  0%   { opacity: 0; transform: scale(0.4) rotate(-30deg); }
+  50%  {
+    opacity: 1;
+    transform: scale(1.3) rotate(8deg);
+    filter: drop-shadow(0 0 18px rgba(255, 215, 130, 1))
+            drop-shadow(0 0 8px rgba(184, 138, 61, 0.8));
+  }
+  75%  {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+    filter: drop-shadow(0 0 12px rgba(184, 138, 61, 0.7));
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+    filter: drop-shadow(0 0 6px rgba(184, 138, 61, 0.5));
+  }
 }
 
-/* Tracé cursif progressif pour SVG */
-@keyframes etincelle-draw {
-  to { stroke-dashoffset: 0; }
+/* Filet doré qui se dessine sous le mot (signature) */
+@keyframes etincelle-underline {
+  0%   { transform: scaleX(0); transform-origin: left center; opacity: 0; }
+  20%  { opacity: 1; }
+  100% { transform: scaleX(1); transform-origin: left center; opacity: 0.7; }
 }
 
-/* Glow doré qui pulse légèrement après l'écriture */
-@keyframes etincelle-glow {
-  0%   { filter: drop-shadow(0 0 0 rgba(184,138,61,0)); }
-  60%  { filter: drop-shadow(0 0 16px rgba(184,138,61,0.7)) drop-shadow(0 0 4px rgba(255,210,140,0.6)); }
-  100% { filter: drop-shadow(0 0 6px rgba(184,138,61,0.45)); }
-}
-
-/* Scintillement subtil sur les EtincelleAccent variant glow */
+/* Scintillement permanent post-animation pour les EtincelleAccent glow */
 @keyframes etincelle-scintille {
-  0%, 100% { text-shadow: 0 0 14px rgba(184,138,61,0.40), 0 0 28px rgba(184,138,61,0.16); }
-  50%      { text-shadow: 0 0 22px rgba(184,138,61,0.60), 0 0 42px rgba(184,138,61,0.28); }
+  0%, 100% {
+    text-shadow:
+      0 0 14px rgba(184, 138, 61, 0.45),
+      0 0 28px rgba(184, 138, 61, 0.18);
+  }
+  50% {
+    text-shadow:
+      0 0 22px rgba(184, 138, 61, 0.70),
+      0 0 42px rgba(184, 138, 61, 0.30),
+      0 0 8px rgba(255, 215, 130, 0.40);
+  }
 }
 
 /* Filet doré décoratif */

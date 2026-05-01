@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils";
 
 type Props = {
-  /** Le mot à afficher en cursive dorée (ex: "Bienvenue"). */
+  /** Le mot à afficher (ex: "Bienvenue"). */
   children: React.ReactNode;
   /** Taille — défaut "lg". */
   size?: "md" | "lg" | "xl";
@@ -11,6 +11,8 @@ type Props = {
   delay?: number;
   /** Position de la petite étincelle dorée. Défaut "right-top". */
   sparklePosition?: "right-top" | "right-bottom" | "left-top" | "none";
+  /** Forcer la police : "handwritten" (Caveat cursive) ou "display" (Cormorant). Défaut handwritten. */
+  font?: "handwritten" | "display";
   className?: string;
 };
 
@@ -21,86 +23,113 @@ const SIZE: Record<NonNullable<Props["size"]>, string> = {
 };
 
 /**
- * EtincelleHandwritten — mot cursif doré qui se révèle à l'arrivée
- * sur la page, suivi d'un flash d'étincelle dorée juste à côté.
+ * EtincelleHandwritten v2 — texte révélé par une **tête de lumière dorée**
+ * qui se déplace de gauche à droite, comme une plume lumineuse qui trace
+ * le mot. Inspiré directement des stories Insta de Céline.
  *
- * Inspiré directement des stories Insta de Céline (etincel_debienetre) :
- *  - "Bienvenue" / "se rejoignent" / "rencontrent" en script doré chaud
- *  - Petite étincelle 4 branches qui scintille
- *  - Filet doré effilé sous le mot (signature de plume)
+ * Sprint D ajustement (l'effet précédent était juste un fade-up sans tracé).
  *
- * Animations CSS pures (déclarées dans globals.css) :
- *  - etincelle-glow : tracé qui apparaît avec halo doré qui pulse
- *  - etincelle-flash : étincelle qui scintille avec glow
+ * Composition :
+ *  1. Le texte cursif doré est masqué par un clip-path qui se rétracte
+ *     de gauche à droite (animation 1.6s).
+ *  2. Une tête de lumière dorée flouée se déplace en synchro, donnant
+ *     l'illusion d'une plume qui écrit.
+ *  3. Une étincelle 4 branches flash à la fin du tracé.
+ *  4. Un filet doré se dessine sous le mot après le tracé.
+ *  5. Le mot reste affiché avec un glow doré statique.
  *
- * Pas de Framer Motion (problème opacity:0 en static export).
- * Respect prefers-reduced-motion via media query.
+ * Animations CSS pures (pas Framer). Respect prefers-reduced-motion :
+ * en mode reduce, le texte apparaît directement sans animation.
  */
 export function EtincelleHandwritten({
   children,
   size = "lg",
   delay = 200,
   sparklePosition = "right-top",
+  font = "handwritten",
   className,
 }: Props) {
-  const delayStyle = { animationDelay: `${delay}ms` } as React.CSSProperties;
-  const sparkleDelay = { animationDelay: `${delay + 700}ms` } as React.CSSProperties;
+  const traceDuration = 1600; // ms — durée du tracé lumineux
+  const sparkleDelay = delay + traceDuration - 200;
+  const underlineDelay = delay + traceDuration - 400;
+
+  const fontClass = font === "handwritten" ? "font-handwritten" : "font-display";
 
   return (
-    <span className={cn("relative inline-flex items-baseline", className)}>
-      <span
-        className={cn(
-          "font-handwritten leading-[0.95] text-[#b88a3d] opacity-0",
-          "motion-safe:animate-[etincelle-glow_1.2s_ease-out_forwards]",
-          SIZE[size],
-        )}
-        style={delayStyle}
-      >
-        {/* Astuce : on superpose deux fades pour révéler progressivement */}
+    <span className={cn("relative inline-flex items-baseline whitespace-nowrap", className)}>
+      <span className="relative inline-block leading-[0.95]">
+        {/* Le texte doré, révélé par clip-path animé */}
         <span
-          className="inline-block opacity-0 motion-safe:animate-[fadeUp_1.2s_cubic-bezier(0.22,1,0.36,1)_forwards]"
-          style={delayStyle}
+          className={cn(
+            fontClass,
+            SIZE[size],
+            "inline-block text-[#b88a3d]",
+            "motion-safe:[clip-path:inset(-30%_100%_-30%_0)]",
+            "motion-safe:animate-[etincelle-trace_1.6s_cubic-bezier(0.22,1,0.36,1)_forwards]",
+          )}
+          style={{ animationDelay: `${delay}ms` }}
         >
           {children}
+        </span>
+
+        {/* Tête de lumière dorée qui se déplace en synchro avec le tracé.
+            Mix-blend-mode screen pour fondre la lumière au texte. */}
+        <span
+          aria-hidden
+          className="motion-safe:absolute pointer-events-none top-[-30%] bottom-[-30%] w-[16%] rounded-full opacity-0 motion-safe:animate-[etincelle-light-head_1.6s_cubic-bezier(0.22,1,0.36,1)_forwards]"
+          style={{
+            animationDelay: `${delay}ms`,
+            background:
+              "radial-gradient(circle, rgba(255,235,180,0.95) 0%, rgba(255,215,130,0.55) 35%, rgba(184,138,61,0.18) 65%, transparent 80%)",
+            filter: "blur(6px)",
+            mixBlendMode: "screen",
+          }}
+        />
+
+        {/* Filet doré effilé sous le mot (style trait de plume) */}
+        <span
+          aria-hidden
+          className="pointer-events-none absolute left-0 right-0 -bottom-1 h-[3px] motion-safe:scale-x-0 motion-safe:animate-[etincelle-underline_1.2s_cubic-bezier(0.22,1,0.36,1)_forwards] origin-left"
+          style={{ animationDelay: `${underlineDelay}ms` }}
+        >
+          <svg viewBox="0 0 200 3" preserveAspectRatio="none" className="w-full h-full">
+            <defs>
+              <linearGradient id="underline-grad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stopColor="#b88a3d" stopOpacity="0" />
+                <stop offset="20%" stopColor="#b88a3d" stopOpacity="0.85" />
+                <stop offset="80%" stopColor="#d2b078" stopOpacity="0.85" />
+                <stop offset="100%" stopColor="#ead7af" stopOpacity="0" />
+              </linearGradient>
+            </defs>
+            <path
+              d="M 2 1.5 Q 50 0.5 100 1.5 T 198 1.5"
+              stroke="url(#underline-grad)"
+              strokeWidth="1.6"
+              strokeLinecap="round"
+              fill="none"
+            />
+          </svg>
         </span>
       </span>
 
       {sparklePosition !== "none" && (
         <SparkleIcon
           className={cn(
-            "absolute opacity-0 motion-safe:animate-[etincelle-flash_1.4s_cubic-bezier(0.22,1,0.36,1)_forwards] text-[#c9924a]",
-            sparklePosition === "right-top" && "right-[-1.4rem] top-[-0.4rem] h-7 w-7",
-            sparklePosition === "right-bottom" && "right-[-1rem] bottom-[-0.6rem] h-6 w-6",
-            sparklePosition === "left-top" && "left-[-1.4rem] top-[-0.4rem] h-7 w-7",
+            "absolute opacity-0 motion-safe:animate-[etincelle-flash_0.9s_cubic-bezier(0.22,1,0.36,1)_forwards] text-[#c9924a]",
+            sparklePosition === "right-top" && "right-[-1.6rem] top-[-0.4rem] h-7 w-7",
+            sparklePosition === "right-bottom" && "right-[-1.2rem] bottom-[-0.6rem] h-6 w-6",
+            sparklePosition === "left-top" && "left-[-1.6rem] top-[-0.4rem] h-7 w-7",
           )}
-          style={sparkleDelay}
+          style={{ animationDelay: `${sparkleDelay}ms` }}
         />
       )}
-
-      {/* Filet doré effilé sous le mot, dessiné en SVG comme un trait de plume */}
-      <span
-        aria-hidden
-        className="pointer-events-none absolute left-0 right-0 -bottom-1 h-2 opacity-0 motion-safe:animate-[fadeUp_0.9s_ease-out_forwards]"
-        style={{ animationDelay: `${delay + 900}ms` }}
-      >
-        <svg viewBox="0 0 200 8" preserveAspectRatio="none" className="w-full h-full">
-          <path
-            d="M 4 4 Q 50 1 100 4 T 196 4"
-            stroke="#b88a3d"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            fill="none"
-            opacity="0.65"
-          />
-        </svg>
-      </span>
     </span>
   );
 }
 
 /**
- * Étincelle 4 branches (style Insta de Céline) — pas un sparkle
- * générique. Forme étoile à 4 pointes effilées avec un petit centre brillant.
+ * Étincelle 4 branches (style Insta de Céline) — étoile à 4 pointes effilées
+ * avec un petit centre brillant.
  */
 function SparkleIcon({ className, style }: { className?: string; style?: React.CSSProperties }) {
   return (
@@ -111,9 +140,7 @@ function SparkleIcon({ className, style }: { className?: string; style?: React.C
       style={style}
       aria-hidden
     >
-      {/* 4 branches effilées */}
       <path d="M 12 0 L 13.4 10.6 L 24 12 L 13.4 13.4 L 12 24 L 10.6 13.4 L 0 12 L 10.6 10.6 Z" />
-      {/* Centre brillant */}
       <circle cx="12" cy="12" r="1.4" fill="#fff0d5" opacity="0.9" />
     </svg>
   );
