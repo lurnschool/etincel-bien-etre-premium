@@ -754,6 +754,16 @@ body {
   );
 }
 
+/* Sprint J — vrai border-light qui circule SUR le contour du bouton.
+ * Ancienne approche (transform: rotate) donnait un effet "hélice" qui faisait
+ * tourner toute la zone. Nouvelle approche : @property anime l'angle du
+ * conic-gradient lui-même → le reflet parcourt vraiment le border. */
+@property --halo-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
 /* Reflet lumineux qui circule autour du border (conic-gradient + mask) */
 .button-halo::after {
   content: "";
@@ -762,11 +772,11 @@ body {
   border-radius: inherit;
   padding: 1.5px;
   background: conic-gradient(
-    from 0deg,
+    from var(--halo-angle, 0deg),
     transparent 0deg,
-    rgba(255, 240, 190, 0) 50deg,
-    rgba(255, 240, 190, 0.85) 90deg,
-    rgba(255, 240, 190, 0) 130deg,
+    rgba(255, 240, 190, 0) 60deg,
+    rgba(255, 240, 190, 0.95) 90deg,
+    rgba(255, 240, 190, 0) 120deg,
     transparent 360deg
   );
   -webkit-mask:
@@ -779,25 +789,25 @@ body {
   mask-composite: exclude;
   z-index: -1;
   pointer-events: none;
-  animation: button-halo-rotate 5.5s linear infinite;
+  animation: button-halo-rotate 4.5s linear infinite;
 }
 .button-halo--violet::after {
   background: conic-gradient(
-    from 0deg,
+    from var(--halo-angle, 0deg),
     transparent 0deg,
-    rgba(220, 200, 240, 0) 50deg,
-    rgba(220, 200, 240, 0.80) 90deg,
-    rgba(220, 200, 240, 0) 130deg,
+    rgba(220, 200, 240, 0) 60deg,
+    rgba(220, 200, 240, 0.92) 90deg,
+    rgba(220, 200, 240, 0) 120deg,
     transparent 360deg
   );
 }
 .button-halo--gold::after {
   background: conic-gradient(
-    from 0deg,
+    from var(--halo-angle, 0deg),
     transparent 0deg,
-    rgba(255, 235, 175, 0) 50deg,
-    rgba(255, 235, 175, 0.85) 90deg,
-    rgba(255, 235, 175, 0) 130deg,
+    rgba(255, 235, 175, 0) 60deg,
+    rgba(255, 235, 175, 0.95) 90deg,
+    rgba(255, 235, 175, 0) 120deg,
     transparent 360deg
   );
 }
@@ -814,14 +824,8 @@ body {
 }
 
 @keyframes button-halo-rotate {
-  from {
-    background-position: 0% 50%;
-    transform: rotate(0deg);
-  }
-  to {
-    background-position: 100% 50%;
-    transform: rotate(360deg);
-  }
+  from { --halo-angle: 0deg; }
+  to { --halo-angle: 360deg; }
 }
 
 /* Sous prefers-reduced-motion : on garde l'ambiance, on coupe le mouvement.
