@@ -3,7 +3,7 @@ import { BienvenueEspace } from "@/components/home/BienvenueEspace";
 import { CeQueVousVenezDeposer } from "@/components/home/CeQueVousVenezDeposer";
 import { LesCheminsQuiSouvrent } from "@/components/home/LesCheminsQuiSouvrent";
 import { LesOutilsQueJeMobilise } from "@/components/home/LesOutilsQueJeMobilise";
-import { MonUnivers } from "@/components/home/MonUnivers";
+import { FragmentsDunivers } from "@/components/home/FragmentsDunivers";
 import { OffrirUnMoment } from "@/components/home/OffrirUnMoment";
 import { CerclesEtRetraites } from "@/components/home/CerclesEtRetraites";
 import { GuidanceTeaser } from "@/components/home/GuidanceTeaser";
@@ -43,7 +43,7 @@ export default function HomePage() {
       <CeQueVousVenezDeposer />
       <LesCheminsQuiSouvrent />
       <LesOutilsQueJeMobilise />
-      <MonUnivers />
+      <FragmentsDunivers />
       <OffrirUnMoment />
       <CerclesEtRetraites />
       <GuidanceTeaser />
