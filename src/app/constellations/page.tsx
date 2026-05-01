@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { PageRefugeHero } from "@/components/page/PageRefugeHero";
 import { GuidanceFooter } from "@/components/page/GuidanceFooter";
+import { ProchainesDates } from "@/components/page/ProchainesDates";
 import {
   PillarFormatsSection,
   PillarFaqSection,
@@ -112,6 +113,13 @@ export default function ConstellationsPage() {
       />
 
       <PillarFaqSection items={constellationsFaq} background="bg-base" />
+
+      <ProchainesDates
+        eyebrow="Prochaines constellations"
+        title="Les prochains rendez-vous."
+        kind="autre"
+        notifyLabel="Recevoir les prochaines dates"
+      />
 
       <GuidanceFooter variant="contact" />
     </>

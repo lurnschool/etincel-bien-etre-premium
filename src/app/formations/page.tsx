@@ -6,6 +6,7 @@ import { Reveal } from "@/components/ui/Reveal";
 import { Etincelle } from "@/components/ui/Etincelle";
 import { PageRefugeHero } from "@/components/page/PageRefugeHero";
 import { GuidanceFooter } from "@/components/page/GuidanceFooter";
+import { ProchainesDates } from "@/components/page/ProchainesDates";
 import { DetailStrip } from "@/components/ui/DetailStrip";
 import { EtincelleAccent } from "@/components/ui/EtincelleAccent";
 import { formations } from "@/lib/data";
@@ -93,6 +94,13 @@ export default function FormationsPage() {
           </ul>
         </Container>
       </section>
+
+      <ProchainesDates
+        eyebrow="Prochaines sessions"
+        title="Les prochaines sessions de formation."
+        kind="autre"
+        notifyLabel="Être prévenue d'une nouvelle session"
+      />
 
       <GuidanceFooter variant="program" />
     </>

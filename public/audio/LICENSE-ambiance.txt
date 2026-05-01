@@ -1,0 +1,72 @@
+================================================================
+LICENCE — AMBIANCE SONORE DU REFUGE ETINCEL
+================================================================
+
+Ce fichier documente la provenance et la licence de la piste audio
+utilisée par le composant AmbianceToggle (src/components/layout/
+AmbianceToggle.tsx) du site Etincel de bien-être.
+
+À RENSEIGNER UNE FOIS LE FICHIER MP3 INSTALLÉ
+----------------------------------------------------------------
+
+Titre de la piste     : __________________________________
+Auteur / artiste      : __________________________________
+Source                : __________________________________
+URL de la page source : __________________________________
+Type de licence       : __________________________________
+                        (ex: Pixabay Content License,
+                             CC-BY 4.0, CC0, Mixkit License)
+URL de la licence     : __________________________________
+Date de téléchargement: __________________________________
+Attribution requise   : OUI / NON
+Mention d'attribution : __________________________________
+                        (à reproduire dans le footer si OUI)
+
+----------------------------------------------------------------
+SOURCES RECOMMANDÉES (LICENCE CLAIRE, USAGE WEB COMMERCIAL)
+----------------------------------------------------------------
+
+1. PIXABAY MUSIC — https://pixabay.com/music/search/meditation/
+   Licence "Pixabay Content License" — usage commercial libre,
+   pas d'attribution obligatoire. Cliquer sur une piste >3 min
+   → Download → MP3.
+   Licence détaillée : https://pixabay.com/service/license-summary/
+
+2. MIXKIT — https://mixkit.co/free-stock-music/tag/meditation/
+   Licence Mixkit Free — usage commercial gratuit, pas
+   d'attribution requise.
+   Licence détaillée : https://mixkit.co/license/#musicFree
+
+3. FREE MUSIC ARCHIVE — https://freemusicarchive.org/genre/Ambient/
+   Vérifier la licence par track (CC-BY, CC-BY-SA, CC0).
+   Si CC-BY → ajouter le crédit dans le footer du site.
+
+----------------------------------------------------------------
+CRITÈRES DE SÉLECTION (brief chef de projet)
+----------------------------------------------------------------
+
+- ambiance méditation / retraite / refuge / soin
+- douce, organique
+- sans voix
+- sans percussion agressive
+- pas de "spa cheap" ni dramatique
+- durée minimale 3 minutes
+- boucle possible
+- format MP3 local (pas de streaming externe)
+
+----------------------------------------------------------------
+INSTALLATION
+----------------------------------------------------------------
+
+1. Télécharger un MP3 conforme depuis l'une des sources ci-dessus.
+2. Renommer le fichier en : ambiance-etincel.mp3
+3. Le placer ici : /public/audio/ambiance-etincel.mp3
+4. Renseigner ce fichier (titre, auteur, source, licence, date).
+5. Dans src/components/layout/AmbianceToggle.tsx, mettre :
+      const AUDIO_SRC = "/audio/ambiance-etincel.mp3";
+6. Si la licence requiert une attribution, l'ajouter dans le
+   footer du site (src/components/layout/Footer.tsx).
+
+Le composant AmbianceToggle bascule automatiquement de "Ambiance
+bientôt disponible" à "Activer l'ambiance" dès que AUDIO_SRC est
+renseigné et qu'un fichier répond à l'URL.

@@ -2,6 +2,7 @@
  * VISUAL ASSET MAP — cartographie centrale de tous les visuels du site.
  *
  * Sprint A · 2026-05-01 — réécrit pour le passage "refuge connecté".
+ * Sprint I · 2026-05-01 — AUDIT IMAGES (brief chef de projet).
  *
  * Chaque visuel est un slot stable :
  *   - emplacement (page, section)
@@ -17,24 +18,51 @@
  * `status`. Le composant <VisualAsset id="..." /> rend automatiquement la
  * bonne image, sans aucune modification de mise en page.
  *
- * RÈGLE : aucun mot "placeholder" visible côté public.
- * RÈGLE : ne jamais inventer une image stock — un placeholder propre vaut
- * toujours mieux qu'une image générique.
+ * ÉTAT AU 2026-05-01 (audit Sprint I) :
+ *   - 32 entrées sourceKind="site-original" → 16 fichiers PNG/JPG du site
+ *     original etinceldebienetre.fr, légitimes (Céline propriétaire).
+ *   - 24 entrées sourceKind="placeholder"   → SVG textures internes neutres,
+ *     créées pour ce projet (pas de scraping, pas d'image stock).
+ *   - 0 entrée sourceKind="instagram"       → AUCUNE image Instagram
+ *     téléchargée. Le composant InstagramFeed est en mode "fallback"
+ *     tant que Céline n'a pas validé une sélection ou qu'un widget tiers
+ *     n'est pas branché.
+ *   - 0 entrée provenant de banques d'images stock (Unsplash, Pexels,
+ *     etc.) — interdit par la direction artistique.
+ *
+ * RÈGLE FERME : aucun mot "placeholder" visible côté public.
+ * RÈGLE FERME : ne jamais inventer une image stock — un placeholder propre
+ *   vaut toujours mieux qu'une image générique.
+ * RÈGLE FERME : aucune photo Instagram ne sera affichée tant que Céline
+ *   n'aura pas validé explicitement la sélection (ou qu'un widget tiers
+ *   officiel ne sera pas branché). Cf. src/components/home/InstagramFeed.tsx.
  */
 
 import { asset } from "./assets";
 
 export type VisualSourceKind =
+  /** Image téléchargée légalement depuis le site original etinceldebienetre.fr */
   | "site-original"
+  /** Image Instagram (uniquement avec autorisation explicite + sélection validée) */
   | "instagram"
+  /** SVG ou texture neutre créés pour ce projet (jamais image stock) */
   | "placeholder"
+  /** Photo finale fournie par Céline */
   | "final";
 
 export type VisualStatus =
-  | "ok" // l'image en place est satisfaisante (finale ou originale exploitable)
-  | "waiting-client-photo" // remplacement attendu par photo finale Céline
-  | "waiting-instagram-auth" // remplacement attendu par photo Instagram (autorisation)
-  | "waiting-shooting"; // remplacement attendu par mini-shooting dédié
+  /** L'image en place est satisfaisante (finale ou originale exploitable) */
+  | "ok"
+  /** Licence et droits d'usage explicitement vérifiés (Sprint I) */
+  | "license-verified"
+  /** Remplacement attendu par photo finale Céline */
+  | "waiting-client-photo"
+  /** Remplacement attendu par photo Instagram avec autorisation */
+  | "waiting-instagram-auth"
+  /** Remplacement attendu par mini-shooting dédié */
+  | "waiting-shooting"
+  /** Marquée pour suppression — image douteuse ou non validée */
+  | "to-remove";
 
 export type VisualPriority = "indispensable" | "important" | "bonus";
 

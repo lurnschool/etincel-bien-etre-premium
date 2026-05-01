@@ -6,6 +6,7 @@ import { Reveal } from "@/components/ui/Reveal";
 import { Etincelle } from "@/components/ui/Etincelle";
 import { PageRefugeHero } from "@/components/page/PageRefugeHero";
 import { GuidanceFooter } from "@/components/page/GuidanceFooter";
+import { ProchainesDates } from "@/components/page/ProchainesDates";
 import { DetailStrip } from "@/components/ui/DetailStrip";
 import { EtincelleAccent } from "@/components/ui/EtincelleAccent";
 import { whatsappLink, whatsappMessages } from "@/lib/whatsapp";
@@ -175,6 +176,13 @@ export default function EvenementsPage() {
           </ul>
         </Container>
       </section>
+
+      <ProchainesDates
+        eyebrow="Prochains événements"
+        title="Ce qui s'ouvre dans les prochaines semaines."
+        kind="autre"
+        notifyLabel="Être prévenue des prochaines ouvertures"
+      />
 
       <GuidanceFooter variant="contact" />
     </>

@@ -1,9 +1,10 @@
 import { HeroRefuge } from "@/components/home/HeroRefuge";
 import { BienvenueEspace } from "@/components/home/BienvenueEspace";
 import { CeQueVousVenezDeposer } from "@/components/home/CeQueVousVenezDeposer";
+import { VousVenezPour } from "@/components/home/VousVenezPour";
 import { LesCheminsQuiSouvrent } from "@/components/home/LesCheminsQuiSouvrent";
 import { LesOutilsQueJeMobilise } from "@/components/home/LesOutilsQueJeMobilise";
-import { FragmentsDunivers } from "@/components/home/FragmentsDunivers";
+import { InstagramFeed } from "@/components/home/InstagramFeed";
 import { OffrirUnMoment } from "@/components/home/OffrirUnMoment";
 import { CerclesEtRetraites } from "@/components/home/CerclesEtRetraites";
 import { GuidanceTeaser } from "@/components/home/GuidanceTeaser";
@@ -41,9 +42,10 @@ export default function HomePage() {
       <HeroRefuge />
       <BienvenueEspace />
       <CeQueVousVenezDeposer />
+      <VousVenezPour />
       <LesCheminsQuiSouvrent />
       <LesOutilsQueJeMobilise />
-      <FragmentsDunivers />
+      <InstagramFeed />
       <OffrirUnMoment />
       <CerclesEtRetraites />
       <GuidanceTeaser />
