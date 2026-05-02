@@ -187,21 +187,21 @@ export function HeroRefuge() {
                   <span className="inline-flex items-center gap-1.5">
                     <Etincelle size={8} />
                     <span className="font-display-italic text-text-medium">
-                      Mémoires & constellations
+                      Constellations Familiales · Transgénérationnel
                     </span>
                   </span>
                   <span className="text-gold/40" aria-hidden>·</span>
                   <span className="inline-flex items-center gap-1.5">
                     <Etincelle size={8} />
                     <span className="font-display-italic text-text-medium">
-                      Féminin & cacao
+                      Accompagnement du Féminin · Cérémonie Cacao
                     </span>
                   </span>
                   <span className="text-gold/40" aria-hidden>·</span>
                   <span className="inline-flex items-center gap-1.5">
                     <Etincelle size={8} />
                     <span className="font-display-italic text-text-medium">
-                      Corps & intégration
+                      Reliance au corps
                     </span>
                   </span>
                 </div>

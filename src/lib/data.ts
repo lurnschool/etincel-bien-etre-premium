@@ -72,7 +72,7 @@ export const contact = {
  * Les labels visibles sont courts mais les slugs sont explicites pour le SEO.
  */
 export const navigation = [
-  { label: "Mémoires", href: "/memoires-constellations" },
+  { label: "Constellations", href: "/memoires-constellations" },
   { label: "Féminin & cacao", href: "/feminin-cacao" },
   { label: "Corps", href: "/corps-integration" },
   { label: "Retraites", href: "/retraites" },
@@ -482,7 +482,7 @@ export const heroSlides = [
   },
   {
     id: "memoires",
-    category: "Axe 1 · Mémoires & constellations",
+    category: "Axe 1 · Constellations Familiales · Transgénérationnel",
     title: "Libérer les mémoires qui ne vous appartiennent plus.",
     text:
       "Constellations familiales, transgénérationnel, mémoires portées — mettre en lumière les dynamiques invisibles qui influencent votre histoire pour retrouver votre place.",
@@ -494,7 +494,7 @@ export const heroSlides = [
   },
   {
     id: "feminin",
-    category: "Axe 2 · Féminin & cacao",
+    category: "Axe 2 · Accompagnement du Féminin · Cérémonie Cacao",
     title: "Revenir au corps, au cœur et au féminin.",
     text:
       "Cérémonies cacao, cercles de femmes, accompagnement symbolique autour du féminin et de l'intuition. Un espace de douceur, de présence et de reconnexion.",
@@ -506,7 +506,7 @@ export const heroSlides = [
   },
   {
     id: "corps",
-    category: "Axe 3 · Corps & intégration",
+    category: "Axe 3 · Reliance au corps",
     title: "Intégrer par le corps ce que les mots ne suffisent pas à transformer.",
     text:
       "Innerdance, breathwork chamanique, retraites immersives — le souffle, le mouvement et l'expérience intérieure pour ancrer ce qui demande à se transformer.",
@@ -556,7 +556,7 @@ export const corePathways = [
   {
     id: "memoires-constellations",
     number: "01",
-    name: "Mémoires & constellations",
+    name: "Constellations Familiales · Transgénérationnel",
     catchphrase: "Libérer les mémoires qui ne vous appartiennent plus.",
     description:
       "Constellations familiales, transgénérationnel, mémoires portées. Mettre en lumière les loyautés, les répétitions et les dynamiques invisibles qui traversent votre histoire pour retrouver une place plus juste.",
@@ -570,7 +570,7 @@ export const corePathways = [
   {
     id: "feminin-cacao",
     number: "02",
-    name: "Féminin & cacao",
+    name: "Accompagnement du Féminin · Cérémonie Cacao",
     catchphrase: "Revenir au corps, au cœur et au féminin.",
     description:
       "Cérémonies cacao, cercles de femmes, accompagnement symbolique autour du féminin sacré, des cycles, du corps et de l'intuition. Un espace de douceur, de présence et de reconnexion.",
@@ -584,7 +584,7 @@ export const corePathways = [
   {
     id: "corps-integration",
     number: "03",
-    name: "Corps & intégration",
+    name: "Reliance au corps",
     catchphrase: "Intégrer par le corps ce que les mots ne suffisent pas à transformer.",
     description:
       "Innerdance, breathwork chamanique, retraites immersives. Le souffle, le mouvement et l'expérience intérieure pour ancrer ce qui demande à se transformer après une constellation, un travail sur le féminin, ou une transition de vie.",
@@ -656,7 +656,7 @@ export const ceQueVousVenezDeposer = {
 export const cheminsRefuge = [
   {
     id: "memoires",
-    eyebrow: "Mémoires & constellations",
+    eyebrow: "Constellations Familiales · Transgénérationnel",
     title: "Une histoire qui n'est pas tout à fait la vôtre.",
     body: "Certaines personnes viennent me voir parce qu'elles sentent qu'elles portent une histoire qui ne leur appartient pas totalement. Loyautés invisibles, répétitions, mémoires familiales qui pèsent sans qu'on sache d'où elles viennent. Là, je travaille avec les constellations, l'hypnose, le transgénérationnel.",
     href: "/memoires-constellations",
@@ -665,7 +665,7 @@ export const cheminsRefuge = [
   },
   {
     id: "feminin",
-    eyebrow: "Féminin & cacao",
+    eyebrow: "Accompagnement du Féminin · Cérémonie Cacao",
     title: "Revenir à votre corps, votre cœur, votre espace intérieur.",
     body: "D'autres femmes arrivent avec le besoin de revenir à elles. À leur corps, à leur cœur, à leur intuition. C'est là que j'ouvre les cercles, les cérémonies cacao, les accompagnements féminins. Un espace doux, sensible, où chacune retrouve sa place.",
     href: "/feminin-cacao",
@@ -674,7 +674,7 @@ export const cheminsRefuge = [
   },
   {
     id: "corps",
-    eyebrow: "Corps & intégration",
+    eyebrow: "Reliance au corps",
     title: "Ce qui a été compris doit parfois être traversé par le corps.",
     body: "Parfois, on a déjà compris beaucoup avec la tête. Ce qui manque, c'est de laisser le corps intégrer. Le souffle, le mouvement, l'innerdance, les retraites — pour ancrer ce qui demande à être ancré.",
     href: "/corps-integration",

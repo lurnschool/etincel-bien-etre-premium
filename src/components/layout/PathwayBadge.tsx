@@ -10,14 +10,14 @@ const pathwayConfig: Record<
   { label: string; href: string; description: string; linkLabel: string }
 > = {
   memoires: {
-    label: "Au service du chemin Mémoires & constellations",
+    label: "Au service du chemin Constellations Familiales · Transgénérationnel",
     href: "/memoires-constellations",
     description:
       "Cet outil prend tout son sens dans le travail des mémoires, des loyautés et de la place dans la lignée.",
     linkLabel: "Voir le chemin complet",
   },
   feminin: {
-    label: "Au service du chemin Féminin & cacao",
+    label: "Au service du chemin Accompagnement du Féminin · Cérémonie Cacao",
     href: "/feminin-cacao",
     description:
       "Cet outil prend tout son sens dans l'accompagnement du corps, des cycles et de l'intuition féminine.",

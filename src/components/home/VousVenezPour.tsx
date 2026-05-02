@@ -30,7 +30,7 @@ const PORTES: Porte[] = [
   {
     intent: "Je porte une histoire familiale, une mémoire qui me dépasse.",
     href: "/memoires-constellations",
-    ctaLabel: "Mémoires & constellations",
+    ctaLabel: "Constellations Familiales",
     icon: Compass,
     accent: "violet",
   },
@@ -44,7 +44,7 @@ const PORTES: Porte[] = [
   {
     intent: "Je veux intégrer par le souffle et le mouvement.",
     href: "/corps-integration",
-    ctaLabel: "Corps & intégration",
+    ctaLabel: "Reliance au corps",
     icon: Wind,
     accent: "sage",
   },
