@@ -432,19 +432,41 @@ export function PremiumGiftCard({
 }
 
 /* -----------------------------------------------------------
- * Sparkler SVG — feu de Bengale stylisé en SVG (plus fiable
- * que des spans CSS tournés, et net en print/export).
+ * Sparkler SVG — feu de Bengale stylisé en SVG, posé sur une
+ * scène d'ambiance floutée (cosy, bougies, déco) en bokeh.
  * ----------------------------------------------------------- */
-export function Sparkler({ glow }: { glow: string }) {
+export function Sparkler({
+  glow,
+  backgroundSrc = "/images/celine-2026/soin.jpg",
+}: {
+  glow: string;
+  /** Photo d'ambiance affichée floutée en arrière-plan derrière l'étincelle. */
+  backgroundSrc?: string;
+}) {
   const RAYS = 28;
   return (
     <div className="absolute inset-0">
-      {/* Halo doré diffus en arrière-plan, qui élargit la lumière */}
+      {/* Photo d'ambiance floutée + assombrie en arrière-plan */}
+      {backgroundSrc && (
+        <div
+          aria-hidden
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `url("${backgroundSrc}")`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            filter: "blur(6px) brightness(0.5) saturate(1.3)",
+            transform: "scale(1.15)",
+          }}
+        />
+      )}
+
+      {/* Halo doré diffus posé sur la photo, qui élargit la lumière */}
       <div
         aria-hidden
         className="absolute inset-0"
         style={{
-          background: `radial-gradient(circle at 50% 50%, ${glow}66 0%, ${glow}22 25%, transparent 55%)`,
+          background: `radial-gradient(circle at 50% 50%, ${glow}88 0%, ${glow}33 25%, transparent 55%)`,
         }}
       />
 
