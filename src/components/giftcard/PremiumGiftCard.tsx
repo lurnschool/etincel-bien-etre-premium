@@ -2,13 +2,16 @@
 
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { Etincelle } from "@/components/ui/Etincelle";
+import { contact } from "@/lib/data";
 
 type GiftCardTheme = "feminin" | "cacao" | "retraite" | "libre";
+type GiftCardFormat = "portrait" | "landscape";
 
 type Props = {
-  /** Thème visuel de la carte. Défaut "feminin". */
+  /** Thème visuel — colore le polaroid au recto et la diagonale au verso. */
   theme?: GiftCardTheme;
+  /** Format d'affichage : portrait (default, 5:7) ou landscape (16:9, façon carte imprimée). */
+  format?: GiftCardFormat;
   /** Nom du destinataire (affiché au verso). Défaut "À une personne précieuse". */
   recipient?: string;
   /** Type de l'offre (affiché au verso). Défaut "Un moment d'écoute". */
@@ -22,69 +25,57 @@ type Props = {
   className?: string;
 };
 
-const THEME_STYLES: Record<
+const THEME_TINT: Record<
   GiftCardTheme,
   {
     label: string;
-    gradient: string;
-    accent: string;
-    motif: string;
+    /** Teinte chaude des paillettes/bokeh — colore le verso et le sparkler. */
+    glow: string;
+    /** Teinte profonde de la diagonale au verso. */
+    deep: string;
+    /** Couleur du tampon manuscrit "Retrouver son Etin'Cel". */
+    handInk: string;
   }
 > = {
   feminin: {
     label: "Féminin & cacao",
-    gradient:
-      "bg-[linear-gradient(135deg,#f4d3c2_0%,#e0a988_50%,#a06548_100%)]",
-    accent: "#7a4630",
-    motif:
-      "radial-gradient(circle at 20% 25%, rgba(255,215,150,0.30) 0%, transparent 45%), radial-gradient(circle at 80% 75%, rgba(122,70,48,0.25) 0%, transparent 45%)",
+    glow: "#e7c08e",
+    deep: "#b78b4f",
+    handInk: "#d3a86a",
   },
   cacao: {
     label: "Cérémonie cacao",
-    gradient:
-      "bg-[linear-gradient(135deg,#7a5037_0%,#4e3220_55%,#2c1c12_100%)]",
-    accent: "#ead7af",
-    motif:
-      "radial-gradient(circle at 30% 30%, rgba(255,215,150,0.22) 0%, transparent 50%), radial-gradient(circle at 70% 70%, rgba(255,200,110,0.12) 0%, transparent 50%)",
+    glow: "#dca866",
+    deep: "#7a4e2a",
+    handInk: "#cf9a52",
   },
   retraite: {
     label: "Retraite & immersion",
-    gradient:
-      "bg-[linear-gradient(135deg,#fce8d4_0%,#f0c9a3_55%,#a06548_100%)]",
-    accent: "#5e3724",
-    motif:
-      "radial-gradient(ellipse at 50% 100%, rgba(94,55,36,0.30) 0%, transparent 60%), radial-gradient(circle at 80% 30%, rgba(255,240,200,0.35) 0%, transparent 50%)",
+    glow: "#efd2a0",
+    deep: "#a47438",
+    handInk: "#caa05f",
   },
   libre: {
     label: "Montant libre",
-    gradient:
-      "bg-[linear-gradient(135deg,#f4e8d2_0%,#e6c79a_60%,#caa376_100%)]",
-    accent: "#7a5d3a",
-    motif:
-      "radial-gradient(circle at 70% 25%, rgba(255,235,180,0.40) 0%, transparent 50%), radial-gradient(circle at 25% 80%, rgba(122,93,58,0.20) 0%, transparent 50%)",
+    glow: "#e8c98e",
+    deep: "#a07a3c",
+    handInk: "#c9a86a",
   },
 };
 
 /**
- * PremiumGiftCard — carte cadeau premium avec flip 3D recto/verso.
+ * PremiumGiftCard — refondue 2026-05-02 d'après la carte cadeau originale
+ * que Céline utilise déjà : recto noir profond + polaroid avec trombone +
+ * texte manuscrit "Retrouver son Etin'Cel" + bokeh doré ; verso crème
+ * avec souffle de paillettes dorées + bande diagonale dorée + identité.
  *
- * Sprint F : module cadeau premium et désirable.
- *
- * Composition :
- *  - Container `.gift-card-3d` avec perspective 1400px
- *  - Inner avec transform-style preserve-3d
- *  - Recto : visuel premium thématique (feminin/cacao/retraite/libre)
- *    + signature manuscrite "Etincel" + étincelle dorée + texte "Carte cadeau"
- *  - Verso : informations (destinataire, offre, valeur, référence)
- *  - Animation flip au hover ET au clic (state interne)
- *  - Sweep doré qui passe au hover (effet lumière qui glisse)
- *  - Effet papier réaliste : bord avec ring + ombre profonde
- *
- * Usage typique :
- *   <PremiumGiftCard theme="cacao" recipient="Marie" offerLabel="Cérémonie cacao" value="60 €" />
+ * Le flip 3D recto/verso est conservé (interaction hover + clic). Quatre
+ * teintes (feminin/cacao/retraite/libre) modulent la palette dorée. Deux
+ * formats : portrait (5:7) ou landscape (16:9, façon carte imprimée).
  */
 export function PremiumGiftCard({
   theme = "feminin",
+  format = "portrait",
   recipient = "À une personne précieuse",
   offerLabel = "Un moment d'écoute",
   value = "Sur demande",
@@ -93,7 +84,8 @@ export function PremiumGiftCard({
   className,
 }: Props) {
   const [isFlipped, setIsFlipped] = useState(false);
-  const styles = THEME_STYLES[theme];
+  const tint = THEME_TINT[theme];
+  const isLandscape = format === "landscape";
 
   const handleClick = () => {
     if (clickable) setIsFlipped((f) => !f);
@@ -102,7 +94,8 @@ export function PremiumGiftCard({
   return (
     <div
       className={cn(
-        "gift-card-3d relative w-full aspect-[5/7] max-w-xs mx-auto",
+        "gift-card-3d group relative w-full mx-auto",
+        isLandscape ? "aspect-[16/9] max-w-2xl" : "aspect-[5/7] max-w-xs",
         clickable && "cursor-pointer",
         isFlipped && "is-flipped",
         className,
@@ -116,259 +109,312 @@ export function PremiumGiftCard({
           handleClick();
         }
       }}
-      aria-label={`Carte cadeau ${styles.label} — cliquer pour retourner`}
+      aria-label={`Carte cadeau ${tint.label} — cliquer pour retourner`}
     >
-      {/* Halo doré derrière la carte — donne profondeur premium */}
+      {/* Halo doré derrière la carte */}
       <div
         aria-hidden
-        className="absolute -inset-6 rounded-[2.5rem] bg-gradient-to-br from-rose-soft/30 via-gold-soft/40 to-transparent blur-2xl -z-10"
+        className="absolute -inset-6 rounded-[2.5rem] bg-gradient-to-br from-amber-200/25 via-amber-100/20 to-transparent blur-2xl -z-10"
       />
 
       <div className="gift-card-3d-inner">
-        {/* === RECTO === */}
+        {/* ============== RECTO ============== */}
         <div
           className={cn(
-            "gift-card-face gift-card-shine rounded-[1.4rem] overflow-hidden shadow-[0_24px_60px_rgba(31,26,46,0.22)] ring-1 ring-bg-base/20",
-            styles.gradient,
+            "gift-card-face gift-card-shine rounded-[1.4rem] overflow-hidden shadow-[0_24px_60px_rgba(0,0,0,0.45)] ring-1 ring-black/40",
+            "bg-[#0c0a0c]",
           )}
         >
-          {/* Motif décoratif radial sur le recto */}
+          {/* Bokeh doré profond */}
           <div
             aria-hidden
             className="absolute inset-0"
-            style={{ background: styles.motif }}
-          />
-
-          {/* Grain de papier subtil */}
-          <div
-            aria-hidden
-            className="absolute inset-0 opacity-30 mix-blend-overlay"
             style={{
-              backgroundImage:
-                "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E\")",
+              background: `
+                radial-gradient(circle at 18% 22%, ${tint.glow}66 0%, transparent 28%),
+                radial-gradient(circle at 78% 18%, ${tint.glow}44 0%, transparent 22%),
+                radial-gradient(circle at 88% 78%, ${tint.glow}66 0%, transparent 32%),
+                radial-gradient(circle at 22% 82%, ${tint.glow}33 0%, transparent 30%),
+                radial-gradient(ellipse at 50% 50%, #1a1418 0%, #0a0809 100%)
+              `,
             }}
           />
 
-          {/* Cadre élégant double — premium éditorial */}
-          <div
-            aria-hidden
-            className="absolute inset-3 rounded-[1.1rem]"
-            style={{ boxShadow: `inset 0 0 0 1px ${styles.accent}40` }}
-          />
-          <div
-            aria-hidden
-            className="absolute inset-[14px] rounded-[1rem]"
-            style={{ boxShadow: `inset 0 0 0 1px ${styles.accent}18` }}
-          />
-
-          {/* Ornements de coin façon Art Déco — 4 angles */}
-          {[
-            { pos: "top-3.5 left-3.5", rotate: "0deg" },
-            { pos: "top-3.5 right-3.5", rotate: "90deg" },
-            { pos: "bottom-3.5 right-3.5", rotate: "180deg" },
-            { pos: "bottom-3.5 left-3.5", rotate: "270deg" },
-          ].map((c, i) => (
-            <div
+          {/* Petites particules de bokeh — points lumineux flous */}
+          {BOKEH_DOTS.map((d, i) => (
+            <span
               key={i}
               aria-hidden
-              className={`absolute ${c.pos}`}
-              style={{ color: styles.accent, transform: `rotate(${c.rotate})` }}
-            >
-              <CornerOrnament className="h-5 w-5 opacity-65" />
-            </div>
+              className="absolute rounded-full motion-safe:animate-[twinkle_3.4s_ease-in-out_infinite]"
+              style={{
+                top: d.top,
+                left: d.left,
+                width: d.size,
+                height: d.size,
+                background: tint.glow,
+                opacity: d.opacity,
+                filter: `blur(${d.blur}px)`,
+                animationDelay: d.delay,
+              }}
+            />
           ))}
 
-          {/* Monogramme É en watermark central très diffus */}
-          <div
-            aria-hidden
-            className="absolute inset-0 flex items-center justify-center pointer-events-none"
-          >
-            <p
-              className="font-display select-none leading-none"
-              style={{
-                color: styles.accent,
-                opacity: 0.07,
-                fontSize: "16rem",
-                fontStyle: "italic",
-              }}
-            >
-              É
-            </p>
-          </div>
-
-          {/* Constellation de petites étincelles secondaires */}
-          {[
-            { top: "18%", left: "14%", size: 6, delay: "0s" },
-            { top: "32%", left: "78%", size: 5, delay: "1.4s" },
-            { top: "62%", left: "20%", size: 4, delay: "0.7s" },
-            { top: "76%", left: "70%", size: 5, delay: "2.1s" },
-          ].map((s, i) => (
+          {/* Étoiles 4 branches scintillantes éparpillées */}
+          {STARS.map((s, i) => (
             <div
               key={i}
               aria-hidden
-              className="absolute motion-safe:animate-[twinkle_3s_ease-in-out_infinite]"
+              className="absolute motion-safe:animate-[twinkle_2.8s_ease-in-out_infinite]"
               style={{
                 top: s.top,
                 left: s.left,
-                color: styles.accent,
-                opacity: 0.5,
+                color: tint.glow,
+                opacity: s.opacity,
                 animationDelay: s.delay,
+                transform: `rotate(${s.rotate}deg)`,
               }}
             >
-              <SparkleIcon style={{ width: s.size, height: s.size }} />
+              <FourPointStar style={{ width: s.size, height: s.size }} />
             </div>
           ))}
 
-          {/* Étincelle décorative principale en haut à droite */}
-          <div
-            className="absolute top-5 right-5 motion-safe:animate-[center-pulse_3s_ease-in-out_infinite]"
-            style={{ color: styles.accent }}
-            aria-hidden
-          >
-            <SparkleIcon className="h-5 w-5" />
+          {/* Polaroid central, légèrement incliné */}
+          <div className="absolute inset-0 flex items-center justify-center px-5 md:px-6">
+            <div
+              className={cn(
+                "relative bg-[#fbf8f1] shadow-[0_18px_40px_rgba(0,0,0,0.55)]",
+                "p-2.5 pb-7 md:p-3 md:pb-9",
+                isLandscape
+                  ? "w-[34%] -rotate-[4deg]"
+                  : "w-[68%] -rotate-[3deg]",
+              )}
+              style={{
+                boxShadow:
+                  "0 18px 40px rgba(0,0,0,0.55), inset 0 0 0 1px rgba(0,0,0,0.04)",
+              }}
+            >
+              {/* Photo polaroid : sparkler CSS pur */}
+              <div className="relative aspect-[3/4] overflow-hidden bg-[#1a1212]">
+                <Sparkler glow={tint.glow} />
+              </div>
+
+              {/* Texte manuscrit "Retrouver son Etin'Cel" */}
+              <div className="absolute bottom-1.5 left-0 right-0 text-center">
+                <p
+                  className="font-handwritten leading-none"
+                  style={{
+                    color: tint.handInk,
+                    fontSize: isLandscape ? "0.78rem" : "0.95rem",
+                  }}
+                >
+                  Retrouver son
+                </p>
+                <p
+                  className="font-handwritten leading-tight italic"
+                  style={{
+                    color: tint.handInk,
+                    fontSize: isLandscape ? "0.95rem" : "1.15rem",
+                  }}
+                >
+                  Etin&apos;Cel
+                </p>
+              </div>
+
+              {/* Trombone doré métallique posé en haut à droite du polaroid */}
+              <div
+                aria-hidden
+                className="absolute -top-3 right-4 md:right-6"
+                style={{ color: tint.glow }}
+              >
+                <Paperclip
+                  style={{
+                    width: isLandscape ? 22 : 28,
+                    height: isLandscape ? 28 : 38,
+                    filter: "drop-shadow(0 2px 3px rgba(0,0,0,0.4))",
+                  }}
+                />
+              </div>
+            </div>
           </div>
 
-          {/* Contenu principal du recto — composition premium */}
-          <div className="relative h-full flex flex-col justify-between p-6 md:p-8">
-            {/* En-tête : libellé thématique */}
-            <div>
+          {/* Coin info — référence + signature discrète */}
+          <div className="absolute bottom-3 left-4 right-4 flex items-end justify-between text-[0.55rem] uppercase tracking-[0.32em]">
+            <span style={{ color: tint.glow, opacity: 0.7 }}>{tint.label}</span>
+            <span style={{ color: tint.glow, opacity: 0.5 }}>{reference}</span>
+          </div>
+        </div>
+
+        {/* ============== VERSO ============== */}
+        <div
+          className={cn(
+            "gift-card-face gift-card-back rounded-[1.4rem] overflow-hidden shadow-[0_24px_60px_rgba(31,26,46,0.22)] ring-1 ring-black/10",
+            "bg-[#f5ead4]",
+          )}
+        >
+          {/* Photo "souffle de paillettes" — gradient chaud + paillettes en pluie */}
+          <div
+            aria-hidden
+            className="absolute inset-0"
+            style={{
+              background: `
+                radial-gradient(ellipse at 65% 38%, ${tint.glow}99 0%, transparent 45%),
+                radial-gradient(ellipse at 30% 55%, ${tint.glow}40 0%, transparent 55%),
+                linear-gradient(135deg, #f5ead4 0%, #ecdcb6 40%, #d6b988 100%)
+              `,
+            }}
+          />
+
+          {/* Pluie de paillettes dorées (dots scintillants) */}
+          {GLITTER.map((g, i) => (
+            <span
+              key={i}
+              aria-hidden
+              className="absolute rounded-full motion-safe:animate-[twinkle_2.6s_ease-in-out_infinite]"
+              style={{
+                top: g.top,
+                left: g.left,
+                width: g.size,
+                height: g.size,
+                background: tint.deep,
+                opacity: g.opacity,
+                animationDelay: g.delay,
+                boxShadow: `0 0 ${g.size * 2}px ${tint.glow}88`,
+              }}
+            />
+          ))}
+
+          {/* Bande diagonale dorée — bas à gauche vers haut à droite */}
+          <div
+            aria-hidden
+            className="absolute inset-0"
+            style={{
+              clipPath: isLandscape
+                ? "polygon(0% 100%, 100% 100%, 100% 28%, 38% 100%)"
+                : "polygon(0% 100%, 100% 100%, 100% 38%, 12% 100%)",
+              background: `linear-gradient(135deg, ${tint.deep} 0%, ${tint.glow} 100%)`,
+              boxShadow: `inset 0 1px 0 ${tint.glow}`,
+            }}
+          />
+
+          {/* Étoiles dorées scintillantes au verso */}
+          {VERSO_STARS.map((s, i) => (
+            <div
+              key={i}
+              aria-hidden
+              className="absolute motion-safe:animate-[twinkle_3.2s_ease-in-out_infinite]"
+              style={{
+                top: s.top,
+                left: s.left,
+                color: i < 2 ? tint.deep : "#fff8e3",
+                opacity: s.opacity,
+                animationDelay: s.delay,
+                transform: `rotate(${s.rotate}deg)`,
+              }}
+            >
+              <FourPointStar style={{ width: s.size, height: s.size }} />
+            </div>
+          ))}
+
+          {/* Contenu verso */}
+          <div
+            className={cn(
+              "relative h-full flex flex-col p-5 md:p-7",
+              isLandscape ? "justify-between" : "justify-between",
+            )}
+          >
+            {/* En-tête : "Pour" + destinataire */}
+            <div className="space-y-1">
+              <p className="text-[0.55rem] uppercase tracking-[0.32em] text-stone-700/70">
+                Pour
+              </p>
               <p
-                className="text-[0.6rem] uppercase tracking-[0.36em] font-medium opacity-90"
-                style={{ color: styles.accent }}
+                className={cn(
+                  "font-display leading-tight text-stone-900",
+                  isLandscape ? "text-base md:text-lg" : "text-lg md:text-xl",
+                )}
               >
-                {styles.label}
+                {recipient}
               </p>
             </div>
 
-            {/* Centre : titre carte cadeau cursif */}
-            <div className="text-center space-y-2">
+            {/* Centre : titre "Carte cadeau" en manuscrit blanc */}
+            <div className="relative z-10 text-center my-2">
               <p
-                className="font-handwritten text-3xl md:text-4xl leading-none"
+                className="font-handwritten leading-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.18)]"
                 style={{
-                  color: styles.accent,
-                  textShadow: `0 0 20px ${styles.accent}40`,
+                  color: "#fff8e3",
+                  fontSize: isLandscape ? "2.2rem" : "2.6rem",
+                  textShadow: `0 1px 0 ${tint.deep}, 0 0 30px ${tint.glow}66`,
                 }}
               >
                 Carte
               </p>
               <p
-                className="font-handwritten text-3xl md:text-4xl leading-none"
+                className="font-handwritten leading-tight italic -mt-1 drop-shadow-[0_2px_8px_rgba(0,0,0,0.18)]"
                 style={{
-                  color: styles.accent,
-                  textShadow: `0 0 20px ${styles.accent}40`,
+                  color: "#fff8e3",
+                  fontSize: isLandscape ? "2.4rem" : "2.8rem",
+                  textShadow: `0 1px 0 ${tint.deep}, 0 0 30px ${tint.glow}66`,
                 }}
               >
                 cadeau
               </p>
-              <div className="flex items-center justify-center gap-3 mt-3">
-                <span
-                  className="h-px w-8"
-                  style={{
-                    background: `linear-gradient(90deg, transparent, ${styles.accent}, transparent)`,
-                  }}
-                />
-                <Etincelle size={9} />
-                <span
-                  className="h-px w-8"
-                  style={{
-                    background: `linear-gradient(90deg, transparent, ${styles.accent}, transparent)`,
-                  }}
-                />
-              </div>
             </div>
 
-            {/* Pied : signature Etincel manuscrite */}
-            <div className="flex items-end justify-between">
+            {/* Bloc identité + offre, posé sur la diagonale dorée */}
+            <div className="relative z-10 space-y-2.5">
+              {/* Offre */}
               <div className="space-y-0.5">
                 <p
-                  className="text-[0.55rem] uppercase tracking-[0.32em] opacity-75"
-                  style={{ color: styles.accent }}
+                  className="text-[0.55rem] uppercase tracking-[0.32em]"
+                  style={{ color: "#fff8e3", opacity: 0.85 }}
                 >
-                  Étincel
-                </p>
-                <p
-                  className="font-display-italic text-xs opacity-80"
-                  style={{ color: styles.accent }}
-                >
-                  Céline Dusseval
-                </p>
-              </div>
-              <p
-                className="text-[0.55rem] uppercase tracking-[0.28em] opacity-60"
-                style={{ color: styles.accent }}
-              >
-                {reference}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* === VERSO === */}
-        <div
-          className={cn(
-            "gift-card-face gift-card-back rounded-[1.4rem] overflow-hidden shadow-[0_24px_60px_rgba(31,26,46,0.22)] ring-1 ring-bg-base/30",
-            "bg-gradient-to-br from-bg-base via-bg-soft to-bg-base",
-          )}
-        >
-          {/* Bord doré */}
-          <div
-            aria-hidden
-            className="absolute inset-3 rounded-[1.1rem] border border-gold-soft/50"
-          />
-
-          {/* Filigrane Etincel très discret */}
-          <div
-            aria-hidden
-            className="absolute inset-0 flex items-center justify-center pointer-events-none"
-          >
-            <p className="font-handwritten text-7xl text-gold-deep/8 rotate-[-15deg] select-none">
-              Étincel
-            </p>
-          </div>
-
-          {/* Contenu verso */}
-          <div className="relative h-full flex flex-col justify-between p-6 md:p-8">
-            {/* En-tête : "Pour" */}
-            <div className="space-y-2">
-              <p className="text-[0.55rem] uppercase tracking-[0.32em] text-text-soft">
-                Pour
-              </p>
-              <p className="font-display text-xl md:text-2xl text-text-deep leading-tight">
-                {recipient}
-              </p>
-            </div>
-
-            {/* Centre : offre */}
-            <div className="space-y-3 py-4 border-y border-gold-soft/40">
-              <div>
-                <p className="text-[0.55rem] uppercase tracking-[0.32em] text-text-soft mb-1">
                   Offre
                 </p>
-                <p className="font-display text-base md:text-lg text-text-deep leading-snug">
-                  {offerLabel}
-                </p>
+                <div className="flex items-baseline justify-between gap-3">
+                  <p
+                    className="font-display leading-snug"
+                    style={{ color: "#fff8e3" }}
+                  >
+                    {offerLabel}
+                  </p>
+                  <p
+                    className="font-display-italic whitespace-nowrap"
+                    style={{
+                      color: "#fff8e3",
+                      fontSize: isLandscape ? "1.05rem" : "1.15rem",
+                    }}
+                  >
+                    {value}
+                  </p>
+                </div>
               </div>
-              <div className="flex items-baseline justify-between">
-                <p className="text-[0.55rem] uppercase tracking-[0.32em] text-text-soft">
-                  Valeur
-                </p>
-                <p className="font-display-italic text-lg md:text-xl text-gold-deep">
-                  {value}
-                </p>
-              </div>
-            </div>
 
-            {/* Pied : référence + signature */}
-            <div className="space-y-3">
-              <div className="flex items-center gap-2">
-                <Etincelle size={9} />
-                <p className="font-display-italic text-sm text-text-deep">
-                  Avec délicatesse, Céline.
+              {/* Identité Etin'Cel */}
+              <div className="pt-1.5 border-t border-white/30 space-y-0.5">
+                <p
+                  className="font-handwritten italic leading-none"
+                  style={{
+                    color: "#fff8e3",
+                    fontSize: isLandscape ? "1.4rem" : "1.6rem",
+                  }}
+                >
+                  Etin&apos;Cel
                 </p>
-              </div>
-              <div className="flex items-center justify-between text-[0.55rem] uppercase tracking-[0.28em] text-text-soft pt-2 border-t border-gold-soft/30">
-                <span>Réf · {reference}</span>
-                <span>etinceldebienetre.fr</span>
+                <p
+                  className="text-[0.6rem] tracking-wide italic"
+                  style={{ color: "#fff8e3", opacity: 0.85 }}
+                >
+                  Trouver l&apos;endroit en soi où tout est possible
+                </p>
+                <div
+                  className="flex items-center gap-2 text-[0.6rem] pt-0.5"
+                  style={{ color: "#fff8e3", opacity: 0.9 }}
+                >
+                  <span>Tél&nbsp;: {contact.phone}</span>
+                  <span aria-hidden>·</span>
+                  <span className="truncate">etinceldebienetre.fr</span>
+                </div>
               </div>
             </div>
           </div>
@@ -385,45 +431,180 @@ export function PremiumGiftCard({
   );
 }
 
-function SparkleIcon({
-  className,
-  style,
-}: {
-  className?: string;
-  style?: React.CSSProperties;
-}) {
+/* -----------------------------------------------------------
+ * Sparkler SVG — feu de Bengale stylisé en SVG (plus fiable
+ * que des spans CSS tournés, et net en print/export).
+ * ----------------------------------------------------------- */
+function Sparkler({ glow }: { glow: string }) {
+  const RAYS = 28;
+  return (
+    <div className="absolute inset-0">
+      {/* Halo doré diffus en arrière-plan, qui élargit la lumière */}
+      <div
+        aria-hidden
+        className="absolute inset-0"
+        style={{
+          background: `radial-gradient(circle at 50% 50%, ${glow}66 0%, ${glow}22 25%, transparent 55%)`,
+        }}
+      />
+
+      <svg
+        viewBox="-50 -50 100 100"
+        className="absolute inset-0 h-full w-full"
+        aria-hidden
+      >
+        <defs>
+          <radialGradient id="sparkler-core">
+            <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
+            <stop offset="40%" stopColor="#fff3b8" stopOpacity="0.95" />
+            <stop offset="100%" stopColor={glow} stopOpacity="0" />
+          </radialGradient>
+          <linearGradient id="sparkler-ray" x1="0" x2="1" y1="0" y2="0">
+            <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
+            <stop offset="40%" stopColor="#fff3b8" stopOpacity="0.9" />
+            <stop offset="100%" stopColor={glow} stopOpacity="0" />
+          </linearGradient>
+        </defs>
+
+        {/* Halo lumineux derrière le cœur */}
+        <circle cx="0" cy="0" r="22" fill="url(#sparkler-core)" opacity="0.85" />
+
+        {/* Rayons rayonnants — 28 traits émergeant du centre */}
+        <g stroke="url(#sparkler-ray)" strokeLinecap="round" strokeWidth="0.9">
+          {Array.from({ length: RAYS }).map((_, i) => {
+            const angle = (i * 360) / RAYS;
+            const len = 30 + ((i * 11) % 14);
+            const rad = (angle * Math.PI) / 180;
+            const x2 = Math.cos(rad) * len;
+            const y2 = Math.sin(rad) * len;
+            return (
+              <line
+                key={i}
+                x1="0"
+                y1="0"
+                x2={x2}
+                y2={y2}
+                opacity={i % 2 ? 0.75 : 0.55}
+              />
+            );
+          })}
+        </g>
+
+        {/* Cœur incandescent — point blanc avec halo flou */}
+        <circle cx="0" cy="0" r="4.5" fill="#ffffff">
+          <animate
+            attributeName="r"
+            values="4;5.5;4"
+            dur="2.2s"
+            repeatCount="indefinite"
+          />
+        </circle>
+        <circle cx="0" cy="0" r="2" fill="#ffffff" />
+
+        {/* Particules satellites */}
+        {Array.from({ length: 10 }).map((_, i) => {
+          const angle = (i * 36 + 12) * (Math.PI / 180);
+          const r = 28 + (i % 3) * 5;
+          return (
+            <circle
+              key={`p${i}`}
+              cx={Math.cos(angle) * r}
+              cy={Math.sin(angle) * r}
+              r={i % 2 ? 0.6 : 1}
+              fill={glow}
+              opacity={0.85}
+            >
+              <animate
+                attributeName="opacity"
+                values="0.3;0.95;0.3"
+                dur={`${1.6 + (i % 4) * 0.4}s`}
+                repeatCount="indefinite"
+                begin={`${(i * 0.15) % 2}s`}
+              />
+            </circle>
+          );
+        })}
+      </svg>
+    </div>
+  );
+}
+
+/* -----------------------------------------------------------
+ * Trombone doré métallique — SVG inline simple et élégant.
+ * ----------------------------------------------------------- */
+function Paperclip({ style }: { style?: React.CSSProperties }) {
   return (
     <svg
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      className={className}
+      viewBox="0 0 24 36"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
       style={style}
       aria-hidden
     >
-      <path d="M 12 0 L 13.4 10.6 L 24 12 L 13.4 13.4 L 12 24 L 10.6 13.4 L 0 12 L 10.6 10.6 Z" />
-      <circle cx="12" cy="12" r="1.4" fill="currentColor" opacity="0.6" />
+      {/* Boucle externe */}
+      <path d="M 6 6 L 6 26 Q 6 32, 12 32 Q 18 32, 18 26 L 18 10 Q 18 6, 14 6 Q 10 6, 10 10 L 10 24" />
     </svg>
   );
 }
 
-/**
- * Petit ornement de coin Art Déco — 2 lignes courbées + point central.
- * Décor premium qui habille les angles de la carte sans surcharger.
- */
-function CornerOrnament({ className }: { className?: string }) {
+/* -----------------------------------------------------------
+ * Étoile à 4 branches scintillante — rendu net, pas de halo dur.
+ * Forme classique d'étoile filante (sparkle).
+ * ----------------------------------------------------------- */
+function FourPointStar({ style }: { style?: React.CSSProperties }) {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="0.9"
-      strokeLinecap="round"
-      className={className}
-      aria-hidden
-    >
-      <path d="M 2 8 Q 2 2, 8 2" />
-      <path d="M 2 4 Q 4 2, 6 4" opacity="0.6" />
-      <circle cx="3.5" cy="3.5" r="0.7" fill="currentColor" stroke="none" />
+    <svg viewBox="0 0 24 24" fill="currentColor" style={style} aria-hidden>
+      <path d="M 12 0 L 13.4 10.6 L 24 12 L 13.4 13.4 L 12 24 L 10.6 13.4 L 0 12 L 10.6 10.6 Z" />
     </svg>
   );
 }
+
+/* ============================================================
+ * Constantes décoratives (positions & tailles fixes — évite le
+ * recalcul aléatoire à chaque render et garde le SSR stable).
+ * ============================================================ */
+
+const BOKEH_DOTS = [
+  { top: "12%", left: "8%", size: 14, opacity: 0.55, blur: 5, delay: "0s" },
+  { top: "8%", left: "82%", size: 18, opacity: 0.6, blur: 6, delay: "0.6s" },
+  { top: "32%", left: "62%", size: 10, opacity: 0.7, blur: 3, delay: "1.2s" },
+  { top: "68%", left: "12%", size: 16, opacity: 0.6, blur: 5, delay: "0.3s" },
+  { top: "84%", left: "72%", size: 22, opacity: 0.5, blur: 7, delay: "1.6s" },
+  { top: "48%", left: "92%", size: 12, opacity: 0.65, blur: 4, delay: "0.9s" },
+  { top: "92%", left: "38%", size: 14, opacity: 0.5, blur: 5, delay: "2.1s" },
+  { top: "22%", left: "28%", size: 8, opacity: 0.75, blur: 2, delay: "1.5s" },
+] as const;
+
+const STARS = [
+  { top: "6%", left: "16%", size: 9, opacity: 0.85, delay: "0s", rotate: 0 },
+  { top: "10%", left: "70%", size: 7, opacity: 0.9, delay: "1.1s", rotate: 25 },
+  { top: "26%", left: "8%", size: 5, opacity: 0.8, delay: "0.6s", rotate: -10 },
+  { top: "28%", left: "88%", size: 6, opacity: 0.85, delay: "1.6s", rotate: 12 },
+  { top: "78%", left: "8%", size: 6, opacity: 0.85, delay: "0.4s", rotate: 18 },
+  { top: "82%", left: "82%", size: 9, opacity: 0.9, delay: "1.3s", rotate: -8 },
+  { top: "92%", left: "44%", size: 5, opacity: 0.75, delay: "2s", rotate: 30 },
+] as const;
+
+const GLITTER = [
+  { top: "12%", left: "18%", size: 2, opacity: 0.6, delay: "0s" },
+  { top: "18%", left: "62%", size: 3, opacity: 0.75, delay: "0.5s" },
+  { top: "26%", left: "38%", size: 2, opacity: 0.55, delay: "1.1s" },
+  { top: "32%", left: "82%", size: 2.5, opacity: 0.7, delay: "0.3s" },
+  { top: "44%", left: "20%", size: 2, opacity: 0.6, delay: "1.4s" },
+  { top: "48%", left: "70%", size: 3, opacity: 0.75, delay: "0.8s" },
+  { top: "56%", left: "48%", size: 2, opacity: 0.5, delay: "1.7s" },
+  { top: "62%", left: "12%", size: 2.5, opacity: 0.65, delay: "0.6s" },
+  { top: "12%", left: "88%", size: 2, opacity: 0.7, delay: "2s" },
+  { top: "38%", left: "8%", size: 2.5, opacity: 0.6, delay: "1.2s" },
+] as const;
+
+const VERSO_STARS = [
+  { top: "20%", left: "8%", size: 11, opacity: 0.85, delay: "0s", rotate: 0 },
+  { top: "10%", left: "82%", size: 8, opacity: 0.75, delay: "0.8s", rotate: 18 },
+  { top: "60%", left: "78%", size: 9, opacity: 0.85, delay: "1.4s", rotate: -10 },
+  { top: "78%", left: "92%", size: 7, opacity: 0.8, delay: "0.4s", rotate: 22 },
+  { top: "88%", left: "12%", size: 6, opacity: 0.7, delay: "1.6s", rotate: -15 },
+] as const;

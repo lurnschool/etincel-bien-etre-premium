@@ -385,6 +385,7 @@ const homeAssets: VisualAssetEntry[] = [
     ratio: "16:9",
     altText: "Le lieu où Céline accueille — porte d'entrée du refuge",
     priority: "important",
+    objectPosition: "object-[center_top]",
     replacementInstructions:
       "Photo de la porte/seuil, du salon d'accueil, ou du jardin. Sensation d'arrivée.",
   },
@@ -650,6 +651,7 @@ const retraitesAssets: VisualAssetEntry[] = [
     ratio: "21:9",
     altText: "Silhouette face au coucher de soleil — moment de retraite",
     priority: "indispensable",
+    objectPosition: "object-[center_top]",
     replacementInstructions:
       "Photo finale 2026 — Céline silhouette face soleil bras levés (Corse).",
   },

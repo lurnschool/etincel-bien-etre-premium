@@ -4,12 +4,53 @@ import { CeQueVousVenezDeposer } from "@/components/home/CeQueVousVenezDeposer";
 import { VousVenezPour } from "@/components/home/VousVenezPour";
 import { LesCheminsQuiSouvrent } from "@/components/home/LesCheminsQuiSouvrent";
 import { LesOutilsQueJeMobilise } from "@/components/home/LesOutilsQueJeMobilise";
-import { InstagramFeed } from "@/components/home/InstagramFeed";
+import {
+  InstagramFeed,
+  type InstagramManualPost,
+} from "@/components/home/InstagramFeed";
 import { OffrirUnMoment } from "@/components/home/OffrirUnMoment";
 import { CerclesEtRetraites } from "@/components/home/CerclesEtRetraites";
 import { GuidanceTeaser } from "@/components/home/GuidanceTeaser";
 import { RetoursDexperience } from "@/components/home/RetoursDexperience";
 import { EcrivezMoi } from "@/components/home/EcrivezMoi";
+
+/** Posts Instagram validés par Céline (mai 2026).
+ *  Téléchargés localement depuis @celine_dusseval_etincel — pas de scraping.
+ *  Mettre à jour cette liste quand Céline livre de nouveaux visuels. */
+const instagramPosts: InstagramManualPost[] = [
+  {
+    src: "/images/celine-insta/insta-0230.jpg",
+    alt: "Rêv'Elle — Retraite au cœur du Féminin, plage à Montalivet",
+  },
+  {
+    src: "/images/celine-insta/insta-0231.jpg",
+    alt: "Constellation Familiale — cercle de mains et présence",
+  },
+  {
+    src: "/images/celine-insta/insta-0232.jpg",
+    alt: "Cérémonie Cacao — Harmoniser le Féminin et le Masculin sacré, yourte de Botinet",
+  },
+  {
+    src: "/images/celine-insta/insta-0233.jpg",
+    alt: "Le Souffle d'Isis — Cérémonie Cacao, ankh et roses",
+  },
+  {
+    src: "/images/celine-insta/insta-0234.jpg",
+    alt: "Rêv'Elle — Retraite immersive, énergie d'Isis dans le désert",
+  },
+  {
+    src: "/images/celine-insta/insta-0235.jpg",
+    alt: "Constellations Familiales — Oser, accueillir le renouveau",
+  },
+  {
+    src: "/images/celine-insta/insta-0236.jpg",
+    alt: "Ce que le cacao apporte vraiment à ton corps — fèves de cacao",
+  },
+  {
+    src: "/images/celine-insta/insta-0237.jpg",
+    alt: "Tu fais tout pour avancer — invitation à la libération",
+  },
+];
 
 /**
  * HOME — Sprint A "refuge connecté".
@@ -45,7 +86,7 @@ export default function HomePage() {
       <VousVenezPour />
       <LesCheminsQuiSouvrent />
       <LesOutilsQueJeMobilise />
-      <InstagramFeed />
+      <InstagramFeed mode="manual" manualPosts={instagramPosts} />
       <OffrirUnMoment />
       <CerclesEtRetraites />
       <GuidanceTeaser />
