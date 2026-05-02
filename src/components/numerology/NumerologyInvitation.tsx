@@ -6,8 +6,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Calendar } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Etincelle } from "@/components/ui/Etincelle";
+import { ButtonHalo } from "@/components/ui/ButtonHalo";
 import { whatsappLink, whatsappMessages } from "@/lib/whatsapp";
 import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
+import {
+  calculerCheminDeVie,
+  getCheminDeVieInfo,
+  type CheminDeVieInfo,
+} from "@/lib/numerologie";
 
 /**
  * Animation invitation à la numérologie.
@@ -24,6 +30,7 @@ export function NumerologyInvitation() {
   const [animating, setAnimating] = useState(false);
   const [revealed, setRevealed] = useState(false);
   const [animatedNumbers, setAnimatedNumbers] = useState<number[]>([]);
+  const [chemin, setChemin] = useState<{ n: number; info: CheminDeVieInfo } | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,16 +38,20 @@ export function NumerologyInvitation() {
     setAnimating(true);
     setRevealed(false);
     setAnimatedNumbers([]);
+    setChemin(null);
 
     const digits = birthdate.replace(/-/g, "").split("").map(Number);
     let i = 0;
-    // Cadence rapide pour que la danse des chiffres arrive vite (90ms),
-    // puis légère pause avant le reveal pour que la vibration se déploie.
     const interval = window.setInterval(() => {
       if (i >= digits.length) {
         window.clearInterval(interval);
+        // Calcul du chemin de vie après l'animation des chiffres
+        const n = calculerCheminDeVie(birthdate);
         window.setTimeout(() => {
           setAnimating(false);
+          if (n !== null) {
+            setChemin({ n, info: getCheminDeVieInfo(n) });
+          }
           setRevealed(true);
         }, 350);
         return;
@@ -54,6 +65,7 @@ export function NumerologyInvitation() {
     setRevealed(false);
     setAnimating(false);
     setAnimatedNumbers([]);
+    setChemin(null);
     setBirthdate("");
   };
 
@@ -160,62 +172,101 @@ export function NumerologyInvitation() {
                 Aucune donnée n&apos;est enregistrée. Cette animation est symbolique.
               </p>
             </motion.form>
-          ) : (
+          ) : chemin ? (
             <motion.div
               key="reveal"
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1.6, ease: [0.22, 1, 0.36, 1] }}
-              className="rounded-[2rem] border border-gold-soft/40 bg-white/5 backdrop-blur-md p-8 md:p-12 max-w-3xl mx-auto space-y-8"
+              transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+              className="rounded-[2rem] border border-gold-soft/40 bg-white/5 backdrop-blur-md p-8 md:p-12 max-w-3xl mx-auto space-y-7"
             >
+              {/* Chiffres de la date qui s'estompent en vibration */}
               <motion.div
-                className="flex flex-wrap items-center justify-center gap-3"
+                className="flex flex-wrap items-center justify-center gap-2"
                 initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
+                animate={{ opacity: 0.55 }}
                 transition={{ duration: 0.6, delay: 0.1 }}
               >
                 {animatedNumbers.map((n, i) => (
-                  <motion.span
+                  <span
                     key={i}
-                    initial={{ opacity: 0, scale: 0, rotate: -90 }}
-                    animate={{ opacity: 0.5, scale: 1, rotate: 0 }}
-                    transition={{
-                      duration: 0.7,
-                      delay: 0.15 + i * 0.08,
-                      ease: [0.22, 1, 0.36, 1],
-                    }}
                     className={cn(
-                      "font-display-italic text-2xl md:text-3xl",
+                      "font-display-italic text-xl md:text-2xl",
                       i % 3 === 0 ? "text-gold" : i % 3 === 1 ? "text-gold-soft" : "text-rose-soft",
                     )}
                   >
                     {n}
-                  </motion.span>
+                  </span>
                 ))}
               </motion.div>
 
-              <motion.blockquote
+              {/* Grand chiffre du chemin de vie + halo doré pulsant */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 1.1, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                className="relative flex flex-col items-center justify-center py-4"
+              >
+                <p className="text-[0.65rem] uppercase tracking-[0.36em] text-gold-soft mb-3">
+                  Votre chemin de vie
+                </p>
+                <div className="relative">
+                  <div
+                    aria-hidden
+                    className="absolute inset-0 rounded-full blur-3xl bg-gradient-to-br from-gold/40 via-gold-soft/30 to-rose-soft/20 motion-safe:animate-[center-pulse_4s_ease-in-out_infinite]"
+                  />
+                  <p className="relative font-display text-[5.5rem] md:text-[7rem] leading-none text-gold-gradient drop-shadow-[0_0_30px_rgba(201,168,106,0.4)]">
+                    {chemin.n}
+                  </p>
+                </div>
+                {chemin.info.maitre && (
+                  <p className="mt-2 text-[0.65rem] uppercase tracking-[0.32em] text-gold-soft/80 italic">
+                    Maître nombre
+                  </p>
+                )}
+              </motion.div>
+
+              {/* Nom + essence */}
+              <motion.div
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1, delay: 0.6 + animatedNumbers.length * 0.08 }}
-                className="font-display-italic text-balance text-2xl md:text-[1.9rem] leading-[1.3] text-text-on-dark text-center max-w-2xl mx-auto"
+                transition={{ duration: 0.9, delay: 0.9 }}
+                className="text-center space-y-3"
               >
-                « Chaque date porte une vibration. Céline vous aide à lire cette information dans son ensemble, avec votre histoire, vos cycles et vos ressources. »
-              </motion.blockquote>
+                <h3 className="font-display text-3xl md:text-4xl text-text-on-dark leading-tight">
+                  {chemin.info.nom}
+                </h3>
+                <p className="font-display-italic text-base md:text-lg text-gold-soft tracking-wide">
+                  {chemin.info.essence}
+                </p>
+              </motion.div>
 
+              {/* Message court */}
+              <motion.p
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.9, delay: 1.2 }}
+                className="text-text-on-dark-soft text-base md:text-lg leading-relaxed text-center max-w-xl mx-auto"
+              >
+                {chemin.info.message}
+              </motion.p>
+
+              {/* CTA — réservation lecture complète */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ duration: 0.8, delay: 1.4 + animatedNumbers.length * 0.08 }}
-                className="flex flex-wrap gap-3 justify-center pt-4 border-t border-white/10"
+                transition={{ duration: 0.8, delay: 1.6 }}
+                className="flex flex-wrap gap-3 justify-center pt-5 border-t border-white/10"
               >
-                <Link
-                  href="/reserver/numerologie"
-                  className="inline-flex items-center gap-2 rounded-full bg-gold px-7 py-3.5 text-sm font-medium text-text-deep hover:bg-gold-soft transition-colors"
-                >
-                  Réserver ma lecture
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
+                <ButtonHalo tone="gold">
+                  <Link
+                    href="/reserver/numerologie"
+                    className="inline-flex items-center gap-2 rounded-full bg-gold px-7 py-3.5 text-sm font-medium text-text-deep hover:bg-gold-soft transition-colors"
+                  >
+                    Recevoir ma lecture complète
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </ButtonHalo>
                 <WhatsAppButton message={whatsappMessages.numerologie} variant="outline">
                   Parler à Céline
                 </WhatsAppButton>
@@ -224,15 +275,23 @@ export function NumerologyInvitation() {
                   className="text-sm text-text-on-dark-soft hover:text-gold transition-colors px-4"
                   type="button"
                 >
-                  Recommencer
+                  Une autre date
                 </button>
               </motion.div>
 
-              <p className="text-[0.7rem] text-text-on-dark-soft/60 leading-relaxed text-center max-w-xl mx-auto pt-2 border-t border-white/5">
-                Cette page n&apos;effectue pas d&apos;interprétation numérologique automatisée. La lecture se fait avec Céline, en présence ou à distance.
-              </p>
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.8, delay: 2 }}
+                className="text-[0.72rem] text-text-on-dark-soft/70 leading-relaxed text-center max-w-2xl mx-auto pt-3 border-t border-white/5"
+              >
+                Le chemin de vie n&apos;est qu&apos;une vibration parmi d&apos;autres dans
+                votre thème complet. La lecture entière avec Céline déploie aussi
+                votre nombre d&apos;expression, votre nombre intime, vos cycles
+                actuels, vos ressources et vos défis personnels.
+              </motion.p>
             </motion.div>
-          )}
+          ) : null}
         </AnimatePresence>
 
         <a
