@@ -435,7 +435,7 @@ export function PremiumGiftCard({
  * Sparkler SVG — feu de Bengale stylisé en SVG (plus fiable
  * que des spans CSS tournés, et net en print/export).
  * ----------------------------------------------------------- */
-function Sparkler({ glow }: { glow: string }) {
+export function Sparkler({ glow }: { glow: string }) {
   const RAYS = 28;
   return (
     <div className="absolute inset-0">
@@ -532,7 +532,7 @@ function Sparkler({ glow }: { glow: string }) {
 /* -----------------------------------------------------------
  * Trombone doré métallique — SVG inline simple et élégant.
  * ----------------------------------------------------------- */
-function Paperclip({ style }: { style?: React.CSSProperties }) {
+export function Paperclip({ style }: { style?: React.CSSProperties }) {
   return (
     <svg
       viewBox="0 0 24 36"
@@ -554,7 +554,7 @@ function Paperclip({ style }: { style?: React.CSSProperties }) {
  * Étoile à 4 branches scintillante — rendu net, pas de halo dur.
  * Forme classique d'étoile filante (sparkle).
  * ----------------------------------------------------------- */
-function FourPointStar({ style }: { style?: React.CSSProperties }) {
+export function FourPointStar({ style }: { style?: React.CSSProperties }) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" style={style} aria-hidden>
       <path d="M 12 0 L 13.4 10.6 L 24 12 L 13.4 13.4 L 12 24 L 10.6 13.4 L 0 12 L 10.6 10.6 Z" />

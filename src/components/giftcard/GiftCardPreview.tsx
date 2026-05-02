@@ -1,8 +1,13 @@
 "use client";
 
 import { forwardRef } from "react";
-import { Etincelle } from "@/components/ui/Etincelle";
 import { cn } from "@/lib/utils";
+import { contact } from "@/lib/data";
+import {
+  Sparkler,
+  Paperclip,
+  FourPointStar,
+} from "./PremiumGiftCard";
 
 export type GiftCardData = {
   fromName: string;
@@ -52,93 +57,321 @@ export const giftCardStyles: Record<
   },
 };
 
+/** Palette dorée par style — module juste glow/deep, structure identique. */
+const STYLE_TINT: Record<GiftCardStyle, { glow: string; deep: string; handInk: string }> = {
+  doree:       { glow: "#e8c98e", deep: "#a07a3c", handInk: "#c9a86a" },
+  feminin:     { glow: "#e7c08e", deep: "#b78b4f", handInk: "#d3a86a" },
+  cacao:       { glow: "#dca866", deep: "#7a4e2a", handInk: "#cf9a52" },
+  retraite:    { glow: "#efd2a0", deep: "#a47438", handInk: "#caa05f" },
+  reconnexion: { glow: "#e3c285", deep: "#8a6a3a", handInk: "#c9a86a" },
+  elegance:    { glow: "#d9bd84", deep: "#6e5530", handInk: "#b89556" },
+};
+
 /**
- * Carte cadeau visuelle — aperçu uniquement tant que le paiement Stripe
- * réel ou la validation manuelle Céline n'a pas eu lieu.
+ * Carte cadeau personnalisable — aperçu live et exportable en PNG.
+ * Refondue 2026-05-02 sur le même langage visuel que PremiumGiftCard
+ * (l'originale utilisée par Céline) : recto noir avec polaroid + sparkler
+ * + diagonale dorée à droite portant le contenu personnalisé.
+ *
+ * Format paysage 7:5 (carte imprimée). Statique (pas de flip) — c'est un
+ * aperçu unique qui sera exporté en PNG via html-to-image.
  *
  * `watermark` (true par défaut) ajoute :
- *  - une bande "APERÇU · NON VALIDE COMME CADEAU" en diagonale
- *  - une référence "REF: APERCU"
- * pour empêcher l'usage frauduleux d'un PNG capturé par capture d'écran.
+ *  - une bande "APERÇU · NON VALIDE" diagonale + bandeau du haut
+ *  - "REF: APERÇU" à la place du fromName
  */
 export const GiftCardPreview = forwardRef<
   HTMLDivElement,
   { data: GiftCardData; watermark?: boolean }
 >(function GiftCardPreview({ data, watermark = true }, ref) {
-  const styleConfig = renderStyles[data.style];
+  const tint = STYLE_TINT[data.style];
+
   return (
     <div
       ref={ref}
-      className={cn(
-        "relative w-full aspect-[7/5] rounded-2xl overflow-hidden",
-        "shadow-[0_30px_80px_rgba(31,26,46,0.18)]",
-        styleConfig.container,
-      )}
+      className="relative w-full aspect-[7/5] rounded-2xl overflow-hidden shadow-[0_30px_80px_rgba(31,26,46,0.18)] ring-1 ring-black/40 bg-[#0c0a0c]"
     >
-      {styleConfig.background}
+      {/* === Fond noir + bokeh doré (côté gauche, pour le polaroid) === */}
+      <div
+        aria-hidden
+        className="absolute inset-0"
+        style={{
+          background: `
+            radial-gradient(circle at 18% 22%, ${tint.glow}66 0%, transparent 28%),
+            radial-gradient(circle at 38% 78%, ${tint.glow}44 0%, transparent 30%),
+            radial-gradient(circle at 8% 60%, ${tint.glow}33 0%, transparent 30%),
+            radial-gradient(ellipse at 22% 50%, #1a1418 0%, #0a0809 100%)
+          `,
+        }}
+      />
 
-      <div className={cn("relative h-full p-7 md:p-9 flex flex-col justify-between", styleConfig.text)}>
-        <header className="flex items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <span className={styleConfig.iconColor}>
-              <Etincelle size={16} />
-            </span>
-            <div className="leading-none">
-              <p className="font-display text-lg md:text-xl">Etincel</p>
-              <p className={cn("font-display-italic text-[0.55rem] md:text-[0.6rem] tracking-[0.28em] uppercase mt-0.5", styleConfig.subtle)}>
-                de bien être · Céline Dusseval
+      {/* Bokeh dots éparpillés à gauche */}
+      {[
+        { top: "12%", left: "6%", size: 14, opacity: 0.55, blur: 5 },
+        { top: "28%", left: "18%", size: 10, opacity: 0.65, blur: 3 },
+        { top: "76%", left: "8%", size: 18, opacity: 0.55, blur: 6 },
+        { top: "62%", left: "30%", size: 12, opacity: 0.6, blur: 4 },
+      ].map((d, i) => (
+        <span
+          key={i}
+          aria-hidden
+          className="absolute rounded-full"
+          style={{
+            top: d.top,
+            left: d.left,
+            width: d.size,
+            height: d.size,
+            background: tint.glow,
+            opacity: d.opacity,
+            filter: `blur(${d.blur}px)`,
+          }}
+        />
+      ))}
+
+      {/* Étoiles 4 branches dans la zone noire gauche */}
+      {[
+        { top: "8%", left: "12%", size: 8, rotate: 0 },
+        { top: "18%", left: "32%", size: 6, rotate: 25 },
+        { top: "82%", left: "22%", size: 7, rotate: -10 },
+        { top: "48%", left: "4%", size: 5, rotate: 15 },
+      ].map((s, i) => (
+        <div
+          key={i}
+          aria-hidden
+          className="absolute"
+          style={{
+            top: s.top,
+            left: s.left,
+            color: tint.glow,
+            opacity: 0.85,
+            transform: `rotate(${s.rotate}deg)`,
+          }}
+        >
+          <FourPointStar style={{ width: s.size, height: s.size }} />
+        </div>
+      ))}
+
+      {/* === Diagonale dorée à droite portant le contenu personnalisé === */}
+      <div
+        aria-hidden
+        className="absolute inset-0"
+        style={{
+          clipPath: "polygon(38% 0%, 100% 0%, 100% 100%, 52% 100%)",
+          background: `linear-gradient(135deg, ${tint.deep} 0%, ${tint.glow} 100%)`,
+          boxShadow: `inset 1px 0 0 ${tint.glow}`,
+        }}
+      />
+
+      {/* Paillettes dans la zone dorée */}
+      {[
+        { top: "16%", left: "62%", size: 2.5 },
+        { top: "30%", left: "82%", size: 3 },
+        { top: "48%", left: "70%", size: 2 },
+        { top: "62%", left: "92%", size: 2.5 },
+        { top: "78%", left: "78%", size: 2 },
+      ].map((g, i) => (
+        <span
+          key={`g${i}`}
+          aria-hidden
+          className="absolute rounded-full"
+          style={{
+            top: g.top,
+            left: g.left,
+            width: g.size,
+            height: g.size,
+            background: tint.deep,
+            opacity: 0.7,
+            boxShadow: `0 0 ${g.size * 2}px #fff8e3aa`,
+          }}
+        />
+      ))}
+
+      {/* Étoiles 4 branches dorées scintillantes côté droit */}
+      {[
+        { top: "10%", left: "92%", size: 9, color: "#fff8e3" },
+        { top: "26%", left: "60%", size: 6, color: tint.deep },
+        { top: "70%", left: "62%", size: 7, color: "#fff8e3" },
+        { top: "88%", left: "88%", size: 8, color: "#fff8e3" },
+      ].map((s, i) => (
+        <div
+          key={`vs${i}`}
+          aria-hidden
+          className="absolute"
+          style={{ top: s.top, left: s.left, color: s.color, opacity: 0.85 }}
+        >
+          <FourPointStar style={{ width: s.size, height: s.size }} />
+        </div>
+      ))}
+
+      {/* === Polaroid à gauche avec sparkler === */}
+      <div className="absolute left-[6%] top-1/2 -translate-y-1/2 w-[28%] -rotate-[4deg]">
+        <div
+          className="bg-[#fbf8f1] p-2 pb-6"
+          style={{
+            boxShadow:
+              "0 18px 40px rgba(0,0,0,0.55), inset 0 0 0 1px rgba(0,0,0,0.04)",
+          }}
+        >
+          <div className="relative aspect-[3/4] overflow-hidden bg-[#1a1212]">
+            <Sparkler glow={tint.glow} />
+          </div>
+          <div className="absolute bottom-0.5 left-0 right-0 text-center">
+            <p
+              className="font-handwritten leading-none text-[0.65rem]"
+              style={{ color: tint.handInk }}
+            >
+              Retrouver son
+            </p>
+            <p
+              className="font-handwritten italic leading-tight text-[0.85rem]"
+              style={{ color: tint.handInk }}
+            >
+              Etin&apos;Cel
+            </p>
+          </div>
+          {/* Trombone doré */}
+          <div
+            aria-hidden
+            className="absolute -top-2 right-3"
+            style={{ color: tint.glow }}
+          >
+            <Paperclip
+              style={{
+                width: 18,
+                height: 24,
+                filter: "drop-shadow(0 2px 3px rgba(0,0,0,0.4))",
+              }}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* === Contenu personnalisé sur la partie dorée === */}
+      <div className="absolute right-0 top-0 h-full w-[55%] flex flex-col justify-between p-6 md:p-8">
+        {/* En-tête : Pour + occasion */}
+        <div className="space-y-1.5">
+          <div className="flex items-center justify-between gap-3">
+            <p
+              className="text-[0.55rem] uppercase tracking-[0.32em]"
+              style={{ color: "#fff8e3", opacity: 0.85 }}
+            >
+              Pour
+            </p>
+            {data.occasion && (
+              <span
+                className="text-[0.55rem] uppercase tracking-[0.24em] px-2 py-0.5 rounded-full border"
+                style={{
+                  color: "#fff8e3",
+                  borderColor: "#fff8e3",
+                  opacity: 0.85,
+                }}
+              >
+                {data.occasion}
+              </span>
+            )}
+          </div>
+          <h3
+            className="font-display text-2xl md:text-3xl leading-tight"
+            style={{ color: "#fff8e3" }}
+          >
+            {data.toName ? (
+              <span className="font-display-italic">{data.toName}</span>
+            ) : (
+              <span className="italic opacity-70">Pour vous</span>
+            )}
+          </h3>
+        </div>
+
+        {/* Centre : titre "Carte cadeau" + message personnel */}
+        <div className="space-y-2">
+          <p
+            className="font-handwritten leading-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.18)]"
+            style={{
+              color: "#fff8e3",
+              fontSize: "1.8rem",
+              textShadow: `0 1px 0 ${tint.deep}`,
+            }}
+          >
+            Carte
+          </p>
+          <p
+            className="font-handwritten italic leading-tight -mt-1 drop-shadow-[0_2px_8px_rgba(0,0,0,0.18)]"
+            style={{
+              color: "#fff8e3",
+              fontSize: "2rem",
+              textShadow: `0 1px 0 ${tint.deep}`,
+            }}
+          >
+            cadeau
+          </p>
+          {data.message && (
+            <p
+              className="text-xs md:text-sm leading-snug italic max-w-[24ch] pt-1"
+              style={{ color: "#fff8e3", opacity: 0.95 }}
+            >
+              « {data.message} »
+            </p>
+          )}
+        </div>
+
+        {/* Pied : type + montant + de la part de + identité */}
+        <div className="space-y-2">
+          <div className="flex items-end justify-between gap-3 pb-1.5 border-b border-white/30">
+            <div className="space-y-0.5">
+              <p
+                className="text-[0.55rem] uppercase tracking-[0.32em]"
+                style={{ color: "#fff8e3", opacity: 0.85 }}
+              >
+                {data.cardType || "Cadeau"}
+              </p>
+              <p
+                className="font-display text-base md:text-lg leading-none"
+                style={{ color: "#fff8e3" }}
+              >
+                {data.amount || "Montant à définir"}
+              </p>
+            </div>
+            <div className="text-right space-y-0.5">
+              <p
+                className="text-[0.55rem] uppercase tracking-[0.28em]"
+                style={{ color: "#fff8e3", opacity: 0.85 }}
+              >
+                {watermark ? "Référence" : "De la part de"}
+              </p>
+              <p
+                className="font-display-italic text-sm md:text-base leading-none"
+                style={{ color: "#fff8e3" }}
+              >
+                {watermark ? "APERÇU" : data.fromName || "—"}
               </p>
             </div>
           </div>
-          {data.occasion && (
-            <span className={cn("text-[0.6rem] uppercase tracking-[0.24em] px-2.5 py-1 rounded-full border", styleConfig.badge)}>
-              {data.occasion}
-            </span>
-          )}
-        </header>
-
-        <div className="space-y-3 max-w-md">
-          <p className={cn("text-[0.6rem] uppercase tracking-[0.32em]", styleConfig.label)}>
-            Carte cadeau personnalisée
-          </p>
-          <h3 className="font-display text-2xl md:text-[2rem] leading-[1.05]">
-            {data.toName ? (
-              <>
-                <span className={styleConfig.italic}>Pour</span>{" "}
-                <span className="font-display-italic">{data.toName}</span>
-              </>
-            ) : (
-              <span className={styleConfig.placeholder}>Pour vous</span>
-            )}
-          </h3>
-          <p className={cn("text-sm md:text-[0.95rem] leading-relaxed", styleConfig.body)}>
-            {data.message || "Une parenthèse pour revenir à soi."}
-          </p>
-        </div>
-
-        <footer className="flex items-end justify-between gap-4 pt-4">
           <div className="space-y-0.5">
-            <p className={cn("text-[0.55rem] uppercase tracking-[0.28em]", styleConfig.label)}>
-              {data.cardType || "Type de cadeau"}
+            <p
+              className="font-handwritten italic leading-none"
+              style={{ color: "#fff8e3", fontSize: "1.2rem" }}
+            >
+              Etin&apos;Cel
             </p>
-            <p className="font-display text-lg md:text-xl">
-              {data.amount || "Montant à définir"}
+            <p
+              className="text-[0.55rem] italic leading-snug"
+              style={{ color: "#fff8e3", opacity: 0.85 }}
+            >
+              Trouver l&apos;endroit en soi où tout est possible
+            </p>
+            <p
+              className="text-[0.55rem] pt-0.5"
+              style={{ color: "#fff8e3", opacity: 0.85 }}
+            >
+              {contact.phone} · etinceldebienetre.fr
             </p>
           </div>
-          <div className="text-right space-y-0.5">
-            <p className={cn("text-[0.55rem] uppercase tracking-[0.28em]", styleConfig.label)}>
-              {watermark ? "Référence" : "Offert par"}
-            </p>
-            <p className="font-display-italic text-base md:text-lg">
-              {watermark ? "APERÇU" : data.fromName || "—"}
-            </p>
-          </div>
-        </footer>
+        </div>
       </div>
 
+      {/* === Watermark "APERÇU" === */}
       {watermark && (
         <>
-          {/* Bande diagonale visible mais non destructive */}
           <div
             aria-hidden
             className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden"
@@ -155,10 +388,9 @@ export const GiftCardPreview = forwardRef<
               Aperçu · Non valide
             </span>
           </div>
-          {/* Bandeau du haut */}
           <div
             aria-hidden
-            className="pointer-events-none absolute top-0 inset-x-0 bg-rose/85 text-white text-[0.55rem] md:text-[0.6rem] font-medium tracking-[0.32em] uppercase text-center py-1.5"
+            className="pointer-events-none absolute top-0 inset-x-0 bg-rose/85 text-white text-[0.55rem] md:text-[0.6rem] font-medium tracking-[0.32em] uppercase text-center py-1.5 z-10"
           >
             Aperçu — paiement non finalisé
           </div>
@@ -167,159 +399,3 @@ export const GiftCardPreview = forwardRef<
     </div>
   );
 });
-
-type StyleConfig = {
-  container: string;
-  background: React.ReactNode;
-  text: string;
-  subtle: string;
-  body: string;
-  iconColor: string;
-  italic: string;
-  label: string;
-  placeholder: string;
-  badge: string;
-};
-
-const renderStyles: Record<GiftCardStyle, StyleConfig> = {
-  doree: {
-    container: "bg-gradient-to-br from-[#fbf2dc] via-[#f3e1c0] to-[#e9cf9d] border border-gold-soft/40",
-    background: (
-      <>
-        <div className="absolute -top-20 -right-16 h-72 w-72 rounded-full bg-gold/30 blur-3xl" />
-        <div className="absolute -bottom-24 -left-16 h-72 w-72 rounded-full bg-rose-soft/40 blur-3xl" />
-        <div className="absolute inset-0 grain opacity-30" />
-      </>
-    ),
-    text: "text-text-deep",
-    subtle: "text-gold-deep",
-    body: "text-text-medium",
-    iconColor: "text-gold-deep",
-    italic: "text-gold-deep",
-    label: "text-gold-deep/80",
-    placeholder: "italic text-text-soft/70",
-    badge: "border-gold-deep/30 text-gold-deep bg-bg-card/40",
-  },
-  feminin: {
-    container: "bg-gradient-to-br from-[#3a1f3d] via-[#4a2742] to-[#2a1232]",
-    background: (
-      <>
-        <div className="absolute -top-24 -left-16 h-80 w-80 rounded-full bg-rose/25 blur-3xl" />
-        <div className="absolute -bottom-20 -right-16 h-72 w-72 rounded-full bg-gold/20 blur-3xl" />
-        <div className="absolute inset-0 grain opacity-40" />
-      </>
-    ),
-    text: "text-text-on-dark",
-    subtle: "text-gold-soft",
-    body: "text-text-on-dark-soft",
-    iconColor: "text-gold",
-    italic: "text-gold-soft",
-    label: "text-gold-soft/80",
-    placeholder: "italic text-text-on-dark-soft/60",
-    badge: "border-gold-soft/40 text-gold-soft bg-white/5",
-  },
-  reconnexion: {
-    container: "bg-gradient-to-br from-[#15102a] via-[#241a3f] to-[#0f0a1f]",
-    background: (
-      <>
-        <div className="absolute -top-24 -right-16 h-80 w-80 rounded-full bg-accent/40 blur-3xl" />
-        <div className="absolute -bottom-20 -left-16 h-72 w-72 rounded-full bg-gold/20 blur-3xl" />
-        <div className="absolute inset-0 grain opacity-40" />
-      </>
-    ),
-    text: "text-text-on-dark",
-    subtle: "text-gold-soft",
-    body: "text-text-on-dark-soft",
-    iconColor: "text-gold",
-    italic: "text-gold-soft",
-    label: "text-gold-soft/80",
-    placeholder: "italic text-text-on-dark-soft/60",
-    badge: "border-gold-soft/40 text-gold-soft bg-white/5",
-  },
-  elegance: {
-    container: "bg-[#faf6f0] border border-text-deep/10",
-    background: (
-      <>
-        <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-gold via-accent to-gold" />
-        <div className="absolute -bottom-24 -right-20 h-72 w-72 rounded-full bg-bg-soft blur-3xl" />
-        <div className="absolute inset-0 grain opacity-20" />
-      </>
-    ),
-    text: "text-text-deep",
-    subtle: "text-accent",
-    body: "text-text-medium",
-    iconColor: "text-accent",
-    italic: "text-accent",
-    label: "text-text-soft",
-    placeholder: "italic text-text-soft/70",
-    badge: "border-text-deep/15 text-text-deep bg-bg-soft",
-  },
-  retraite: {
-    container: "bg-gradient-to-br from-[#15102a] via-[#241a3f] to-[#0a0617]",
-    background: (
-      <>
-        <div className="absolute -top-24 -right-16 h-80 w-80 rounded-full bg-accent/30 blur-3xl" />
-        <div className="absolute -bottom-20 -left-16 h-72 w-72 rounded-full bg-gold/15 blur-3xl" />
-        {/* Mandala étoilé */}
-        <svg
-          aria-hidden
-          viewBox="0 0 200 200"
-          className="absolute -right-12 top-1/2 -translate-y-1/2 w-56 h-auto text-gold/15"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="0.4"
-        >
-          <circle cx="100" cy="100" r="90" />
-          <circle cx="100" cy="100" r="70" />
-          <circle cx="100" cy="100" r="50" />
-          <circle cx="100" cy="100" r="30" />
-        </svg>
-        {/* Petites étoiles */}
-        <div className="absolute top-6 right-12 h-1 w-1 rounded-full bg-gold/60" />
-        <div className="absolute top-16 right-32 h-px w-px bg-gold-soft" />
-        <div className="absolute bottom-20 left-16 h-1 w-1 rounded-full bg-gold/40" />
-        <div className="absolute inset-0 grain opacity-40" />
-      </>
-    ),
-    text: "text-text-on-dark",
-    subtle: "text-gold-soft",
-    body: "text-text-on-dark-soft",
-    iconColor: "text-gold",
-    italic: "text-gold-soft",
-    label: "text-gold-soft/80",
-    placeholder: "italic text-text-on-dark-soft/60",
-    badge: "border-gold-soft/40 text-gold-soft bg-white/5",
-  },
-  cacao: {
-    container: "bg-gradient-to-br from-[#3d2a1f] via-[#2d1f15] to-[#1a120b]",
-    background: (
-      <>
-        <div className="absolute -top-24 -left-16 h-80 w-80 rounded-full bg-gold/20 blur-3xl" />
-        <div className="absolute -bottom-20 -right-16 h-72 w-72 rounded-full bg-rose/15 blur-3xl" />
-        {/* Ornement Ankh subtil en arrière-plan */}
-        <svg
-          aria-hidden
-          viewBox="0 0 32 44"
-          className="absolute -right-10 top-1/2 -translate-y-1/2 w-48 h-auto text-gold/15"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="0.6"
-          strokeLinecap="round"
-        >
-          <ellipse cx="16" cy="11" rx="9" ry="10" />
-          <line x1="16" y1="21" x2="16" y2="42" />
-          <line x1="6" y1="25" x2="26" y2="25" />
-        </svg>
-        <div className="absolute inset-0 grain opacity-40" />
-      </>
-    ),
-    text: "text-text-on-dark",
-    subtle: "text-gold-soft",
-    body: "text-text-on-dark-soft",
-    iconColor: "text-gold",
-    italic: "text-gold-soft",
-    label: "text-gold-soft/80",
-    placeholder: "italic text-text-on-dark-soft/60",
-    badge: "border-gold-soft/40 text-gold-soft bg-white/5",
-  },
-};
