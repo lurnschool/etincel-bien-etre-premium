@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { PageRefugeHero } from "@/components/page/PageRefugeHero";
 import { GuidanceFooter } from "@/components/page/GuidanceFooter";
 import { ProchainesDates } from "@/components/page/ProchainesDates";
+import { cercleDates } from "@/lib/agenda";
 import { PillarPourQuiSection, PillarFaqSection } from "@/components/page/PillarSections";
 import { RitualStepsSection } from "@/components/page/sections/RitualStepsSection";
 import { DetailStrip } from "@/components/ui/DetailStrip";
@@ -84,6 +85,7 @@ export default function CerclesDeFemmesPage() {
         eyebrow="Prochains cercles"
         title="Les prochains cercles de femmes."
         kind="cercle"
+        dates={cercleDates}
         notifyLabel="Recevoir l'invitation au prochain cercle"
       />
 

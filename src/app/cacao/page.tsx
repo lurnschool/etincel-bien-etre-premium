@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { PageRefugeHero } from "@/components/page/PageRefugeHero";
 import { GuidanceFooter } from "@/components/page/GuidanceFooter";
 import { ProchainesDates } from "@/components/page/ProchainesDates";
+import { cacaoDates } from "@/lib/agenda";
 import {
   PillarFormatsSection,
   PillarFaqSection,
@@ -159,6 +160,7 @@ export default function CacaoPage() {
         eyebrow="Prochaines cérémonies cacao"
         title="Les prochaines cérémonies."
         kind="cacao"
+        dates={cacaoDates}
         notifyLabel="Être prévenue d'une cérémonie"
       />
 

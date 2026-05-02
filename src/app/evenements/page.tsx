@@ -7,6 +7,7 @@ import { Etincelle } from "@/components/ui/Etincelle";
 import { PageRefugeHero } from "@/components/page/PageRefugeHero";
 import { GuidanceFooter } from "@/components/page/GuidanceFooter";
 import { ProchainesDates } from "@/components/page/ProchainesDates";
+import { evenementsDates } from "@/lib/agenda";
 import { DetailStrip } from "@/components/ui/DetailStrip";
 import { EtincelleAccent } from "@/components/ui/EtincelleAccent";
 import { whatsappLink, whatsappMessages } from "@/lib/whatsapp";
@@ -181,6 +182,7 @@ export default function EvenementsPage() {
         eyebrow="Prochains événements"
         title="Ce qui s'ouvre dans les prochaines semaines."
         kind="autre"
+        dates={evenementsDates}
         notifyLabel="Être prévenue des prochaines ouvertures"
       />
 

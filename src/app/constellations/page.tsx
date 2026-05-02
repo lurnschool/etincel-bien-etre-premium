@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { PageRefugeHero } from "@/components/page/PageRefugeHero";
 import { GuidanceFooter } from "@/components/page/GuidanceFooter";
 import { ProchainesDates } from "@/components/page/ProchainesDates";
+import { constellationDates } from "@/lib/agenda";
 import {
   PillarFormatsSection,
   PillarFaqSection,
@@ -118,6 +119,7 @@ export default function ConstellationsPage() {
         eyebrow="Prochaines constellations"
         title="Les prochains rendez-vous."
         kind="autre"
+        dates={constellationDates}
         notifyLabel="Recevoir les prochaines dates"
       />
 
