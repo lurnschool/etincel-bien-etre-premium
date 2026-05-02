@@ -446,7 +446,7 @@ export function Sparkler({
   const RAYS = 28;
   return (
     <div className="absolute inset-0">
-      {/* Photo d'ambiance floutée + assombrie en arrière-plan */}
+      {/* Photo d'ambiance floutée en arrière-plan (cosy, on devine la scène) */}
       {backgroundSrc && (
         <div
           aria-hidden
@@ -455,18 +455,28 @@ export function Sparkler({
             backgroundImage: `url("${backgroundSrc}")`,
             backgroundSize: "cover",
             backgroundPosition: "center",
-            filter: "blur(6px) brightness(0.5) saturate(1.3)",
-            transform: "scale(1.15)",
+            filter: "blur(3px) brightness(0.7) saturate(1.4) contrast(1.1)",
+            transform: "scale(1.12)",
           }}
         />
       )}
 
-      {/* Halo doré diffus posé sur la photo, qui élargit la lumière */}
+      {/* Vignettage doux pour ramener l'attention vers le centre */}
       <div
         aria-hidden
         className="absolute inset-0"
         style={{
-          background: `radial-gradient(circle at 50% 50%, ${glow}88 0%, ${glow}33 25%, transparent 55%)`,
+          background:
+            "radial-gradient(ellipse at 50% 50%, transparent 30%, rgba(0,0,0,0.55) 100%)",
+        }}
+      />
+
+      {/* Halo doré diffus posé sur la photo, autour du sparkler uniquement */}
+      <div
+        aria-hidden
+        className="absolute inset-0"
+        style={{
+          background: `radial-gradient(circle at 50% 50%, ${glow}55 0%, ${glow}22 18%, transparent 40%)`,
         }}
       />
 
