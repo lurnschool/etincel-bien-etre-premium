@@ -93,34 +93,43 @@ export type VisualAssetEntry = {
   objectPosition?: string;
 };
 
-const PLACEHOLDERS = {
-  // Sprint A — placeholders neutres
-  cream: "/images/placeholders/texture-cream-warm.svg",
-  sand: "/images/placeholders/texture-sand-light.svg",
-  rose: "/images/placeholders/texture-rose-ancient.svg",
-  sage: "/images/placeholders/texture-sage-soft.svg",
-  clay: "/images/placeholders/texture-clay-warm.svg",
-  arch: "/images/placeholders/organic-arch-warm.svg",
-  circle: "/images/placeholders/organic-circle-gold.svg",
-  light: "/images/placeholders/detail-light-soft.svg",
-  // Sprint C — placeholders thématiques par pièce du refuge
-  memoiresNight: "/images/placeholders/memoires-night.svg",
-  memoiresCircle: "/images/placeholders/memoires-circle.svg",
-  femininWarm: "/images/placeholders/feminin-warm.svg",
-  cacaoRitual: "/images/placeholders/cacao-ritual.svg",
-  corpsWater: "/images/placeholders/corps-water.svg",
-  breathFlow: "/images/placeholders/breath-flow.svg",
-  natureHorizon: "/images/placeholders/nature-horizon.svg",
-  paperKraft: "/images/placeholders/paper-kraft.svg",
-} as const;
-
 const SITE_ORIGINAL = "/images/source-site-original";
 
 /** Photos finales Céline livrées le 2026-05-02. Compressées et redimensionnées
  *  (max 1600px, qualité 80) à partir du dossier /public/images/nouvelle images/.
- *  Mapping principal effectué — les autres photos restent dispo dans ce dossier
- *  pour mappings additionnels (carrousels, fragments d'univers, etc.). */
+ *  Pool de photos disponibles pour tous les slots du site. */
 const CELINE_2026 = "/images/celine-2026";
+
+/**
+ * PLACEHOLDERS — historiquement des SVG textures neutres, désormais
+ * remplacés par les vraies photos Céline thématiquement adaptées.
+ * Les keys sont conservées pour ne pas casser le helper makeMicros et
+ * les autres références dynamiques `PLACEHOLDERS[key]`.
+ *
+ * Pour varier l'apparence visuelle, plusieurs photos différentes sont
+ * réparties par thème : cacao/rituel → tambour, féminin → main+celine6,
+ * corps → celine10/celine12, nature → Cel1, accueil/portrait → celine15.
+ */
+const PLACEHOLDERS = {
+  // Tons généraux (anciennement textures Sprint A)
+  cream: `${CELINE_2026}/celine15.jpg`,        // portrait lumineux
+  sand: `${CELINE_2026}/Cel1.jpg`,             // silhouette face soleil
+  rose: `${CELINE_2026}/main.jpg`,             // mains galets cœur
+  sage: `${CELINE_2026}/celine10.jpg`,         // paysage rocheux Corse
+  clay: `${CELINE_2026}/tambour.jpg`,          // instruments rituels
+  arch: `${CELINE_2026}/Cel1.jpg`,             // silhouette ouverte
+  circle: `${CELINE_2026}/tambour.jpg`,        // tambour rond
+  light: `${CELINE_2026}/celine12.jpg`,        // eau lumineuse
+  // Thématiques par pièce du refuge (Sprint C)
+  memoiresNight: `${CELINE_2026}/soin.jpg`,    // autel rituel chaud
+  memoiresCircle: `${CELINE_2026}/tambour.jpg`,
+  femininWarm: `${CELINE_2026}/celine6.jpg`,   // Céline tambour plage couché
+  cacaoRitual: `${CELINE_2026}/tambour.jpg`,
+  corpsWater: `${CELINE_2026}/celine12.jpg`,   // eau / nénuphars
+  breathFlow: `${CELINE_2026}/celine10.jpg`,
+  natureHorizon: `${CELINE_2026}/Cel1.jpg`,
+  paperKraft: `${CELINE_2026}/soin.jpg`,
+} as const;
 
 /* -------------------------------------------------------------------------- */
 /*  HOME                                                                      */
