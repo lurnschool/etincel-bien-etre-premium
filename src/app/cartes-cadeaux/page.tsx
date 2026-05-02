@@ -359,7 +359,7 @@ export default function CartesCadeauxPage() {
         </Container>
       </section>
 
-      <section className="py-20 md:py-28">
+      <section id="choisir" className="py-20 md:py-28 scroll-mt-24">
         <Container>
           <AnimatePresence mode="wait">
             {step === "choisir" && (
