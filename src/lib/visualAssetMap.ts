@@ -110,6 +110,48 @@ const CELINE_2026 = "/images/celine-2026";
  * réparties par thème : cacao/rituel → tambour, féminin → main+celine6,
  * corps → celine10/celine12, nature → Cel1, accueil/portrait → celine15.
  */
+/**
+ * Pool de photos Céline disponibles pour rotation dans les carrousels
+ * et DetailStrips. ~25 photos diverses pour éviter toute répétition
+ * consécutive visible (avec ~6 slots par strip et offset par page).
+ */
+const PHOTO_POOL: readonly string[] = [
+  `${CELINE_2026}/celine6.jpg`,
+  `${CELINE_2026}/celine7.jpg`,
+  `${CELINE_2026}/celine8.jpg`,
+  `${CELINE_2026}/celine9.jpg`,
+  `${CELINE_2026}/celine10.jpg`,
+  `${CELINE_2026}/celine11.jpg`,
+  `${CELINE_2026}/celine12.jpg`,
+  `${CELINE_2026}/celine13.jpg`,
+  `${CELINE_2026}/celine14.jpg`,
+  `${CELINE_2026}/celine16.jpg`,
+  `${CELINE_2026}/celine17.jpg`,
+  `${CELINE_2026}/celine18.jpg`,
+  `${CELINE_2026}/celine19.jpg`,
+  `${CELINE_2026}/Cel1.jpg`,
+  `${CELINE_2026}/cel2.jpg`,
+  `${CELINE_2026}/cel3.jpg`,
+  `${CELINE_2026}/main.jpg`,
+  `${CELINE_2026}/soin.jpg`,
+  `${CELINE_2026}/soin2.jpg`,
+  `${CELINE_2026}/tambour.jpg`,
+  `${CELINE_2026}/massage.jpg`,
+  `${CELINE_2026}/photo24.jpg`,
+  `${CELINE_2026}/photo28.jpg`,
+  `${CELINE_2026}/photo29.jpg`,
+  `${CELINE_2026}/photo30.jpg`,
+  `${CELINE_2026}/photo32.jpg`,
+];
+
+/** Rotation déterministe : choisit une photo du pool en fonction du
+ *  prefix de page (offset stable) et de l'index du slot.
+ *  L'incrément 7 entre slots adjacents évite les répétitions visibles. */
+function pickFromPool(prefix: string, slotIndex: number): string {
+  const seed = prefix.split("").reduce((acc, c) => acc + c.charCodeAt(0), 0);
+  return PHOTO_POOL[(seed * 11 + slotIndex * 7) % PHOTO_POOL.length];
+}
+
 const PLACEHOLDERS = {
   // Tons généraux (anciennement textures Sprint A)
   cream: `${CELINE_2026}/celine15.jpg`,        // portrait lumineux
@@ -1072,8 +1114,8 @@ const microCartesCadeaux: VisualAssetEntry[] = makeMicros(
 
 /**
  * Helper interne pour créer 6 mini-slots 1:1 par page de manière concise.
- * Toutes les micros sont en `waiting-shooting` priorité bonus,
- * remplaçables au fil des livraisons photo.
+ * Sprint K : utilise désormais un pool de 25 photos avec rotation
+ * déterministe — pas de répétition consécutive visible.
  */
 function makeMicros(
   page: string,
@@ -1081,15 +1123,15 @@ function makeMicros(
   baseUsage: string,
   placeholderKeys: (keyof typeof PLACEHOLDERS)[],
 ): VisualAssetEntry[] {
-  return placeholderKeys.map((key, i) => ({
+  return placeholderKeys.map((_, i) => ({
     id: `${prefix}-${i + 1}`,
     page,
     section: "detail-strip",
     usage: `${baseUsage} (${i + 1})`,
     expectedFileName: `${prefix}-${i + 1}.jpg`,
-    currentFile: PLACEHOLDERS[key],
-    sourceKind: "placeholder" as VisualSourceKind,
-    status: "waiting-shooting" as VisualStatus,
+    currentFile: pickFromPool(prefix, i),
+    sourceKind: "final" as VisualSourceKind,
+    status: "ok" as VisualStatus,
     ratio: "1:1" as VisualRatio,
     altText: `${baseUsage} — emplacement ${i + 1}`,
     priority: "bonus" as VisualPriority,

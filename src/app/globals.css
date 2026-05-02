@@ -835,6 +835,13 @@ body {
   );
 }
 
+/* Bandeau défilant continu — la liste est doublée côté React,
+ * l'animation translate de 0 à -50% pour une boucle invisible. */
+@keyframes practices-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
 @keyframes button-halo-pulse {
   0%, 100% {
     opacity: 0.7;
